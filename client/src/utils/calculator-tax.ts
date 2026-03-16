@@ -15,7 +15,7 @@ function getResidualRate(modelYearAge: number): number {
 
 function isDisabilityExempt(input: CarTaxInput): boolean {
   if (!input.isDisabledOwner) return false;
-  if (input.vehicleType === "light") return true;
+  if (input.vehicleType === "light" || input.vehicleType === "motorcycle") return true;
 
   return input.vehicleType === "passenger" && input.displacementRange !== "over2000";
 }

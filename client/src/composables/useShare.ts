@@ -71,7 +71,7 @@ export function useShare(options: ShareOptions) {
         content: {
           title: toValue(options.title),
           description: toValue(options.description),
-          imageUrl: `${window.location.origin}/favicon.svg`,
+          imageUrl: `${window.location.origin}/og-image.png`,
           link: { mobileWebUrl: url, webUrl: url },
         },
         buttons: [

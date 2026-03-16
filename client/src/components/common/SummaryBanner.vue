@@ -45,10 +45,20 @@ defineEmits<{
           : ''
       ]"
     >
-      <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-[13px]">
+      <p
+        :class="[
+          'text-[11px] font-bold uppercase tracking-[0.14em] sm:text-[13px]',
+          highlight ? 'text-white/80' : 'text-muted-foreground'
+        ]"
+      >
         {{ leaderLabel ?? "비교 결과" }}
       </p>
-      <p class="text-[24px] font-bold leading-none text-white sm:text-[32px]">
+      <p
+        :class="[
+          'text-[24px] font-bold leading-none sm:text-[32px]',
+          highlight ? 'text-white' : 'text-foreground'
+        ]"
+      >
         {{ leaderValue }}
       </p>
     </div>

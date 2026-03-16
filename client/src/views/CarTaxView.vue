@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import AdSlot from "@/components/common/AdSlot.vue";
+import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
+import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
@@ -10,6 +12,7 @@ import CarTaxBreakdown from "@/components/car-tax/CarTaxBreakdown.vue";
 import CarTaxFAQ from "@/components/car-tax/CarTaxFAQ.vue";
 import CarTaxInput from "@/components/car-tax/CarTaxInput.vue";
 import CarTaxResult from "@/components/car-tax/CarTaxResult.vue";
+import { carAffiliateItems } from "@/data/affiliateLinks";
 import { CAR_TAX_DATA_UPDATED, CAR_TAX_SOURCES } from "@/data/carTaxRates";
 import { useCarTaxCalc } from "@/composables/useCarTaxCalc";
 import { useShare } from "@/composables/useShare";
@@ -100,10 +103,16 @@ const summaryFacts = computed(() => [
     </div>
 
     <CarTaxResult :result="result" @share="share.openShare" />
+    <AffiliateLinkPanel
+      title="차량 구매 후 같이 챙기는 상품"
+      description="등록비용을 계산했다면 블랙박스와 세차용품 가격도 함께 비교해 보세요."
+      :items="carAffiliateItems"
+    />
     <CarTaxBreakdown :result="result" />
     <CompareSourceFooter :sources="CAR_TAX_SOURCES" updated-at="2026-03-11" />
-    <AdSlot slot="top" label="자동차 금융 광고 영역" />
+    <AdSlot slot-id="top" label="자동차 금융 광고 영역" />
     <CarTaxFAQ :faqs="faqItems" />
+    <AffiliateDisclosure v-if="carAffiliateItems.length > 0" />
 
     <ShareModal
       :show="share.showShareModal.value"

@@ -10,7 +10,7 @@ import {
 } from "@/data/leaseRates";
 import { LEASE_PRICE_PRESETS } from "@/data/pricePresets";
 import { formatNumber } from "@/lib/utils";
-import { CAR_PRICE_MAX, CAR_PRICE_MIN } from "@/lib/validators";
+import { CAR_PRICE_MAX, CAR_PRICE_MIN, CAR_PRICE_SLIDER_MAX } from "@/lib/validators";
 import type { LeaseCompareInput } from "@/utils/calculator";
 
 const props = defineProps<{
@@ -64,7 +64,7 @@ function onPriceInput(event: Event): void {
         type="range"
         class="retro-range"
         :min="CAR_PRICE_MIN"
-        :max="100000000"
+        :max="CAR_PRICE_SLIDER_MAX"
         step="500000"
         @input="patch({ vehiclePrice: Number(($event.target as HTMLInputElement).value) })"
       />

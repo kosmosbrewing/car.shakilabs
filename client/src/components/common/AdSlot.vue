@@ -8,7 +8,7 @@ declare global {
 }
 
 const props = defineProps<{
-  slot: string;
+  slotId: string;
   label?: string;
 }>();
 
@@ -18,7 +18,7 @@ const slotAliasMap: Record<string, string> = {
   top: (import.meta.env.VITE_ADSENSE_SLOT_TOP || "").trim(),
   bottom: (import.meta.env.VITE_ADSENSE_SLOT_BOTTOM || "").trim(),
 };
-const resolvedSlot = computed(() => slotAliasMap[props.slot]?.trim() || props.slot.trim());
+const resolvedSlot = computed(() => slotAliasMap[props.slotId]?.trim() || props.slotId.trim());
 const canRenderRealAd = computed(() => Boolean(publisherId && resolvedSlot.value));
 
 function ensureAdsenseScript(): void {
@@ -49,7 +49,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <section v-if="publisherId || isDev" class="retro-panel p-3">
+  <!-- SSG: 항상 placeholder 렌더 → hydration 후 광고 삽입 -->
+  <section class="retro-panel p-3">
     <p class="mb-2 text-caption text-muted-foreground">
       {{ label || "광고 영역" }}
     </p>
@@ -67,6 +68,10 @@ onMounted(() => {
 
     <div v-else-if="isDev" class="flex min-h-[80px] items-center justify-center border border-dashed border-border/60 rounded-lg text-caption text-muted-foreground">
       광고 영역 (개발 모드{{ resolvedSlot ? ` · slot ${resolvedSlot}` : "" }})
+    </div>
+
+    <div v-else class="min-h-[80px]">
+      <!-- SSG build 시 빈 placeholder (hydration 후 클라이언트에서 광고 로드) -->
     </div>
   </section>
 </template>

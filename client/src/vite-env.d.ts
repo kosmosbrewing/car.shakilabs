@@ -15,6 +15,8 @@ interface ImportMetaEnv {
   readonly VITE_ADSENSE_PUBLISHER_ID?: string;
   readonly VITE_ADSENSE_SLOT_TOP?: string;
   readonly VITE_ADSENSE_SLOT_BOTTOM?: string;
+  readonly VITE_COUPANG_BLACKBOX_URL?: string;
+  readonly VITE_COUPANG_CAR_WASH_URL?: string;
   readonly VITE_KAKAO_JS_KEY?: string;
 }
 

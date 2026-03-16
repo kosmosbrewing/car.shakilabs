@@ -137,7 +137,7 @@ export function isRemoteConstantsEnabled(): boolean {
 
 export async function fetchCurrentUser(): Promise<User | null> {
   const response = await apiRequest<AuthSessionResponse>("/api/auth/session", {
-    cachePolicy: "authSession",
+    cachePolicy: "noCache",
   });
   return response.user;
 }

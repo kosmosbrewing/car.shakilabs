@@ -54,7 +54,6 @@ class ApiCache {
 }
 
 export const cachePolicies = {
-  authSession: { maxAge: 30 * 1000 },
   constants: { maxAge: 60 * 60 * 1000 },
   noCache: { maxAge: 0 },
 } as const;

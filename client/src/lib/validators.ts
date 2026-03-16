@@ -28,6 +28,8 @@ import type {
 
 export const CAR_PRICE_MIN = 1_000_000;
 export const CAR_PRICE_MAX = 300_000_000;
+/** 슬라이더 UX용 상한 — 텍스트 입력은 CAR_PRICE_MAX까지 허용 */
+export const CAR_PRICE_SLIDER_MAX = 100_000_000;
 export const INSURANCE_PREMIUM_MIN = 100_000;
 export const INSURANCE_PREMIUM_MAX = 3_000_000;
 

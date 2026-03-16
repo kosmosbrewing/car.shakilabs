@@ -10,7 +10,7 @@ import {
 } from "@/data/carTaxRates";
 import { TAX_PRICE_PRESETS } from "@/data/pricePresets";
 import { formatNumber } from "@/lib/utils";
-import { CAR_PRICE_MAX, CAR_PRICE_MIN } from "@/lib/validators";
+import { CAR_PRICE_MAX, CAR_PRICE_MIN, CAR_PRICE_SLIDER_MAX } from "@/lib/validators";
 import type { CarTaxInput } from "@/utils/calculator";
 
 const props = defineProps<{
@@ -83,7 +83,7 @@ function selectVehicleType(vehicleType: VehicleType): void {
         type="range"
         class="retro-range"
         :min="CAR_PRICE_MIN"
-        :max="100000000"
+        :max="CAR_PRICE_SLIDER_MAX"
         step="500000"
         @input="patch({ vehiclePrice: Number(($event.target as HTMLInputElement).value) })"
       />

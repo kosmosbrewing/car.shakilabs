@@ -117,6 +117,7 @@ export function calcInsurance(input: InsuranceInput): InsuranceBreakdown {
       ? 1 - finalPremium / input.currentPremium
       : 0;
 
+  notes.push("각 할인·할증은 보험사 실제 방식처럼 단계별로 적용됩니다. 절대 금액은 적용 순서에 따라 달라질 수 있습니다.");
   notes.push("다이렉트 전환 절감액은 주요 보험사의 공개 할인 범위를 보수적으로 단순화한 가정입니다.");
 
   return {

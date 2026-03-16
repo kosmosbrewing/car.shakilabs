@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import AdSlot from "@/components/common/AdSlot.vue";
+import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
+import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
@@ -11,6 +13,7 @@ import LeaseCompareCards from "@/components/lease/LeaseCompareCards.vue";
 import LeaseCompareInput from "@/components/lease/LeaseCompareInput.vue";
 import LeaseCompareTable from "@/components/lease/LeaseCompareTable.vue";
 import LeaseGuide from "@/components/lease/LeaseGuide.vue";
+import { carAffiliateItems } from "@/data/affiliateLinks";
 import { LEASE_DATA_UPDATED, LEASE_SOURCES } from "@/data/leaseRates";
 import { useLeaseCompare } from "@/composables/useLeaseCompare";
 import { useShare } from "@/composables/useShare";
@@ -78,6 +81,11 @@ const summaryFacts = computed(() => [
     </div>
 
     <LeaseCompareCards :result="result" />
+    <AffiliateLinkPanel
+      title="차량 계약 전에 같이 확인해 볼 상품"
+      description="차량 이용 방식 비교와 함께 블랙박스, 세차용품 예산도 미리 점검해 보세요."
+      :items="carAffiliateItems"
+    />
     <LeaseCompareTable :result="result" />
     <LeaseGuide />
     <CompareSourceFooter :sources="LEASE_SOURCES" updated-at="2026-03-11" />
@@ -87,7 +95,8 @@ const summaryFacts = computed(() => [
       <p>• 할부: 같은 기간 실제 납부액 기준, 차량 잔존가치는 비교에서 제외</p>
       <p>• 장기렌트: 보험·세금 포함 월 납입금 기준</p>
     </div>
-    <AdSlot slot="bottom" label="자동차 금융 광고 영역" />
+    <AdSlot slot-id="bottom" label="자동차 금융 광고 영역" />
+    <AffiliateDisclosure v-if="carAffiliateItems.length > 0" />
 
     <ShareModal
       :show="share.showShareModal.value"
