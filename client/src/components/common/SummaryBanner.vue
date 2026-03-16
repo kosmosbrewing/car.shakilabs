@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue";
 import { Button } from "@/components/ui/button";
 
 interface SummaryFact {
@@ -6,18 +7,27 @@ interface SummaryFact {
   value: string;
 }
 
-defineProps<{
+const props = defineProps<{
   title: string;
   leaderValue: string;
   leaderLabel?: string;
   deltaValue: string;
   deltaLabel: string;
+  deltaTone?: "success" | "danger" | "neutral";
   facts?: SummaryFact[];
   highlight?: boolean;
   showShare?: boolean;
   showDetail?: boolean;
   detailLabel?: string;
 }>();
+
+const toneClasses = {
+  success: { row: "bg-profit/5 dark:bg-profit/12", badge: "bg-profit/12 text-profit" },
+  danger: { row: "bg-fee/5 dark:bg-fee/12", badge: "bg-fee/12 text-fee" },
+  neutral: { row: "bg-muted/30", badge: "bg-muted text-foreground" },
+} as const;
+
+const tone = computed(() => toneClasses[props.deltaTone ?? "success"]);
 
 defineEmits<{
   share: [];
@@ -46,12 +56,12 @@ defineEmits<{
     <div class="retro-panel-content space-y-3.5 p-0 sm:p-0">
       <table class="w-full text-body">
         <tbody>
-          <tr class="border-b border-border/40 bg-profit/5 dark:bg-profit/12">
+          <tr :class="['border-b border-border/40', tone.row]">
             <td class="whitespace-nowrap px-4 py-3 text-caption font-semibold text-muted-foreground">
               {{ deltaLabel }}
             </td>
             <td class="px-4 py-3 text-right">
-              <span class="inline-flex items-center rounded-full bg-profit/12 px-3 py-1 text-[17px] font-bold tabular-nums text-profit sm:text-[22px]">
+              <span :class="['inline-flex items-center rounded-full px-3 py-1 text-[17px] font-bold tabular-nums sm:text-[22px]', tone.badge]">
                 {{ deltaValue }}
               </span>
             </td>

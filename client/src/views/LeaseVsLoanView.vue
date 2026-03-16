@@ -55,6 +55,18 @@ const summaryFacts = computed(() => [
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
+    <SummaryBanner
+      title="계약기간 동안 실제로 빠져나가는 현금유출 기준입니다. 리스는 만기 반납 기준이며 잔존가치 인수비용은 총비용에 포함하지 않았습니다."
+      leader-label="현금유출이 가장 적은 방식"
+      :leader-value="result.bestResult.label"
+      delta-label="최고/최저 차이"
+      :delta-value="formatWon(result.spread)"
+      delta-tone="neutral"
+      :facts="summaryFacts"
+      show-share
+      @share="share.openShare"
+    />
+
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
         <h1 class="retro-title">리스 vs 할부 vs 장기렌트 비교</h1>
@@ -64,17 +76,6 @@ const summaryFacts = computed(() => [
         <LeaseCompareInput v-model="form" />
       </div>
     </div>
-
-    <SummaryBanner
-      title="계약기간 동안 실제로 빠져나가는 현금유출 기준입니다. 리스는 만기 반납 기준이며 잔존가치 인수비용은 총비용에 포함하지 않았습니다."
-      leader-label="현금유출이 가장 적은 방식"
-      :leader-value="result.bestResult.label"
-      delta-label="최고/최저 차이"
-      :delta-value="formatWon(result.spread)"
-      :facts="summaryFacts"
-      show-share
-      @share="share.openShare"
-    />
 
     <LeaseCompareCards :result="result" />
     <LeaseCompareTable :result="result" />

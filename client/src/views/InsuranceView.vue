@@ -72,16 +72,6 @@ const summaryFacts = computed(() => [
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">보험 갱신 절약 시뮬레이터</h1>
-        <FreshBadge :message="`${INSURANCE_DATA_UPDATED} 기준`" />
-      </div>
-      <div class="retro-panel-content">
-        <InsuranceInput v-model="form" />
-      </div>
-    </div>
-
     <SummaryBanner
       title="현재 보험료 기준으로 조정 가능한 할인 항목을 단계별로 적용한 결과입니다."
       leader-label="다이렉트 포함 예상 보험료"
@@ -92,6 +82,16 @@ const summaryFacts = computed(() => [
       show-share
       @share="share.openShare"
     />
+
+    <div class="retro-panel overflow-hidden">
+      <div class="retro-titlebar rounded-t-2xl">
+        <h1 class="retro-title">보험 갱신 절약 시뮬레이터</h1>
+        <FreshBadge :message="`${INSURANCE_DATA_UPDATED} 기준`" />
+      </div>
+      <div class="retro-panel-content">
+        <InsuranceInput v-model="form" />
+      </div>
+    </div>
 
     <InsuranceResult :result="result" @share="share.openShare" />
     <CompareSourceFooter :sources="INSURANCE_SOURCES" updated-at="2026-03-11" />

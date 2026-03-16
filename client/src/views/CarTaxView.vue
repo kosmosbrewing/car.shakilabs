@@ -77,6 +77,18 @@ const summaryFacts = computed(() => [
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
+    <SummaryBanner
+      title="차량가와 등록 지역 기준의 예상 초기 등록비용입니다."
+      leader-label="예상 총 등록비용"
+      :leader-value="formatWon(result.totalCost)"
+      delta-label="차량가 대비 비중"
+      :delta-value="formatPercent(result.totalCost / form.vehiclePrice, 1)"
+      delta-tone="danger"
+      :facts="summaryFacts"
+      show-share
+      @share="share.openShare"
+    />
+
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
         <h1 class="retro-title">자동차 취등록세 계산기</h1>
@@ -86,17 +98,6 @@ const summaryFacts = computed(() => [
         <CarTaxInput v-model="form" />
       </div>
     </div>
-
-    <SummaryBanner
-      title="차량가와 등록 지역 기준의 예상 초기 등록비용입니다."
-      leader-label="예상 총 등록비용"
-      :leader-value="formatWon(result.totalCost)"
-      delta-label="차량가 대비 비중"
-      :delta-value="formatPercent(result.totalCost / form.vehiclePrice, 1)"
-      :facts="summaryFacts"
-      show-share
-      @share="share.openShare"
-    />
 
     <CarTaxResult :result="result" @share="share.openShare" />
     <CarTaxBreakdown :result="result" />

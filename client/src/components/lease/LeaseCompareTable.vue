@@ -35,55 +35,58 @@ const copyRows = computed(() => [
     <div class="mb-2 flex justify-end">
       <CopyTableButton :headers="copyHeaders" :rows="copyRows" />
     </div>
-    <div class="overflow-hidden rounded-2xl border border-border/70 bg-card">
+    <div class="rounded-2xl border border-border/70 bg-card">
       <table class="w-full table-fixed text-body">
-        <thead>
-          <tr class="border-b border-border/80 bg-muted/25">
-            <th class="px-4 py-3 text-left text-caption font-semibold text-muted-foreground">항목</th>
+        <thead class="sticky top-12 z-10">
+          <tr class="border-b border-border/80 bg-muted">
+            <th class="rounded-tl-2xl px-4 py-3 text-left text-caption font-semibold text-muted-foreground">항목</th>
             <th
               v-for="(method, index) in sortedMethods"
               :key="method.method"
               class="px-4 py-3 text-center text-caption font-semibold"
-              :class="index === 0 ? 'bg-profit/8 text-profit' : 'text-foreground'"
+              :class="[
+                index === 0 ? 'bg-profit/8 text-profit' : 'text-foreground',
+                index === sortedMethods.length - 1 ? 'rounded-tr-2xl' : ''
+              ]"
             >
               {{ method.label }}
             </th>
           </tr>
         </thead>
         <tbody>
-          <tr class="border-b border-border/40">
+          <tr class="border-b border-border/40 transition-colors hover:bg-accent/25">
             <td class="px-4 py-3 text-caption text-muted-foreground">월 납입금</td>
             <td v-for="(method, index) in sortedMethods" :key="`${method.method}-monthly`" class="px-4 py-3 text-center font-semibold tabular-nums" :class="index === 0 ? 'bg-profit/8' : ''">{{ formatWon(method.monthlyPayment) }}</td>
           </tr>
-          <tr class="border-b border-border/40">
+          <tr class="border-b border-border/40 bg-muted/10 transition-colors hover:bg-accent/25">
             <td class="px-4 py-3 text-caption text-muted-foreground">선수금</td>
             <td v-for="(method, index) in sortedMethods" :key="`${method.method}-deposit`" class="px-4 py-3 text-center font-semibold tabular-nums" :class="index === 0 ? 'bg-profit/8' : ''">{{ formatWon(method.deposit) }}</td>
           </tr>
-          <tr class="border-b border-border/40">
+          <tr class="border-b border-border/40 transition-colors hover:bg-accent/25">
             <td class="px-4 py-3 text-caption text-muted-foreground">총 납입금</td>
             <td v-for="(method, index) in sortedMethods" :key="`${method.method}-installment`" class="px-4 py-3 text-center font-semibold tabular-nums" :class="index === 0 ? 'bg-profit/8' : ''">{{ formatWon(method.totalInstallment) }}</td>
           </tr>
-          <tr class="border-b border-border/40">
+          <tr class="border-b border-border/40 bg-muted/10 transition-colors hover:bg-accent/25">
             <td class="px-4 py-3 text-caption text-muted-foreground">잔존가치</td>
             <td v-for="(method, index) in sortedMethods" :key="`${method.method}-residual`" class="px-4 py-3 text-center font-semibold tabular-nums" :class="index === 0 ? 'bg-profit/8' : ''">{{ method.residualValue > 0 ? formatWon(method.residualValue) : "-" }}</td>
           </tr>
-          <tr class="border-b border-border/40">
+          <tr class="border-b border-border/40 transition-colors hover:bg-accent/25">
             <td class="px-4 py-3 text-caption text-muted-foreground">보험료</td>
             <td v-for="(method, index) in sortedMethods" :key="`${method.method}-insurance`" class="px-4 py-3 text-center font-semibold tabular-nums" :class="index === 0 ? 'bg-profit/8' : ''">{{ costText(method.insuranceCost, method.includesInsurance) }}</td>
           </tr>
-          <tr class="border-b border-border/40">
+          <tr class="border-b border-border/40 bg-muted/10 transition-colors hover:bg-accent/25">
             <td class="px-4 py-3 text-caption text-muted-foreground">취등록세</td>
             <td v-for="(method, index) in sortedMethods" :key="`${method.method}-tax`" class="px-4 py-3 text-center font-semibold tabular-nums" :class="index === 0 ? 'bg-profit/8' : ''">{{ costText(method.taxCost, method.includesTax) }}</td>
           </tr>
-          <tr class="border-b border-border/40">
+          <tr class="border-b border-border/40 transition-colors hover:bg-accent/25">
             <td class="px-4 py-3 text-caption text-muted-foreground">총비용</td>
             <td v-for="(method, index) in sortedMethods" :key="`${method.method}-total`" class="px-4 py-3 text-center font-bold tabular-nums" :class="index === 0 ? 'bg-profit/8 text-profit' : ''">{{ formatWon(method.totalCost) }}</td>
           </tr>
-          <tr>
+          <tr class="bg-muted/10 transition-colors hover:bg-accent/25">
             <td class="px-4 py-3 text-caption text-muted-foreground">비교기준</td>
             <td v-for="(method, index) in sortedMethods" :key="`${method.method}-comparison-note`" class="px-4 py-3 text-center text-caption font-semibold" :class="index === 0 ? 'bg-profit/8' : ''">{{ method.comparisonNote }}</td>
           </tr>
-          <tr>
+          <tr class="transition-colors hover:bg-accent/25">
             <td class="px-4 py-3 text-caption text-muted-foreground">소유권</td>
             <td v-for="(method, index) in sortedMethods" :key="`${method.method}-ownership`" class="px-4 py-3 text-center text-caption font-semibold" :class="index === 0 ? 'bg-profit/8' : ''">{{ method.ownership }}</td>
           </tr>

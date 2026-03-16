@@ -68,13 +68,16 @@ function selectVehicleType(vehicleType: VehicleType): void {
   <section class="space-y-4">
     <div class="space-y-2">
       <label class="block text-caption font-semibold text-foreground">차량 가격 (원)</label>
-      <input
-        :value="formattedPrice"
-        type="text"
-        inputmode="numeric"
-        class="retro-input text-heading font-bold tabular-nums"
-        @input="onPriceInput"
-      />
+      <div class="relative">
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-heading font-bold text-muted-foreground">₩</span>
+        <input
+          :value="formattedPrice"
+          type="text"
+          inputmode="numeric"
+          class="retro-input pl-8 text-heading font-bold tabular-nums"
+          @input="onPriceInput"
+        />
+      </div>
       <input
         :value="modelValue.vehiclePrice"
         type="range"
@@ -89,7 +92,7 @@ function selectVehicleType(vehicleType: VehicleType): void {
           v-for="preset in TAX_PRICE_PRESETS"
           :key="preset"
           type="button"
-          class="retro-button-subtle min-h-9 px-3 py-1.5 text-caption"
+          class="retro-button-subtle min-h-11 px-3 py-1.5 text-caption"
           @click="patch({ vehiclePrice: preset })"
         >
           {{ formatNumber(preset) }}원

@@ -55,13 +55,16 @@ function optionClass(active: boolean): string {
   <section class="space-y-4">
     <div class="space-y-2">
       <label class="block text-caption font-semibold text-foreground">현재 자동차보험료 (원)</label>
-      <input
-        :value="formattedPremium"
-        type="text"
-        inputmode="numeric"
-        class="retro-input text-heading font-bold tabular-nums"
-        @input="onPremiumInput"
-      />
+      <div class="relative">
+        <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-heading font-bold text-muted-foreground">₩</span>
+        <input
+          :value="formattedPremium"
+          type="text"
+          inputmode="numeric"
+          class="retro-input pl-8 text-heading font-bold tabular-nums"
+          @input="onPremiumInput"
+        />
+      </div>
       <input
         :value="modelValue.currentPremium"
         type="range"
@@ -76,7 +79,7 @@ function optionClass(active: boolean): string {
           v-for="preset in INSURANCE_PRESETS"
           :key="preset"
           type="button"
-          class="retro-button-subtle min-h-9 px-3 py-1.5 text-caption"
+          class="retro-button-subtle min-h-11 px-3 py-1.5 text-caption"
           @click="patch({ currentPremium: preset })"
         >
           {{ formatNumber(preset) }}원
