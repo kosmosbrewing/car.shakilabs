@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#052E2B" />
+      <stop offset="100%" stop-color="#0D9488" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)" />
+  <circle cx="1030" cy="98" r="180" fill="rgba(255,255,255,0.08)" />
+  <circle cx="180" cy="560" r="220" fill="rgba(255,255,255,0.06)" />
+  <rect x="72" y="64" width="104" height="44" rx="14" fill="#ffffff" fill-opacity="0.12" />
+  <text x="124" y="92" fill="#ffffff" font-family="Pretendard, sans-serif" font-size="24" font-weight="800" text-anchor="middle">CAR</text>
+  <text x="72" y="210" fill="#ffffff" font-family="Pretendard, sans-serif" font-size="62" font-weight="800">자동차 비교 계산기</text>
+  <text x="72" y="278" fill="#D5FFFA" font-family="Pretendard, sans-serif" font-size="28" font-weight="500">
+    취등록세 · 보험 절약 · 리스 vs 할부 vs 장기렌트
+  </text>
+  <g transform="translate(72 356)">
+    <rect width="220" height="62" rx="22" fill="#ffffff" fill-opacity="0.12" />
+    <text x="110" y="39" fill="#ffffff" font-family="Pretendard, sans-serif" font-size="26" font-weight="700" text-anchor="middle">취등록세 계산</text>
+  </g>
+  <g transform="translate(312 356)">
+    <rect width="220" height="62" rx="22" fill="#ffffff" fill-opacity="0.12" />
+    <text x="110" y="39" fill="#ffffff" font-family="Pretendard, sans-serif" font-size="26" font-weight="700" text-anchor="middle">보험 절약</text>
+  </g>
+  <g transform="translate(552 356)">
+    <rect width="300" height="62" rx="22" fill="#ffffff" fill-opacity="0.12" />
+    <text x="150" y="39" fill="#ffffff" font-family="Pretendard, sans-serif" font-size="26" font-weight="700" text-anchor="middle">리스 · 할부 · 렌트 비교</text>
+  </g>
+  <text x="72" y="550" fill="#E7FFFC" font-family="Pretendard, sans-serif" font-size="24" font-weight="600">
+    car.shakilabs.com
+  </text>
+</svg>

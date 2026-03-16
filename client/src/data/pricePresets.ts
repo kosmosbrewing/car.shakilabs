@@ -1,0 +1,3 @@
+export const TAX_PRICE_PRESETS = [20_000_000, 30_000_000, 50_000_000, 80_000_000] as const;
+export const INSURANCE_PRESETS = [300_000, 500_000, 700_000, 1_000_000] as const;
+export const LEASE_PRICE_PRESETS = [30_000_000, 50_000_000, 70_000_000, 100_000_000] as const;
