@@ -1,13 +1,18 @@
 # Dependencies
 node_modules/
+client/node_modules/
 
 # Build output
 dist/
+client/dist/
 
 # Environment variables
 .env
-.env.*
-!.env.example
+.env.local
+.env.*.local
+client/.env
+client/.env.local
+client/.env.*.local
 
 # IDE / Editor
 .vscode/
