@@ -14,7 +14,6 @@ const viteSsgBin = resolve(
 );
 
 const sitemapRoutes = [
-  { path: "/", changefreq: "weekly", priority: "1.0" },
   { path: "/tax", changefreq: "weekly", priority: "0.9" },
   { path: "/insurance", changefreq: "weekly", priority: "0.9" },
   { path: "/lease-vs-loan", changefreq: "weekly", priority: "0.9" },

@@ -35,18 +35,18 @@ onMounted(() => {
         <div class="retro-titlebar h-11 border-b-0 bg-transparent px-1.5 sm:px-2">
           <div class="flex h-full w-full items-center gap-2.5 sm:gap-4">
             <RouterLink
-              to="/tax"
-              aria-label="자동차 계산기 홈"
-              class="inline-flex h-8 shrink-0 items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+              to="/"
+              aria-label="ShakiLabs 홈"
+              class="inline-flex h-8 w-8 shrink-0 items-center justify-center gap-1 px-0.5 text-muted-foreground transition-colors hover:text-foreground sm:w-auto sm:justify-start sm:gap-1.5"
             >
               <span
-                class="inline-flex h-8 min-w-8 items-center justify-center rounded-lg bg-primary px-2 text-[11px] font-black tracking-[0.18em] text-primary-foreground"
+                class="inline-flex h-6 w-6 items-center justify-center rounded-md bg-muted/60 ring-1 ring-border/60"
                 aria-hidden="true"
               >
-                CAR
+                <img src="/favicon.png" alt="" class="h-4 w-4 shrink-0" />
               </span>
               <span class="hidden font-brand text-tiny font-semibold tracking-wide text-foreground/90 sm:inline">
-                car.shakilabs.com
+                ShakiLabs
               </span>
             </RouterLink>
 
