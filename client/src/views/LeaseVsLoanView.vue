@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { Share2 } from "lucide-vue-next";
 import AdSlot from "@/components/common/AdSlot.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
 import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
@@ -7,12 +8,12 @@ import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import { leaseGuideItems } from "@/data/leaseGuide";
 import LeaseCompareCards from "@/components/lease/LeaseCompareCards.vue";
 import LeaseCompareInput from "@/components/lease/LeaseCompareInput.vue";
 import LeaseCompareTable from "@/components/lease/LeaseCompareTable.vue";
 import LeaseGuide from "@/components/lease/LeaseGuide.vue";
+import { Button } from "@/components/ui/button";
 import { carAffiliateItems } from "@/data/affiliateLinks";
 import { LEASE_DATA_UPDATED, LEASE_SOURCES } from "@/data/leaseRates";
 import { useLeaseCompare } from "@/composables/useLeaseCompare";
@@ -68,17 +69,36 @@ const summaryFacts = computed(() => [
       </div>
     </div>
 
-    <SummaryBanner
-      title="계약기간 동안 실제로 빠져나가는 현금유출 기준입니다. 리스는 만기 반납 기준이며 잔존가치 인수비용은 총비용에 포함하지 않았습니다."
-      leader-label="현금유출이 가장 적은 방식"
-      :leader-value="result.bestResult.label"
-      delta-label="최고/최저 차이"
-      :delta-value="formatWon(result.spread)"
-      delta-tone="neutral"
-      :facts="summaryFacts"
-      show-share
-      @share="share.openShare"
-    />
+    <div class="retro-panel overflow-hidden">
+      <div class="space-y-1 bg-gradient-to-br from-primary via-primary to-primary/80 px-4 py-4 sm:px-5 sm:py-5">
+        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">현금유출이 가장 적은 방식</p>
+        <p class="text-display font-bold leading-none text-white">{{ result.bestResult.label }}</p>
+      </div>
+      <div class="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
+        <span class="flex items-center gap-2 text-caption font-semibold text-muted-foreground">
+          <span class="h-2 w-2 shrink-0 rounded-full bg-muted-foreground" />
+          최고/최저 차이
+        </span>
+        <span class="inline-flex items-center rounded-full bg-muted px-3 py-1 text-heading font-bold tabular-nums text-foreground sm:text-h1">
+          {{ formatWon(result.spread) }}
+        </span>
+      </div>
+      <div class="divide-y divide-border/40 sm:grid sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        <div v-for="fact in summaryFacts" :key="fact.label" class="px-4 py-3 sm:px-5">
+          <p class="text-[11px] font-semibold text-muted-foreground">{{ fact.label }}</p>
+          <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ fact.value }}</p>
+        </div>
+      </div>
+      <div class="space-y-3 border-t border-border/40 px-4 py-3 sm:px-5">
+        <p class="text-caption leading-relaxed text-muted-foreground">
+          계약기간 동안 실제로 빠져나가는 현금유출 기준입니다. 리스는 만기 반납 기준이며 잔존가치 인수비용은 총비용에 포함하지 않았습니다.
+        </p>
+        <Button type="button" variant="subtle" size="sm" @click="share.openShare">
+          <Share2 class="h-3.5 w-3.5" />
+          결과 공유하기
+        </Button>
+      </div>
+    </div>
 
     <LeaseCompareCards :result="result" />
     <AffiliateLinkPanel
