@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { Wrench, CalendarClock, ShieldCheck } from "lucide-vue-next";
-import { Card, CardContent } from "@/components/ui/card";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import { CAR_SERVICE_UPDATED_AT, maintenanceProfiles } from "@/data/ownershipData";
@@ -19,6 +18,16 @@ const result = computed(() => calculateMaintenanceBudget({
   vehicleAge: vehicleAge.value,
   fuelType: fuelType.value,
 }));
+
+const chartSegments = computed(() => {
+  const total = result.value.total || 1;
+  return [
+    { label: "소모품", value: result.value.consumables, pct: (result.value.consumables / total) * 100, color: "bg-fee" },
+    { label: "오일", value: result.value.oil, pct: (result.value.oil / total) * 100, color: "bg-primary/70" },
+    { label: "타이어", value: result.value.tires, pct: (result.value.tires / total) * 100, color: "bg-muted-foreground/50" },
+    { label: "보험+세금", value: result.value.insurance + result.value.tax, pct: ((result.value.insurance + result.value.tax) / total) * 100, color: "bg-status-info/60" },
+  ];
+});
 </script>
 
 <template>
@@ -31,65 +40,79 @@ const result = computed(() => calculateMaintenanceBudget({
         <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
       </div>
       <div class="retro-panel-content grid gap-3 md:grid-cols-3">
-        <input v-model.number="annualKm" type="number" min="1000" class="retro-input" placeholder="연 주행거리" />
-        <input v-model.number="vehicleAge" type="number" min="0" max="20" class="retro-input" placeholder="차량 연식(년)" />
-        <select v-model="fuelType" class="retro-input">
-          <option v-for="(item, key) in maintenanceProfiles" :key="key" :value="key">{{ item.label }}</option>
-        </select>
+        <label class="block space-y-1">
+          <span class="text-caption font-semibold text-foreground">연 주행거리 (km)</span>
+          <input v-model.number="annualKm" type="number" min="1000" class="retro-input" placeholder="연 주행거리" />
+        </label>
+        <label class="block space-y-1">
+          <span class="text-caption font-semibold text-foreground">차량 연식 (년)</span>
+          <input v-model.number="vehicleAge" type="number" min="0" max="20" class="retro-input" placeholder="차량 연식(년)" />
+        </label>
+        <label class="block space-y-1">
+          <span class="text-caption font-semibold text-foreground">연료 종류</span>
+          <select v-model="fuelType" class="retro-input">
+            <option v-for="(item, key) in maintenanceProfiles" :key="key" :value="key">{{ item.label }}</option>
+          </select>
+        </label>
       </div>
     </div>
 
-    <div class="grid gap-3 md:grid-cols-3">
-      <!-- 연간 총 유지비 -->
-      <Card class="border-primary/25 shadow-[0_0_0_1px_hsl(var(--primary)/0.08),0_4px_16px_-4px_hsl(var(--primary)/0.1)]">
-        <CardContent class="p-4">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <p class="text-tiny font-semibold text-muted-foreground">연간 총 유지비</p>
-              <p class="mt-2 text-h1 font-bold text-primary">{{ formatWon(result.total) }}</p>
-            </div>
-            <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <Wrench class="h-5 w-5" />
-            </span>
-          </div>
-        </CardContent>
-      </Card>
-
-      <!-- 월 평균 -->
-      <Card>
-        <CardContent class="p-4">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <p class="text-tiny font-semibold text-muted-foreground">월 평균</p>
-              <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.monthlyAverage) }}</p>
-            </div>
-            <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
-              <CalendarClock class="h-5 w-5" />
-            </span>
-          </div>
-        </CardContent>
-      </Card>
-
-      <!-- 보험+세금 -->
-      <Card>
-        <CardContent class="p-4">
-          <div class="flex items-start justify-between gap-3">
-            <div>
-              <p class="text-tiny font-semibold text-muted-foreground">보험+세금</p>
-              <p class="mt-2 text-h1 font-bold text-foreground">{{ formatWon(result.insurance + result.tax) }}</p>
-            </div>
-            <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
-              <ShieldCheck class="h-5 w-5" />
-            </span>
-          </div>
-        </CardContent>
-      </Card>
+    <!-- 히어로: 연간 총 유지비 -->
+    <div class="flex items-start justify-between gap-4 rounded-2xl border border-primary/20 bg-primary/8 p-4 shadow-sm">
+      <div>
+        <p class="text-caption font-semibold text-muted-foreground">연간 총 유지비</p>
+        <p class="mt-1 text-display font-bold tabular-nums text-primary">{{ formatWon(result.total) }}</p>
+        <p class="mt-1 text-caption text-muted-foreground">
+          월 평균 <strong class="font-semibold tabular-nums text-foreground">{{ formatWon(result.monthlyAverage) }}</strong>
+        </p>
+      </div>
+      <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/12 text-primary">
+        <Wrench class="h-5 w-5" />
+      </span>
     </div>
 
-    <Card class="border-border/60">
-      <CardContent class="p-4 text-caption leading-relaxed text-foreground">
-        소모품 {{ formatWon(result.consumables) }}, 오일 {{ formatWon(result.oil) }}, 타이어 {{ formatWon(result.tires) }}를 포함한 추정치입니다.
-      </CardContent>
-    </Card>
+    <div class="grid gap-3 md:grid-cols-2">
+      <div class="flex items-start justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm">
+        <div>
+          <p class="text-tiny font-semibold text-muted-foreground">월 평균</p>
+          <p class="mt-2 text-h1 font-bold tabular-nums text-foreground">{{ formatWon(result.monthlyAverage) }}</p>
+        </div>
+        <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
+          <CalendarClock class="h-5 w-5" />
+        </span>
+      </div>
+      <div class="flex items-start justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm">
+        <div>
+          <p class="text-tiny font-semibold text-muted-foreground">보험+세금</p>
+          <p class="mt-2 text-h1 font-bold tabular-nums text-foreground">{{ formatWon(result.insurance + result.tax) }}</p>
+        </div>
+        <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
+          <ShieldCheck class="h-5 w-5" />
+        </span>
+      </div>
+    </div>
+
+    <!-- 비율 차트 -->
+    <div class="space-y-3 rounded-2xl border border-border/60 bg-muted/20 p-4 shadow-sm">
+      <p class="text-caption font-semibold text-foreground">비용 구성</p>
+      <div class="flex h-5 gap-px overflow-hidden rounded-lg border border-border/40">
+        <div
+          v-for="seg in chartSegments"
+          :key="seg.label"
+          :class="seg.color"
+          class="transition-all duration-300"
+          :style="{ width: seg.pct + '%' }"
+        />
+      </div>
+      <div class="grid grid-cols-2 gap-2 text-caption sm:grid-cols-4">
+        <div v-for="seg in chartSegments" :key="seg.label" class="space-y-0.5">
+          <span class="flex items-center gap-1.5">
+            <span class="h-2.5 w-2.5 shrink-0 rounded-sm" :class="seg.color" />
+            <span class="text-muted-foreground">{{ seg.label }}</span>
+          </span>
+          <span class="block font-semibold tabular-nums">{{ formatWon(seg.value) }}</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>

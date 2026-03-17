@@ -3,7 +3,6 @@ import { onMounted, ref } from "vue";
 import { Moon, Sun } from "lucide-vue-next";
 import { RouterLink } from "vue-router";
 import TickerBar from "@/components/common/TickerBar.vue";
-import { Button } from "@/components/ui/button";
 import { tickerMessages } from "@/data/tickerMessages";
 
 const THEME_STORAGE_KEY = "car:theme:v1";
@@ -54,17 +53,15 @@ onMounted(() => {
               <TickerBar :messages="tickerMessages" />
             </div>
 
-            <Button
+            <button
               type="button"
-              variant="outline"
-              size="iconSm"
-              class="shrink-0 border-border/70 bg-transparent text-muted-foreground hover:border-primary hover:text-primary"
+              class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-transparent text-muted-foreground transition-colors duration-200 hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               :aria-label="theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'"
               @click="toggleTheme"
             >
               <Moon v-if="theme === 'dark'" class="h-4 w-4" />
               <Sun v-else class="h-4 w-4" />
-            </Button>
+            </button>
           </div>
         </div>
       </div>

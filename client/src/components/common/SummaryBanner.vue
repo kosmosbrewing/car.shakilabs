@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { Button } from "@/components/ui/button";
 
 interface SummaryFact {
   label: string;
@@ -98,24 +97,22 @@ defineEmits<{
       </div>
 
       <div class="flex flex-wrap items-center gap-2.5 border-t border-border/40 px-4 py-3">
-        <Button
+        <button
           v-if="showDetail"
           type="button"
-          variant="default"
-          size="sm"
+          class="inline-flex min-h-10 items-center justify-center rounded-lg border border-primary bg-primary px-3.5 py-2 text-[0.8125rem] font-semibold leading-[1.45] text-white shadow-sm transition-colors duration-200 hover:bg-primary/90 active:bg-primary/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           @click="$emit('detail')"
         >
           {{ detailLabel ?? "상세 비교 보기" }}
-        </Button>
-        <Button
+        </button>
+        <button
           v-if="showShare"
           type="button"
-          variant="default"
-          size="sm"
+          class="inline-flex min-h-10 items-center justify-center rounded-lg border border-primary bg-primary px-3.5 py-2 text-[0.8125rem] font-semibold leading-[1.45] text-white shadow-sm transition-colors duration-200 hover:bg-primary/90 active:bg-primary/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           @click="$emit('share')"
         >
           결과 공유하기
-        </Button>
+        </button>
       </div>
     </div>
   </div>
