@@ -9,6 +9,9 @@ const tabs = [
   { key: "tax", label: "취등록세", to: "/tax", icon: FileText },
   { key: "insurance", label: "보험 절약", to: "/insurance", icon: Shield },
   { key: "lease", label: "리스·할부·렌트", to: "/lease-vs-loan", icon: CarFront },
+  { key: "parking", label: "주차비 비교", to: "/parking", icon: CarFront },
+  { key: "maintenance", label: "유지비 계산", to: "/maintenance", icon: FileText },
+  { key: "ev-vs-gas", label: "전기차 비교", to: "/ev-vs-gas", icon: Shield },
 ] as const;
 
 const activePath = computed(() => route.path);

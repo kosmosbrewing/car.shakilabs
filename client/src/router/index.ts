@@ -23,6 +23,21 @@ export const routes: RouteRecordRaw[] = [
     component: () => import("@/views/LeaseVsLoanView.vue"),
   },
   {
+    path: "/parking",
+    name: "Parking",
+    component: () => import("@/views/ParkingView.vue"),
+  },
+  {
+    path: "/maintenance",
+    name: "Maintenance",
+    component: () => import("@/views/MaintenanceView.vue"),
+  },
+  {
+    path: "/ev-vs-gas",
+    name: "EvVsGas",
+    component: () => import("@/views/EvVsGasView.vue"),
+  },
+  {
     path: "/about",
     name: "About",
     component: () => import("@/views/AboutView.vue"),

@@ -5,6 +5,7 @@ import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
 import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
+import RelatedServices from "@/components/common/RelatedServices.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import SummaryBanner from "@/components/common/SummaryBanner.vue";
@@ -112,6 +113,7 @@ const summaryFacts = computed(() => [
     <CompareSourceFooter :sources="CAR_TAX_SOURCES" updated-at="2026-03-11" />
     <AdSlot slot-id="top" label="자동차 금융 광고 영역" />
     <CarTaxFAQ :faqs="faqItems" />
+    <RelatedServices />
     <AffiliateDisclosure v-if="carAffiliateItems.length > 0" />
 
     <ShareModal
