@@ -58,7 +58,7 @@ const chartSegments = computed(() => {
 
     <!-- 히어로: 연간 총 유지비 -->
     <div class="retro-panel overflow-hidden">
-      <div class="space-y-1 bg-[linear-gradient(135deg,rgba(249,115,22,0.96),rgba(251,146,60,0.88))] px-4 py-4 sm:px-5 sm:py-5">
+      <div class="space-y-1 bg-gradient-to-br from-primary via-primary to-primary/80 px-4 py-4 sm:px-5 sm:py-5">
         <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">연간 총 유지비</p>
         <p class="text-display font-bold leading-none tabular-nums text-white">{{ formatWon(result.total) }}</p>
       </div>
