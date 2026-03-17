@@ -82,6 +82,7 @@ const summaryFacts = computed(() => [
       delta-label="바로 절약 가능한 금액"
       :delta-value="formatWon(result.totalSavingsWithDirect)"
       :facts="summaryFacts"
+      highlight
       show-share
       @share="share.openShare"
     />

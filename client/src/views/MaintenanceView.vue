@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { Wrench, CalendarClock, ShieldCheck } from "lucide-vue-next";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import { CAR_SERVICE_UPDATED_AT, maintenanceProfiles } from "@/data/ownershipData";
@@ -58,37 +57,20 @@ const chartSegments = computed(() => {
     </div>
 
     <!-- 히어로: 연간 총 유지비 -->
-    <div class="flex items-start justify-between gap-4 rounded-2xl border border-primary/20 bg-primary/8 p-4 shadow-sm">
-      <div>
-        <p class="text-caption font-semibold text-muted-foreground">연간 총 유지비</p>
-        <p class="mt-1 text-display font-bold tabular-nums text-primary">{{ formatWon(result.total) }}</p>
-        <p class="mt-1 text-caption text-muted-foreground">
-          월 평균 <strong class="font-semibold tabular-nums text-foreground">{{ formatWon(result.monthlyAverage) }}</strong>
-        </p>
+    <div class="retro-panel overflow-hidden">
+      <div class="space-y-1 bg-[linear-gradient(135deg,rgba(249,115,22,0.96),rgba(251,146,60,0.88))] px-4 py-4 sm:px-5 sm:py-5">
+        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">연간 총 유지비</p>
+        <p class="text-display font-bold leading-none tabular-nums text-white">{{ formatWon(result.total) }}</p>
       </div>
-      <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/12 text-primary">
-        <Wrench class="h-5 w-5" />
-      </span>
-    </div>
-
-    <div class="grid gap-3 md:grid-cols-2">
-      <div class="flex items-start justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm">
-        <div>
-          <p class="text-tiny font-semibold text-muted-foreground">월 평균</p>
-          <p class="mt-2 text-h1 font-bold tabular-nums text-foreground">{{ formatWon(result.monthlyAverage) }}</p>
+      <div class="grid grid-cols-2 divide-x divide-border/40">
+        <div class="px-4 py-3 sm:px-5">
+          <p class="text-[11px] font-semibold text-muted-foreground">월 평균</p>
+          <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ formatWon(result.monthlyAverage) }}</p>
         </div>
-        <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
-          <CalendarClock class="h-5 w-5" />
-        </span>
-      </div>
-      <div class="flex items-start justify-between gap-3 rounded-2xl border border-border bg-card p-4 shadow-sm">
-        <div>
-          <p class="text-tiny font-semibold text-muted-foreground">보험+세금</p>
-          <p class="mt-2 text-h1 font-bold tabular-nums text-foreground">{{ formatWon(result.insurance + result.tax) }}</p>
+        <div class="px-4 py-3 sm:px-5">
+          <p class="text-[11px] font-semibold text-muted-foreground">보험+세금</p>
+          <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ formatWon(result.insurance + result.tax) }}</p>
         </div>
-        <span class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
-          <ShieldCheck class="h-5 w-5" />
-        </span>
       </div>
     </div>
 

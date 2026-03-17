@@ -6,7 +6,7 @@ import TabNavigation from "@/components/common/TabNavigation.vue";
 
 <template>
   <div
-    class="min-h-screen flex flex-col bg-background bg-[radial-gradient(900px_420px_at_10%_-10%,hsl(var(--primary)/0.16),transparent_62%),radial-gradient(780px_360px_at_100%_0%,hsl(var(--primary)/0.09),transparent_58%)]"
+    class="min-h-screen flex flex-col bg-background bg-[radial-gradient(1200px_500px_at_50%_-120px,hsl(var(--primary)/0.12),transparent_70%)]"
   >
     <a
       href="#main-content"

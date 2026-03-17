@@ -89,6 +89,7 @@ const summaryFacts = computed(() => [
       :delta-value="formatPercent(result.totalCost / form.vehiclePrice, 1)"
       delta-tone="danger"
       :facts="summaryFacts"
+      highlight
       show-share
       @share="share.openShare"
     />

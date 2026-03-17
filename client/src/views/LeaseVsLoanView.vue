@@ -66,6 +66,7 @@ const summaryFacts = computed(() => [
       :delta-value="formatWon(result.spread)"
       delta-tone="neutral"
       :facts="summaryFacts"
+      highlight
       show-share
       @share="share.openShare"
     />
