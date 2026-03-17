@@ -65,9 +65,10 @@ function selectVehicleType(vehicleType: VehicleType): void {
 </script>
 
 <template>
-  <section class="space-y-4">
-    <div class="space-y-2">
-      <label class="block text-caption font-semibold text-foreground">차량 가격 (원)</label>
+  <section class="divide-y divide-border/50">
+    <!-- 차량 가격 -->
+    <div class="space-y-3 pb-5">
+      <label class="block text-body font-bold text-foreground">차량 가격 (원)</label>
       <div class="relative">
         <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-heading font-bold text-muted-foreground">₩</span>
         <input
@@ -100,115 +101,124 @@ function selectVehicleType(vehicleType: VehicleType): void {
       </div>
     </div>
 
-    <div class="space-y-2">
-      <span class="block text-caption font-semibold text-foreground">차종</span>
-      <div class="grid grid-cols-2 gap-2">
-        <button
-          v-for="vehicleType in vehicleTypes"
-          :key="vehicleType"
-          type="button"
-          class="touch-target rounded-xl border px-3 py-2 text-left text-caption font-semibold transition-colors"
-          :class="optionClass(modelValue.vehicleType === vehicleType)"
-          @click="selectVehicleType(vehicleType)"
-        >
-          {{ VEHICLE_TYPE_LABELS[vehicleType] }}
-        </button>
+    <!-- 차종 + 신차/중고차 (2열) -->
+    <div class="grid gap-5 py-5 sm:grid-cols-2">
+      <div class="space-y-2">
+        <span class="block text-body font-bold text-foreground">차종</span>
+        <div class="grid grid-cols-2 gap-2">
+          <button
+            v-for="vehicleType in vehicleTypes"
+            :key="vehicleType"
+            type="button"
+            class="touch-target rounded-xl border px-3 py-2 text-left text-caption font-semibold transition-colors"
+            :class="optionClass(modelValue.vehicleType === vehicleType)"
+            @click="selectVehicleType(vehicleType)"
+          >
+            {{ VEHICLE_TYPE_LABELS[vehicleType] }}
+          </button>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <span class="block text-body font-bold text-foreground">신차 / 중고차</span>
+        <div class="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            class="touch-target rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
+            :class="optionClass(modelValue.condition === 'new')"
+            @click="patch({ condition: 'new', modelYearAge: 1 })"
+          >
+            신차
+          </button>
+          <button
+            type="button"
+            class="touch-target rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
+            :class="optionClass(modelValue.condition === 'used')"
+            @click="patch({ condition: 'used' })"
+          >
+            중고차
+          </button>
+        </div>
+
+        <label v-if="modelValue.condition === 'used'" class="block space-y-1">
+          <span class="text-caption text-muted-foreground">중고차 경과연수</span>
+          <select
+            :value="modelValue.modelYearAge"
+            class="retro-input"
+            @change="patch({ modelYearAge: Number(($event.target as HTMLSelectElement).value) })"
+          >
+            <option v-for="age in ageOptions" :key="age" :value="age">{{ age }}년</option>
+          </select>
+        </label>
       </div>
     </div>
 
-    <div class="space-y-2">
-      <span class="block text-caption font-semibold text-foreground">신차 / 중고차</span>
-      <div class="grid grid-cols-2 gap-2">
-        <button
-          type="button"
-          class="touch-target rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
-          :class="optionClass(modelValue.condition === 'new')"
-          @click="patch({ condition: 'new', modelYearAge: 1 })"
+    <!-- 배기량 + 등록 지역 (2열) -->
+    <div class="grid gap-5 py-5 sm:grid-cols-2">
+      <div v-if="showDisplacementRange" class="space-y-2">
+        <span class="block text-body font-bold text-foreground">배기량 구간</span>
+        <p
+          v-if="fixedDisplacementRange === 'under1000'"
+          class="text-caption text-muted-foreground"
         >
-          신차
-        </button>
-        <button
-          type="button"
-          class="touch-target rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
-          :class="optionClass(modelValue.condition === 'used')"
-          @click="patch({ condition: 'used' })"
-        >
-          중고차
-        </button>
+          {{ modelValue.vehicleType === "light" ? "경차는" : "이륜차는" }} 배기량 구간을
+          1,000cc 미만으로 고정해 계산합니다.
+        </p>
+        <div class="grid grid-cols-2 gap-2">
+          <button
+            v-for="range in visibleDisplacementRanges"
+            :key="range"
+            type="button"
+            class="touch-target rounded-xl border px-3 py-2 text-left text-caption font-semibold transition-colors"
+            :class="optionClass(modelValue.displacementRange === range)"
+            :disabled="fixedDisplacementRange != null"
+            @click="patch({ displacementRange: range })"
+          >
+            {{ DISPLACEMENT_LABELS[range] }}
+          </button>
+        </div>
       </div>
 
-      <label v-if="modelValue.condition === 'used'" class="block space-y-1">
-        <span class="text-caption text-muted-foreground">중고차 경과연수</span>
-        <select
-          :value="modelValue.modelYearAge"
-          class="retro-input"
-          @change="patch({ modelYearAge: Number(($event.target as HTMLSelectElement).value) })"
-        >
-          <option v-for="age in ageOptions" :key="age" :value="age">{{ age }}년</option>
-        </select>
-      </label>
-    </div>
-
-    <div v-if="showDisplacementRange" class="space-y-2">
-      <span class="block text-caption font-semibold text-foreground">배기량 구간</span>
-      <p
-        v-if="fixedDisplacementRange === 'under1000'"
-        class="text-caption text-muted-foreground"
-      >
-        {{ modelValue.vehicleType === "light" ? "경차는" : "이륜차는" }} 배기량 구간을
-        1,000cc 미만으로 고정해 계산합니다.
-      </p>
-      <div class="grid grid-cols-2 gap-2">
-        <button
-          v-for="range in visibleDisplacementRanges"
-          :key="range"
-          type="button"
-          class="touch-target rounded-xl border px-3 py-2 text-left text-caption font-semibold transition-colors"
-          :class="optionClass(modelValue.displacementRange === range)"
-          :disabled="fixedDisplacementRange != null"
-          @click="patch({ displacementRange: range })"
-        >
-          {{ DISPLACEMENT_LABELS[range] }}
-        </button>
+      <div class="space-y-2">
+        <span class="block text-body font-bold text-foreground">등록 지역</span>
+        <div class="grid grid-cols-3 gap-2">
+          <button
+            v-for="region in regions"
+            :key="region"
+            type="button"
+            class="touch-target rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
+            :class="optionClass(modelValue.region === region)"
+            @click="patch({ region })"
+          >
+            {{ REGION_LABELS[region] }}
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="space-y-2">
-      <span class="block text-caption font-semibold text-foreground">등록 지역</span>
-      <div class="grid grid-cols-3 gap-2">
-        <button
-          v-for="region in regions"
-          :key="region"
-          type="button"
-          class="touch-target rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
-          :class="optionClass(modelValue.region === region)"
-          @click="patch({ region })"
-        >
-          {{ REGION_LABELS[region] }}
-        </button>
+    <!-- 감면 / 부대 옵션 -->
+    <div class="space-y-2 pt-5">
+      <span class="block text-body font-bold text-foreground">감면 / 부대 옵션</span>
+      <div class="flex flex-col gap-2 sm:flex-row">
+        <label class="flex flex-1 items-center gap-2 rounded-xl border border-border/70 px-3 py-2.5 text-caption transition-colors hover:border-primary/30">
+          <input
+            :checked="modelValue.isDisabledOwner"
+            type="checkbox"
+            class="retro-checkbox"
+            @change="patch({ isDisabledOwner: ($event.target as HTMLInputElement).checked })"
+          />
+          <span>장애인 취득세 감면 가정 적용</span>
+        </label>
+        <label class="flex flex-1 items-center gap-2 rounded-xl border border-border/70 px-3 py-2.5 text-caption transition-colors hover:border-primary/30">
+          <input
+            :checked="modelValue.applyPlateAgencyFee"
+            type="checkbox"
+            class="retro-checkbox"
+            @change="patch({ applyPlateAgencyFee: ($event.target as HTMLInputElement).checked })"
+          />
+          <span>번호판 대행 수수료 포함</span>
+        </label>
       </div>
-    </div>
-
-    <div class="space-y-2">
-      <span class="block text-caption font-semibold text-foreground">감면 / 부대 옵션</span>
-      <label class="flex items-center gap-2 rounded-xl border border-border/70 px-3 py-2 text-caption">
-        <input
-          :checked="modelValue.isDisabledOwner"
-          type="checkbox"
-          class="retro-checkbox"
-          @change="patch({ isDisabledOwner: ($event.target as HTMLInputElement).checked })"
-        />
-        <span>장애인 취득세 감면 가정 적용</span>
-      </label>
-      <label class="flex items-center gap-2 rounded-xl border border-border/70 px-3 py-2 text-caption">
-        <input
-          :checked="modelValue.applyPlateAgencyFee"
-          type="checkbox"
-          class="retro-checkbox"
-          @change="patch({ applyPlateAgencyFee: ($event.target as HTMLInputElement).checked })"
-        />
-        <span>번호판 대행 수수료 포함</span>
-      </label>
     </div>
   </section>
 </template>

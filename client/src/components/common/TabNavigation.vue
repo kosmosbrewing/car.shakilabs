@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useRoute, RouterLink } from "vue-router";
-import { FileText, Shield, CarFront } from "lucide-vue-next";
 
 const route = useRoute();
 
 const tabs = [
-  { key: "tax", label: "취등록세", to: "/tax", icon: FileText },
-  { key: "insurance", label: "보험 절약", to: "/insurance", icon: Shield },
-  { key: "lease", label: "리스·할부·렌트", to: "/lease-vs-loan", icon: CarFront },
-  { key: "parking", label: "주차비 비교", to: "/parking", icon: CarFront },
-  { key: "maintenance", label: "유지비 계산", to: "/maintenance", icon: FileText },
-  { key: "ev-vs-gas", label: "전기차 비교", to: "/ev-vs-gas", icon: Shield },
+  { key: "tax", label: "취등록세", to: "/tax" },
+  { key: "insurance", label: "보험 절약", to: "/insurance" },
+  { key: "lease", label: "리스·할부·렌트", to: "/lease-vs-loan" },
+  { key: "parking", label: "주차비 비교", to: "/parking" },
+  { key: "maintenance", label: "유지비 계산", to: "/maintenance" },
+  { key: "ev-vs-gas", label: "전기차 비교", to: "/ev-vs-gas" },
 ] as const;
 
 const activePath = computed(() => route.path);
@@ -31,14 +30,13 @@ function isActiveTab(path: string): boolean {
           :to="tab.to"
           :aria-current="isActiveTab(tab.to) ? 'page' : undefined"
           :class="[
-            'touch-target relative inline-flex h-12 shrink-0 items-center gap-1.5 whitespace-nowrap px-2.5 text-caption font-semibold transition-all duration-200 sm:px-3 sm:text-body',
+            'touch-target relative inline-flex h-12 shrink-0 items-center whitespace-nowrap px-2.5 text-caption font-semibold transition-all duration-200 sm:px-3 sm:text-body',
             isActiveTab(tab.to)
               ? 'text-white hover:text-white'
               : 'text-white/70 hover:text-white/90',
           ]"
         >
-          <component :is="tab.icon" class="h-3.5 w-3.5 shrink-0 sm:h-4 sm:w-4" />
-          <span>{{ tab.label }}</span>
+          {{ tab.label }}
           <span
             v-if="isActiveTab(tab.to)"
             class="absolute inset-x-1 bottom-0 h-[3px] rounded-full bg-white"
