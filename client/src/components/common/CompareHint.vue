@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onBeforeUnmount, onMounted, useSlots, nextTick, watch } from "vue";
 import { CircleHelp } from "lucide-vue-next";
-import { buttonVariants } from "@/components/ui/button";
 
 const props = defineProps<{
   tooltip?: string;
@@ -118,7 +117,7 @@ onBeforeUnmount(() => {
     <button
       ref="buttonRef"
       type="button"
-      :class="[buttonVariants({ variant: 'ghost', size: 'iconSm' }), 'rounded-full p-0 hover:bg-transparent', props.compact && '!h-auto !w-auto']"
+      :class="['inline-flex items-center justify-center rounded-full p-0 text-muted-foreground transition-colors hover:bg-transparent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2', props.compact ? 'h-auto w-auto' : 'h-8 w-8']"
       aria-label="상세 설명 보기"
       :aria-expanded="isVisible"
       @mouseenter="show"

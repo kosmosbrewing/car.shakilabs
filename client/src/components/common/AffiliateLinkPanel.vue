@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ExternalLink } from "lucide-vue-next";
-import { buttonVariants } from "@/components/ui/button";
 import type { AffiliateItem } from "@/data/affiliateLinks";
 
 defineProps<{
@@ -25,7 +24,7 @@ defineProps<{
         :href="item.href"
         target="_blank"
         rel="nofollow sponsored noopener noreferrer"
-        :class="[buttonVariants({ variant: 'default' }), 'h-auto w-full justify-between gap-3 whitespace-normal px-4 py-3 text-left']"
+        class="inline-flex h-auto w-full items-center justify-between gap-3 whitespace-normal rounded-lg border border-primary bg-primary px-4 py-3 text-left text-body font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-primary/90 active:bg-primary/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
       >
         <span class="flex min-w-0 flex-1 flex-col">
           <span>{{ item.label }}</span>

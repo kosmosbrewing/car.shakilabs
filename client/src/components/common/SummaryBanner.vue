@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { Share2, ChevronRight } from "lucide-vue-next";
 
 interface SummaryFact {
   label: string;
@@ -21,14 +22,12 @@ const props = defineProps<{
 }>();
 
 const toneClasses = {
-  success: { row: "bg-profit/5 dark:bg-profit/12", badge: "bg-profit/12 text-profit" },
-  danger: { row: "bg-fee/5 dark:bg-fee/12", badge: "bg-fee/12 text-fee" },
-  neutral: { row: "bg-muted/30", badge: "bg-muted text-foreground" },
+  success: { badge: "bg-profit/12 text-profit", dot: "bg-profit" },
+  danger: { badge: "bg-fee/12 text-fee", dot: "bg-fee" },
+  neutral: { badge: "bg-muted text-foreground", dot: "bg-muted-foreground" },
 } as const;
 
 const tone = computed(() => toneClasses[props.deltaTone ?? "success"]);
-
-const btnClass = "inline-flex min-h-10 items-center justify-center rounded-lg border border-primary bg-primary px-3.5 py-2 text-[0.8125rem] font-semibold leading-[1.45] text-white shadow-sm transition-colors duration-200 hover:bg-primary/90 active:bg-primary/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2";
 
 defineEmits<{
   share: [];
@@ -38,17 +37,18 @@ defineEmits<{
 
 <template>
   <div class="retro-panel overflow-hidden">
+    <!-- 히어로 영역 -->
     <div
       :class="[
-        'retro-titlebar flex-col items-start gap-1 rounded-t-2xl sm:flex-row sm:items-center sm:gap-3',
+        'space-y-1 px-4 py-4 sm:px-5 sm:py-5',
         highlight
           ? 'bg-[linear-gradient(135deg,rgba(249,115,22,0.96),rgba(251,146,60,0.88))]'
-          : ''
+          : 'border-b border-border/40 bg-primary/6'
       ]"
     >
       <p
         :class="[
-          'text-[11px] font-bold uppercase tracking-[0.14em] sm:text-[13px]',
+          'text-[11px] font-bold uppercase tracking-[0.14em] sm:text-caption',
           highlight ? 'text-white/80' : 'text-muted-foreground'
         ]"
       >
@@ -56,7 +56,7 @@ defineEmits<{
       </p>
       <p
         :class="[
-          'text-[24px] font-bold leading-none sm:text-[32px]',
+          'text-display font-bold leading-none tabular-nums',
           highlight ? 'text-white' : 'text-foreground'
         ]"
       >
@@ -64,55 +64,54 @@ defineEmits<{
       </p>
     </div>
 
-    <div class="retro-panel-content space-y-3.5 p-0 sm:p-0">
-      <table class="w-full text-body">
-        <tbody>
-          <tr :class="['border-b border-border/40', tone.row]">
-            <td class="whitespace-nowrap px-4 py-3 text-caption font-semibold text-muted-foreground">
-              {{ deltaLabel }}
-            </td>
-            <td class="px-4 py-3 text-right">
-              <span :class="['inline-flex items-center rounded-full px-3 py-1 text-[17px] font-bold tabular-nums sm:text-[22px]', tone.badge]">
-                {{ deltaValue }}
-              </span>
-            </td>
-          </tr>
-          <tr
-            v-for="(fact, index) in facts"
-            :key="fact.label"
-            :class="index < (facts?.length ?? 0) - 1 ? 'border-b border-border/40' : ''"
-          >
-            <td class="whitespace-nowrap px-4 py-2.5 text-caption font-semibold text-muted-foreground">
-              {{ fact.label }}
-            </td>
-            <td class="px-4 py-2.5 text-right text-[14px] font-bold tabular-nums sm:text-[15px]">
-              {{ fact.value }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- 델타 하이라이트 -->
+    <div class="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
+      <span class="flex items-center gap-2 text-caption font-semibold text-muted-foreground">
+        <span class="h-2 w-2 shrink-0 rounded-full" :class="tone.dot" />
+        {{ deltaLabel }}
+      </span>
+      <span
+        :class="['inline-flex items-center rounded-full px-3 py-1 text-heading font-bold tabular-nums sm:text-h1', tone.badge]"
+      >
+        {{ deltaValue }}
+      </span>
+    </div>
 
-      <div class="px-4 pb-1">
-        <p class="text-caption leading-relaxed text-muted-foreground">
-          {{ title }}
-        </p>
+    <!-- 팩트 행 -->
+    <div v-if="facts && facts.length > 0" class="divide-y divide-border/40">
+      <div
+        v-for="fact in facts"
+        :key="fact.label"
+        class="flex items-center justify-between px-4 py-2.5 sm:px-5"
+      >
+        <span class="text-caption font-semibold text-muted-foreground">{{ fact.label }}</span>
+        <span class="text-body font-bold tabular-nums">{{ fact.value }}</span>
       </div>
+    </div>
 
-      <div class="flex flex-wrap items-center gap-2.5 border-t border-border/40 px-4 py-3">
+    <!-- 설명 + 액션 -->
+    <div class="space-y-3 border-t border-border/40 px-4 py-3 sm:px-5">
+      <p class="text-caption leading-relaxed text-muted-foreground">
+        {{ title }}
+      </p>
+
+      <div v-if="showDetail || showShare" class="flex flex-wrap items-center gap-2.5">
         <button
           v-if="showDetail"
           type="button"
-          :class="btnClass"
+          class="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-primary bg-primary px-3.5 py-2 text-caption font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-primary/90 active:bg-primary/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           @click="$emit('detail')"
         >
           {{ detailLabel ?? "상세 비교 보기" }}
+          <ChevronRight class="h-3.5 w-3.5" />
         </button>
         <button
           v-if="showShare"
           type="button"
-          :class="btnClass"
+          class="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-border/70 bg-card px-3.5 py-2 text-caption font-semibold text-foreground shadow-sm transition-colors duration-200 hover:border-primary/50 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           @click="$emit('share')"
         >
+          <Share2 class="h-3.5 w-3.5" />
           결과 공유하기
         </button>
       </div>
