@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Receipt, Landmark, FileText, CircleDollarSign, Percent } from "lucide-vue-next";
+import { Card, CardContent } from "@/components/ui/card";
 import SectionShareButton from "@/components/common/SectionShareButton.vue";
 import { formatPercent, formatWon } from "@/lib/utils";
 import type { CarTaxBreakdown } from "@/utils/calculator";
@@ -10,6 +12,14 @@ defineProps<{
 defineEmits<{
   share: [];
 }>();
+
+const statIcons = [Receipt, Landmark, FileText, CircleDollarSign] as const;
+const statIconClasses = [
+  "bg-fee/10 text-fee",
+  "bg-muted text-muted-foreground",
+  "bg-muted text-muted-foreground",
+  "bg-primary/10 text-primary",
+] as const;
 </script>
 
 <template>
@@ -20,28 +30,41 @@ defineEmits<{
     </div>
 
     <div class="retro-panel-content space-y-4">
-      <div class="retro-stat-grid">
-        <div class="retro-stat">
-          <p class="retro-stat-label">취득세</p>
-          <p class="retro-stat-value text-fee">{{ formatWon(result.acquisitionTax) }}</p>
-        </div>
-        <div class="retro-stat">
-          <p class="retro-stat-label">공채비</p>
-          <p class="retro-stat-value">{{ formatWon(result.bondCost) }}</p>
-        </div>
-        <div class="retro-stat">
-          <p class="retro-stat-label">부대비용</p>
-          <p class="retro-stat-value">{{ formatWon(result.miscCost) }}</p>
-        </div>
-        <div class="retro-stat">
-          <p class="retro-stat-label">총비용</p>
-          <p class="retro-stat-value text-primary">{{ formatWon(result.totalCost) }}</p>
-        </div>
+      <!-- stat 카드 그리드 -->
+      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <Card
+          v-for="(stat, index) in [
+            { label: '취득세', value: result.acquisitionTax, cls: 'text-fee' },
+            { label: '공채비', value: result.bondCost, cls: '' },
+            { label: '부대비용', value: result.miscCost, cls: '' },
+            { label: '총비용', value: result.totalCost, cls: 'text-primary' },
+          ]"
+          :key="stat.label"
+          class="border-border/50 bg-muted/30"
+        >
+          <CardContent class="p-3.5">
+            <div class="flex items-center gap-2">
+              <span
+                class="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-lg"
+                :class="statIconClasses[index]"
+              >
+                <component :is="statIcons[index]" class="h-3.5 w-3.5" />
+              </span>
+              <p class="truncate text-caption uppercase tracking-wide text-muted-foreground">{{ stat.label }}</p>
+            </div>
+            <p class="mt-2 text-heading font-bold tabular-nums" :class="stat.cls">
+              {{ formatWon(stat.value) }}
+            </p>
+          </CardContent>
+        </Card>
       </div>
 
       <div class="retro-board-list">
         <div class="retro-board-item bg-primary/5 font-semibold">
-          <span>차량가 대비 총비용</span>
+          <span class="flex items-center gap-2">
+            <Percent class="h-3.5 w-3.5 text-primary" />
+            차량가 대비 총비용
+          </span>
           <strong class="tabular-nums text-primary">
             {{ formatPercent(result.totalCost / result.vehiclePrice, 1) }}
           </strong>

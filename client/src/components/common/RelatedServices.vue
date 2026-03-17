@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Component } from "vue";
 import { ArrowRight, CreditCard } from "lucide-vue-next";
+import { ActionCard } from "@/components/ui/action-card";
 
 type RelatedServiceItem = {
   title: string;
@@ -29,11 +30,12 @@ const items: RelatedServiceItem[] = [
         취등록세까지 계산했다면 이후 매달 나가는 주유비 절감 카드도 함께 확인해 보세요.
       </p>
       <div class="grid gap-3 sm:grid-cols-2">
-        <a
+        <ActionCard
           v-for="item in items"
           :key="item.href"
+          as="a"
           :href="item.href"
-          class="group flex flex-col rounded-[1.6rem] border border-border/70 bg-card p-4 text-left transition-[background-color,border-color,transform,box-shadow] duration-200 hover:-translate-y-[1px] hover:border-primary/25 hover:bg-muted/15"
+          variant="default"
         >
           <div class="flex items-start justify-between gap-3">
             <div>
@@ -48,7 +50,7 @@ const items: RelatedServiceItem[] = [
             바로 가기
             <ArrowRight class="h-3.5 w-3.5" />
           </p>
-        </a>
+        </ActionCard>
       </div>
     </div>
   </section>
