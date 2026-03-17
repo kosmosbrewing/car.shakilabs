@@ -33,7 +33,7 @@ function rankLabel(index: number): string {
       :class="[
         'overflow-hidden rounded-2xl border bg-card shadow-sm transition-shadow duration-200',
         index === 0
-          ? 'border-profit/40 shadow-[0_0_0_1px_hsl(var(--profit)/0.15),0_4px_16px_-4px_hsl(var(--profit)/0.12)]'
+          ? 'border-primary/35 shadow-[0_0_0_1px_hsl(var(--primary)/0.12),0_4px_16px_-4px_hsl(var(--primary)/0.14)]'
           : 'border-border/70'
       ]"
     >
@@ -42,13 +42,13 @@ function rankLabel(index: number): string {
         <div class="flex items-center gap-2.5">
           <span
             class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl"
-            :class="index === 0 ? 'bg-profit/12 text-profit' : 'bg-muted text-muted-foreground'"
+            :class="index === 0 ? 'bg-primary/12 text-primary' : 'bg-muted text-muted-foreground'"
           >
             <Trophy v-if="index === 0" class="h-4 w-4" />
             <Medal v-else class="h-4 w-4" />
           </span>
           <div>
-            <p class="text-tiny font-semibold" :class="index === 0 ? 'text-profit' : 'text-muted-foreground'">
+            <p class="text-tiny font-semibold" :class="index === 0 ? 'text-primary' : 'text-muted-foreground'">
               {{ rankLabel(index) }}
             </p>
             <p class="text-heading font-bold">{{ method.label }}</p>
