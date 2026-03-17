@@ -7,7 +7,6 @@ import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import InsuranceFAQ from "@/components/insurance/InsuranceFAQ.vue";
 import InsuranceInput from "@/components/insurance/InsuranceInput.vue";
 import InsuranceResult from "@/components/insurance/InsuranceResult.vue";
@@ -15,7 +14,7 @@ import { carAffiliateItems } from "@/data/affiliateLinks";
 import { INSURANCE_DATA_UPDATED, INSURANCE_SOURCES } from "@/data/insuranceRates";
 import { useInsuranceCalc } from "@/composables/useInsuranceCalc";
 import { useShare } from "@/composables/useShare";
-import { formatPercent, formatWon } from "@/lib/utils";
+import { formatWon } from "@/lib/utils";
 
 const seoTitle = "자동차보험 갱신 절약 시뮬레이터 — 할인 항목별 절감액";
 const seoDescription =
@@ -63,30 +62,12 @@ const share = useShare({
   path: "/insurance",
   query: shareQuery,
 });
-
-const summaryFacts = computed(() => [
-  { label: "특약 적용 후", value: formatWon(result.value.estimatedPremium) },
-  { label: "다이렉트 포함", value: formatWon(result.value.finalPremium) },
-  { label: "총 절감률", value: formatPercent(result.value.totalDiscountRate, 1) },
-]);
 </script>
 
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
-    <SummaryBanner
-      title="현재 보험료 기준으로 조정 가능한 할인 항목을 단계별로 적용한 결과입니다."
-      leader-label="다이렉트 포함 예상 보험료"
-      :leader-value="formatWon(result.finalPremium)"
-      delta-label="바로 절약 가능한 금액"
-      :delta-value="formatWon(result.totalSavingsWithDirect)"
-      :facts="summaryFacts"
-      highlight
-      show-share
-      @share="share.openShare"
-    />
-
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
         <h1 class="retro-title">보험 갱신 절약 시뮬레이터</h1>

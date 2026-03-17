@@ -8,7 +8,6 @@ import FreshBadge from "@/components/common/FreshBadge.vue";
 import RelatedServices from "@/components/common/RelatedServices.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import SummaryBanner from "@/components/common/SummaryBanner.vue";
 import CarTaxBreakdown from "@/components/car-tax/CarTaxBreakdown.vue";
 import CarTaxFAQ from "@/components/car-tax/CarTaxFAQ.vue";
 import CarTaxInput from "@/components/car-tax/CarTaxInput.vue";
@@ -17,7 +16,7 @@ import { carAffiliateItems } from "@/data/affiliateLinks";
 import { CAR_TAX_DATA_UPDATED, CAR_TAX_SOURCES } from "@/data/carTaxRates";
 import { useCarTaxCalc } from "@/composables/useCarTaxCalc";
 import { useShare } from "@/composables/useShare";
-import { formatPercent, formatWon } from "@/lib/utils";
+import { formatWon } from "@/lib/utils";
 
 const seoTitle = "자동차 취등록세 계산기 — 신차·중고차 총비용";
 const seoDescription =
@@ -69,31 +68,12 @@ const share = useShare({
   path: "/tax",
   query: shareQuery,
 });
-
-const summaryFacts = computed(() => [
-  { label: "취득세", value: formatWon(result.value.acquisitionTax) },
-  { label: "공채비", value: formatWon(result.value.bondCost) },
-  { label: "부대비용", value: formatWon(result.value.miscCost) },
-]);
 </script>
 
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
-    <SummaryBanner
-      title="차량가와 등록 지역 기준의 예상 초기 등록비용입니다."
-      leader-label="예상 총 등록비용"
-      :leader-value="formatWon(result.totalCost)"
-      delta-label="차량가 대비 비중"
-      :delta-value="formatPercent(result.totalCost / form.vehiclePrice, 1)"
-      delta-tone="danger"
-      :facts="summaryFacts"
-      highlight
-      show-share
-      @share="share.openShare"
-    />
-
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
         <h1 class="retro-title">자동차 취등록세 계산기</h1>
