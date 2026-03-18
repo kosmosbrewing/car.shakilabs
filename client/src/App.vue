@@ -7,7 +7,7 @@ import LoadingSpinner from "@/components/ui/loading/LoadingSpinner.vue";
 <template>
   <AppLayout>
     <RouterView v-slot="{ Component, route }">
-      <Transition name="fade">
+      <Transition name="page-fade" mode="out-in">
         <Suspense :key="route.path" timeout="0">
           <component :is="Component" />
           <template #fallback>
