@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, onMounted, onBeforeUnmount } from "vue";
 import { useRoute, RouterLink } from "vue-router";
 
 const route = useRoute();
@@ -18,31 +18,58 @@ const activePath = computed(() => route.path);
 function isActiveTab(path: string): boolean {
   return activePath.value === path;
 }
+
+const scrollEl = ref<HTMLElement | null>(null);
+const showFade = ref(true);
+
+function checkScroll() {
+  const el = scrollEl.value;
+  if (!el) return;
+  showFade.value = el.scrollWidth - el.scrollLeft - el.clientWidth > 8;
+}
+
+onMounted(() => {
+  const el = scrollEl.value;
+  if (el) {
+    el.addEventListener("scroll", checkScroll, { passive: true });
+    checkScroll();
+  }
+});
+
+onBeforeUnmount(() => {
+  scrollEl.value?.removeEventListener("scroll", checkScroll);
+});
 </script>
 
 <template>
   <nav class="sticky top-0 z-50 border-b border-primary/20 bg-primary shadow-sm" aria-label="주요 메뉴">
-    <div class="container">
-      <div class="flex h-12 items-center gap-1 overflow-x-auto sm:gap-2" style="scrollbar-width: none">
+    <div class="container relative">
+      <div ref="scrollEl" class="flex h-12 items-center gap-2 overflow-x-auto" style="scrollbar-width: none">
         <RouterLink
           v-for="tab in tabs"
           :key="tab.key"
           :to="tab.to"
           :aria-current="isActiveTab(tab.to) ? 'page' : undefined"
           :class="[
-            'touch-target relative inline-flex h-12 shrink-0 items-center whitespace-nowrap px-2.5 text-caption font-semibold transition-all duration-200 sm:px-3 sm:text-body',
+            'touch-target relative inline-flex h-12 shrink-0 items-center justify-center px-3 text-center text-[0.82rem] font-semibold leading-tight transition-all duration-200 sm:text-body',
             isActiveTab(tab.to)
-              ? 'text-white hover:text-white'
-              : 'text-white/70 hover:text-white/90',
+              ? 'text-primary-foreground'
+              : 'text-primary-foreground/70 hover:text-primary-foreground/90',
           ]"
         >
-          {{ tab.label }}
+          <span class="break-keep">{{ tab.label }}</span>
           <span
             v-if="isActiveTab(tab.to)"
             class="absolute inset-x-1 bottom-0 h-[3px] rounded-full bg-white"
           />
         </RouterLink>
       </div>
+      <!-- 스크롤 힌트: 우측 그라디언트 fade -->
+      <div
+        v-show="showFade"
+        class="pointer-events-none absolute right-0 top-0 h-full w-10 bg-gradient-to-l from-primary to-transparent"
+        aria-hidden="true"
+      />
     </div>
   </nav>
 </template>
