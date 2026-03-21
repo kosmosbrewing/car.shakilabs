@@ -35,6 +35,10 @@
     }
   ],
   "rewrites": [
+    { "source": "/car/assets/:path*", "destination": "/assets/:path*" },
+    { "source": "/car/fonts/:path*", "destination": "/fonts/:path*" },
+    { "source": "/car/favicon.png", "destination": "/favicon.png" },
+    { "source": "/car/:path*", "destination": "/index.html" },
     { "source": "/((?!assets|fonts|images|favicon|og-image|sitemap|robots|ads\\.txt).*)", "destination": "/index.html" }
   ]
 }
