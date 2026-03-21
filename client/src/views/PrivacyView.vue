@@ -6,7 +6,7 @@ const constantsStore = useConstantsStore();
 </script>
 
 <template>
-  <SEOHead title="개인정보 처리방침" description="car.shakilabs.com의 개인정보 처리방침입니다." />
+  <SEOHead title="개인정보 처리방침" description="shakilabs.com/car의 개인정보 처리방침입니다." />
 
   <div class="container py-5">
     <div class="retro-panel">

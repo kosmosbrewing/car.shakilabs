@@ -34,7 +34,7 @@ function toQuery(form: CarTaxInput): Record<string, string> {
   });
 }
 
-export function useCarTaxCalc() {
+export function useCarTaxCalc(initialOverride?: Partial<CarTaxInput>) {
   const route = useRoute();
   const router = useRouter();
   const syncingFromRoute = ref(false);
@@ -44,6 +44,7 @@ export function useCarTaxCalc() {
     syncingFromRoute.value = true;
     form.value = sanitizeCarTaxInput({
       ...DEFAULT_CAR_TAX_INPUT,
+      ...initialOverride,
       ...parseQuery(route.query),
     });
     syncingFromRoute.value = false;

@@ -12,7 +12,7 @@ const constantsStore = useConstantsStore();
 <template>
   <SEOHead
     title="서비스 안내"
-    description="car.shakilabs.com은 자동차 취등록세, 보험 절약, 리스·할부·렌트 총비용을 비교하는 무료 계산기입니다."
+    description="shakilabs.com/car은 자동차 취등록세, 보험 절약, 리스·할부·렌트 총비용을 비교하는 무료 계산기입니다."
   />
 
   <div class="container py-5 space-y-5">
@@ -23,7 +23,7 @@ const constantsStore = useConstantsStore();
 
       <div class="retro-panel-content space-y-4">
         <p class="text-body text-muted-foreground">
-          car.shakilabs.com은 자동차 구매 전후에 가장 자주 비교하는 초기 비용과 유지 비용을 한곳에서 보는 계산기입니다.
+          shakilabs.com/car은 자동차 구매 전후에 가장 자주 비교하는 초기 비용과 유지 비용을 한곳에서 보는 계산기입니다.
         </p>
 
         <h2 class="text-heading font-bold">제공 기능</h2>

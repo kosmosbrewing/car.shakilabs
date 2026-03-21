@@ -14,11 +14,20 @@ import { carAffiliateItems } from "@/data/affiliateLinks";
 import { INSURANCE_DATA_UPDATED, INSURANCE_SOURCES } from "@/data/insuranceRates";
 import { useInsuranceCalc } from "@/composables/useInsuranceCalc";
 import { useShare } from "@/composables/useShare";
-import { formatWon } from "@/lib/utils";
+import { formatWon, formatManWon } from "@/lib/utils";
 
-const seoTitle = "자동차보험 갱신 절약 시뮬레이터 — 할인 항목별 절감액";
-const seoDescription =
-  "마일리지, 블랙박스, 자기부담금, 다이렉트 전환까지 자동차보험 갱신 시 줄일 수 있는 비용을 한눈에 비교합니다.";
+const props = defineProps<{ initialPremium?: number }>();
+const amountLabel = computed(() => props.initialPremium ? formatManWon(props.initialPremium / 10000) : null);
+const seoTitle = computed(() =>
+  amountLabel.value
+    ? `보험료 ${amountLabel.value} 자동차보험 절약 시뮬레이터 | shakilabs.com/car`
+    : "자동차보험 갱신 절약 시뮬레이터 — 할인 항목별 절감액",
+);
+const seoDescription = computed(() =>
+  amountLabel.value
+    ? `현재 보험료 ${amountLabel.value}원 기준, 할인 특약과 다이렉트 전환으로 줄일 수 있는 비용을 비교합니다.`
+    : "마일리지, 블랙박스, 자기부담금, 다이렉트 전환까지 자동차보험 갱신 시 줄일 수 있는 비용을 한눈에 비교합니다.",
+);
 
 const faqItems = [
   {
@@ -52,10 +61,11 @@ const faqJsonLd = {
   })),
 };
 
-const { form, result, shareQuery } = useInsuranceCalc();
+const override = props.initialPremium ? { currentPremium: props.initialPremium } : undefined;
+const { form, result, shareQuery } = useInsuranceCalc(override);
 const share = useShare({
   title: computed(() => `자동차보험 절약 시뮬레이터 | 예상 절약 ${formatWon(result.value.totalSavingsWithDirect)}`),
-  description: seoDescription,
+  description: seoDescription.value,
   summaryText: computed(
     () => `현재 보험료 ${formatWon(form.value.currentPremium)} → 다이렉트 포함 예상 ${formatWon(result.value.finalPremium)}`
   ),

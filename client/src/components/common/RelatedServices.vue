@@ -14,7 +14,7 @@ const items: RelatedServiceItem[] = [
   {
     title: "주유 할인카드 비교",
     description: "차량 유지비 중 반복 지출인 주유비를 카드 혜택 기준으로 비교합니다.",
-    href: "https://card.shakilabs.com/fuel-card",
+    href: "/card/fuel-card",
     icon: CreditCard,
   },
 ];

@@ -36,7 +36,7 @@ function toQuery(form: LeaseCompareInput): Record<string, string> {
   });
 }
 
-export function useLeaseCompare() {
+export function useLeaseCompare(initialOverride?: Partial<LeaseCompareInput>) {
   const route = useRoute();
   const router = useRouter();
   const syncingFromRoute = ref(false);
@@ -46,6 +46,7 @@ export function useLeaseCompare() {
     syncingFromRoute.value = true;
     form.value = sanitizeLeaseCompareInput({
       ...DEFAULT_LEASE_COMPARE_INPUT,
+      ...initialOverride,
       ...parseQuery(route.query),
     });
     syncingFromRoute.value = false;

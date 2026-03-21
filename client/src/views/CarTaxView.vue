@@ -16,11 +16,20 @@ import { carAffiliateItems } from "@/data/affiliateLinks";
 import { CAR_TAX_DATA_UPDATED, CAR_TAX_SOURCES } from "@/data/carTaxRates";
 import { useCarTaxCalc } from "@/composables/useCarTaxCalc";
 import { useShare } from "@/composables/useShare";
-import { formatWon } from "@/lib/utils";
+import { formatWon, formatManWon } from "@/lib/utils";
 
-const seoTitle = "자동차 취등록세 계산기 — 신차·중고차 총비용";
-const seoDescription =
-  "신차·중고차 취등록세, 공채매입비, 부대비용을 한번에 계산합니다. 차종·지역·연식별 초기 등록비용을 빠르게 확인하세요.";
+const props = defineProps<{ initialVehiclePrice?: number }>();
+const amountLabel = computed(() => props.initialVehiclePrice ? formatManWon(props.initialVehiclePrice / 10000) : null);
+const seoTitle = computed(() =>
+  amountLabel.value
+    ? `${amountLabel.value} 자동차 취등록세 계산기 | shakilabs.com/car`
+    : "자동차 취등록세 계산기 — 신차·중고차 총비용",
+);
+const seoDescription = computed(() =>
+  amountLabel.value
+    ? `차량가 ${amountLabel.value}원 기준 취등록세, 공채매입비, 부대비용을 한번에 계산합니다.`
+    : "신차·중고차 취등록세, 공채매입비, 부대비용을 한번에 계산합니다. 차종·지역·연식별 초기 등록비용을 빠르게 확인하세요.",
+);
 
 const faqItems = [
   {
@@ -58,10 +67,11 @@ const faqJsonLd = {
   })),
 };
 
-const { form, result, shareQuery } = useCarTaxCalc();
+const override = props.initialVehiclePrice ? { vehiclePrice: props.initialVehiclePrice } : undefined;
+const { form, result, shareQuery } = useCarTaxCalc(override);
 const share = useShare({
   title: computed(() => `자동차 취등록세 계산기 | 총 ${formatWon(result.value.totalCost)}`),
-  description: seoDescription,
+  description: seoDescription.value,
   summaryText: computed(
     () => `차량가 ${formatWon(form.value.vehiclePrice)} 기준 예상 등록비용 ${formatWon(result.value.totalCost)}`
   ),

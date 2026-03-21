@@ -3,6 +3,7 @@ import {
   calculateMaintenanceBudget,
   compareEvVsGas,
   compareParkingOptions,
+  calculateEvSubsidy,
 } from "@/utils/ownershipCalculator";
 
 describe("ownershipCalculator", () => {
@@ -28,5 +29,52 @@ describe("ownershipCalculator", () => {
     });
     expect(result.winner).toBe("ev");
     expect(result.gap).toBe(3_082_909);
+  });
+});
+
+describe("calculateEvSubsidy", () => {
+  const baseInput = {
+    vehiclePrice: 45_000_000,
+    nationalSubsidy: 3_400_000,
+    localSubsidy: 2_000_000,
+    isYouth: false,
+    isConversion: false,
+  };
+
+  it("5,000만원 미만 차량은 보조금 100% 지급", () => {
+    const result = calculateEvSubsidy(baseInput);
+    expect(result.priceRate).toBe(1.0);
+    expect(result.adjustedNational).toBe(3_400_000);
+    expect(result.adjustedLocal).toBe(2_000_000);
+    expect(result.totalSubsidy).toBe(5_400_000);
+    expect(result.effectivePrice).toBe(39_600_000);
+  });
+
+  it("5,000~8,500만원 차량은 보조금 50% 지급", () => {
+    const result = calculateEvSubsidy({ ...baseInput, vehiclePrice: 60_000_000 });
+    expect(result.priceRate).toBe(0.5);
+    expect(result.adjustedNational).toBe(1_700_000);
+    expect(result.adjustedLocal).toBe(1_000_000);
+    expect(result.totalSubsidy).toBe(2_700_000);
+    expect(result.effectivePrice).toBe(57_300_000);
+  });
+
+  it("8,500만원 이상 차량은 보조금 미지원", () => {
+    const result = calculateEvSubsidy({ ...baseInput, vehiclePrice: 90_000_000 });
+    expect(result.priceRate).toBe(0);
+    expect(result.totalSubsidy).toBe(0);
+    expect(result.effectivePrice).toBe(90_000_000);
+  });
+
+  it("청년 가산은 가격 조정된 국고보조금의 20%", () => {
+    const result = calculateEvSubsidy({ ...baseInput, isYouth: true });
+    expect(result.youthBonus).toBe(680_000);
+    expect(result.totalSubsidy).toBe(6_080_000);
+  });
+
+  it("전환지원금은 100만원 고정 추가", () => {
+    const result = calculateEvSubsidy({ ...baseInput, isConversion: true });
+    expect(result.conversionBonus).toBe(1_000_000);
+    expect(result.totalSubsidy).toBe(6_400_000);
   });
 });

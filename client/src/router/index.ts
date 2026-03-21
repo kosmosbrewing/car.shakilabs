@@ -13,14 +13,32 @@ export const routes: RouteRecordRaw[] = [
     component: () => import("@/views/CarTaxView.vue"),
   },
   {
+    path: "/tax/:amount(\\d+)",
+    name: "CarTaxAmount",
+    component: () => import("@/views/CarTaxView.vue"),
+    props: (route) => ({ initialVehiclePrice: Number(route.params.amount) * 10000 }),
+  },
+  {
     path: "/insurance",
     name: "Insurance",
     component: () => import("@/views/InsuranceView.vue"),
   },
   {
+    path: "/insurance/:amount(\\d+)",
+    name: "InsuranceAmount",
+    component: () => import("@/views/InsuranceView.vue"),
+    props: (route) => ({ initialPremium: Number(route.params.amount) * 10000 }),
+  },
+  {
     path: "/lease-vs-loan",
     name: "LeaseVsLoan",
     component: () => import("@/views/LeaseVsLoanView.vue"),
+  },
+  {
+    path: "/lease-vs-loan/:amount(\\d+)",
+    name: "LeaseVsLoanAmount",
+    component: () => import("@/views/LeaseVsLoanView.vue"),
+    props: (route) => ({ initialVehiclePrice: Number(route.params.amount) * 10000 }),
   },
   {
     path: "/parking",

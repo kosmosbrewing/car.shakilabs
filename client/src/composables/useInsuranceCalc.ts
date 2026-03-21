@@ -32,7 +32,7 @@ function toQuery(form: InsuranceInput): Record<string, string> {
   });
 }
 
-export function useInsuranceCalc() {
+export function useInsuranceCalc(initialOverride?: Partial<InsuranceInput>) {
   const route = useRoute();
   const router = useRouter();
   const syncingFromRoute = ref(false);
@@ -42,6 +42,7 @@ export function useInsuranceCalc() {
     syncingFromRoute.value = true;
     form.value = sanitizeInsuranceInput({
       ...DEFAULT_INSURANCE_INPUT,
+      ...initialOverride,
       ...parseQuery(route.query),
     });
     syncingFromRoute.value = false;

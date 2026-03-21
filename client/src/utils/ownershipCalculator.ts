@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { maintenanceProfiles } from "@/data/ownershipData";
+import { maintenanceProfiles, PRICE_TIERS, YOUTH_BONUS_RATE, CONVERSION_BONUS, NATIONAL_SUBSIDY_MAX } from "@/data/ownershipData";
 
 const parkingSchema = z.object({
   daysPerMonth: z.number().int().min(1).max(31),
@@ -78,5 +78,68 @@ export function compareEvVsGas(input: z.input<typeof evVsGasSchema>) {
     evTotal,
     winner: evTotal <= gasTotal ? "ev" : "gas",
     gap: Math.abs(gasTotal - evTotal),
+  };
+}
+
+// ── 전기차 보조금 계산 ──────────────────────────────
+const evSubsidySchema = z.object({
+  vehiclePrice: z.number().min(0).max(200_000_000),
+  nationalSubsidy: z.number().min(0).max(NATIONAL_SUBSIDY_MAX),
+  localSubsidy: z.number().min(0).max(10_000_000),
+  isYouth: z.boolean(),
+  isConversion: z.boolean(),
+});
+
+export type EvSubsidyInput = z.input<typeof evSubsidySchema>;
+
+export interface EvSubsidyResult {
+  /** 가격 구간 적용률 */
+  priceRate: number;
+  priceRateLabel: string;
+  /** 가격 조정된 국고보조금 */
+  adjustedNational: number;
+  /** 청년 가산 금액 */
+  youthBonus: number;
+  /** 전환지원금 */
+  conversionBonus: number;
+  /** 지자체 보조금 (가격 조정 적용) */
+  adjustedLocal: number;
+  /** 총 보조금 */
+  totalSubsidy: number;
+  /** 보조금 적용 후 실구매가 */
+  effectivePrice: number;
+}
+
+export function calculateEvSubsidy(input: z.input<typeof evSubsidySchema>): EvSubsidyResult {
+  const parsed = evSubsidySchema.parse(input);
+
+  // 가격 구간별 지급률
+  const tier = PRICE_TIERS.find((t) => parsed.vehiclePrice < t.maxPrice) ?? PRICE_TIERS[PRICE_TIERS.length - 1];
+  const priceRate = tier.rate;
+
+  // 국고보조금 = 성능보조금 × 가격구간률
+  const adjustedNational = Math.round(parsed.nationalSubsidy * priceRate);
+
+  // 청년 가산 = 가격 조정된 국고보조금 × 20%
+  const youthBonus = parsed.isYouth ? Math.round(adjustedNational * YOUTH_BONUS_RATE) : 0;
+
+  // 전환지원금
+  const conversionBonus = parsed.isConversion ? CONVERSION_BONUS : 0;
+
+  // 지자체 보조금에도 동일한 가격 구간률 적용
+  const adjustedLocal = Math.round(parsed.localSubsidy * priceRate);
+
+  const totalSubsidy = adjustedNational + youthBonus + conversionBonus + adjustedLocal;
+  const effectivePrice = Math.max(0, parsed.vehiclePrice - totalSubsidy);
+
+  return {
+    priceRate,
+    priceRateLabel: tier.label,
+    adjustedNational,
+    youthBonus,
+    conversionBonus,
+    adjustedLocal,
+    totalSubsidy,
+    effectivePrice,
   };
 }

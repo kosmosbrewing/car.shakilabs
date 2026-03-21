@@ -18,11 +18,20 @@ import { carAffiliateItems } from "@/data/affiliateLinks";
 import { LEASE_DATA_UPDATED, LEASE_SOURCES } from "@/data/leaseRates";
 import { useLeaseCompare } from "@/composables/useLeaseCompare";
 import { useShare } from "@/composables/useShare";
-import { formatWon } from "@/lib/utils";
+import { formatWon, formatManWon } from "@/lib/utils";
 
-const seoTitle = "리스 vs 할부 vs 장기렌트 비교 — 계약기간 현금유출 비교";
-const seoDescription =
-  "같은 차를 리스·할부·장기렌트로 이용할 때 계약기간 동안 실제로 나가는 현금유출과 월 납입금 차이를 비교합니다.";
+const props = defineProps<{ initialVehiclePrice?: number }>();
+const amountLabel = computed(() => props.initialVehiclePrice ? formatManWon(props.initialVehiclePrice / 10000) : null);
+const seoTitle = computed(() =>
+  amountLabel.value
+    ? `${amountLabel.value} 리스 vs 할부 vs 장기렌트 비교 | shakilabs.com/car`
+    : "리스 vs 할부 vs 장기렌트 비교 — 계약기간 현금유출 비교",
+);
+const seoDescription = computed(() =>
+  amountLabel.value
+    ? `차량가 ${amountLabel.value}원 기준, 리스·할부·장기렌트 계약기간 현금유출과 월 납입금을 비교합니다.`
+    : "같은 차를 리스·할부·장기렌트로 이용할 때 계약기간 동안 실제로 나가는 현금유출과 월 납입금 차이를 비교합니다.",
+);
 
 const faqJsonLd = {
   "@context": "https://schema.org",
@@ -37,10 +46,11 @@ const faqJsonLd = {
   })),
 };
 
-const { form, result, shareQuery } = useLeaseCompare();
+const override = props.initialVehiclePrice ? { vehiclePrice: props.initialVehiclePrice } : undefined;
+const { form, result, shareQuery } = useLeaseCompare(override);
 const share = useShare({
   title: computed(() => `${result.value.bestResult.label}가 가장 저렴합니다 | ${formatWon(result.value.bestResult.totalCost)}`),
-  description: seoDescription,
+  description: seoDescription.value,
   summaryText: computed(
     () => `${result.value.bestResult.label} 총비용 ${formatWon(result.value.bestResult.totalCost)} · 최고/최저 차이 ${formatWon(result.value.spread)}`
   ),

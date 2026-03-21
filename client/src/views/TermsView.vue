@@ -6,7 +6,7 @@ const constantsStore = useConstantsStore();
 </script>
 
 <template>
-  <SEOHead title="이용약관" description="car.shakilabs.com의 서비스 이용약관입니다." />
+  <SEOHead title="이용약관" description="shakilabs.com/car의 서비스 이용약관입니다." />
 
   <div class="container py-5">
     <div class="retro-panel">
@@ -16,7 +16,7 @@ const constantsStore = useConstantsStore();
 
       <div class="retro-panel-content space-y-4">
         <p class="text-body text-muted-foreground">
-          car.shakilabs.com(이하 "본 서비스")은 자동차 관련 비용 비교를 돕는 무료 계산 도구입니다.
+          shakilabs.com/car(이하 "본 서비스")은 자동차 관련 비용 비교를 돕는 무료 계산 도구입니다.
         </p>
 
         <h2 class="text-heading font-bold">1. 서비스 성격</h2>
