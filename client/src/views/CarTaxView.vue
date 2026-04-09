@@ -7,6 +7,8 @@ import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import RelatedServices from "@/components/common/RelatedServices.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { CAR_TAX_GUIDE } from "@/data/seoGuides";
 import ShareModal from "@/components/share/ShareModal.vue";
 import CarTaxBreakdown from "@/components/car-tax/CarTaxBreakdown.vue";
 import CarTaxFAQ from "@/components/car-tax/CarTaxFAQ.vue";
@@ -104,6 +106,14 @@ const share = useShare({
     <CompareSourceFooter :sources="CAR_TAX_SOURCES" updated-at="2026-03-11" />
     <AdSlot slot-id="top" label="자동차 금융 광고 영역" />
     <CarTaxFAQ :faqs="faqItems" />
+    <SeoRichGuide
+      :title="CAR_TAX_GUIDE.title"
+      :intro="CAR_TAX_GUIDE.intro"
+      :sections="CAR_TAX_GUIDE.sections"
+      :checklist="CAR_TAX_GUIDE.checklist"
+      :faqs="CAR_TAX_GUIDE.faqs"
+      :disclaimer="CAR_TAX_GUIDE.disclaimer"
+    />
     <RelatedServices />
     <AffiliateDisclosure v-if="carAffiliateItems.length > 0" />
 

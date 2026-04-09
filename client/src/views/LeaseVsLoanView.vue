@@ -7,6 +7,8 @@ import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { CAR_LEASE_GUIDE } from "@/data/seoGuides";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { leaseGuideItems } from "@/data/leaseGuide";
 import LeaseCompareCards from "@/components/lease/LeaseCompareCards.vue";
@@ -126,6 +128,14 @@ const summaryFacts = computed(() => [
       <p>• 장기렌트: 보험·세금 포함 월 납입금 기준</p>
     </div>
     <AdSlot slot-id="bottom" label="자동차 금융 광고 영역" />
+    <SeoRichGuide
+      :title="CAR_LEASE_GUIDE.title"
+      :intro="CAR_LEASE_GUIDE.intro"
+      :sections="CAR_LEASE_GUIDE.sections"
+      :checklist="CAR_LEASE_GUIDE.checklist"
+      :faqs="CAR_LEASE_GUIDE.faqs"
+      :disclaimer="CAR_LEASE_GUIDE.disclaimer"
+    />
     <AffiliateDisclosure v-if="carAffiliateItems.length > 0" />
 
     <ShareModal

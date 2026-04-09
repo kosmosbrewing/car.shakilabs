@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { CAR_ABOUT_GUIDE, CAR_HOME_GUIDE } from "@/data/seoGuides";
 import { RouterLink } from "vue-router";
 import { useConstantsStore } from "@/stores/constants";
 import { CAR_TAX_DATA_UPDATED } from "@/data/carTaxRates";
@@ -59,5 +61,18 @@ const constantsStore = useConstantsStore();
     <div class="text-center">
       <RouterLink class="retro-button" to="/tax">취등록세 계산기로 이동</RouterLink>
     </div>
+
+    <SeoRichGuide
+      :title="CAR_ABOUT_GUIDE.title"
+      :intro="CAR_ABOUT_GUIDE.intro"
+      :sections="CAR_ABOUT_GUIDE.sections"
+      :disclaimer="CAR_ABOUT_GUIDE.disclaimer"
+    />
+    <SeoRichGuide
+      :title="CAR_HOME_GUIDE.title"
+      :intro="CAR_HOME_GUIDE.intro"
+      :sections="CAR_HOME_GUIDE.sections"
+      :faqs="CAR_HOME_GUIDE.faqs"
+    />
   </div>
 </template>

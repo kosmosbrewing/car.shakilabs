@@ -3,6 +3,8 @@ import { computed, ref } from "vue";
 import { ParkingSquare, Trophy } from "lucide-vue-next";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { CAR_PARKING_GUIDE } from "@/data/seoGuides";
 import { CAR_SERVICE_UPDATED_AT } from "@/data/ownershipData";
 import { formatWon } from "@/lib/utils";
 import { compareParkingOptions } from "@/utils/ownershipCalculator";
@@ -107,5 +109,13 @@ const result = computed(() => compareParkingOptions({
         </span>
       </div>
     </div>
+
+    <SeoRichGuide
+      :title="CAR_PARKING_GUIDE.title"
+      :intro="CAR_PARKING_GUIDE.intro"
+      :sections="CAR_PARKING_GUIDE.sections"
+      :faqs="CAR_PARKING_GUIDE.faqs"
+      :disclaimer="CAR_PARKING_GUIDE.disclaimer"
+    />
   </div>
 </template>

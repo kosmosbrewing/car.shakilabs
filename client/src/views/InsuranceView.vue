@@ -6,6 +6,8 @@ import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { CAR_INSURANCE_GUIDE } from "@/data/seoGuides";
 import ShareModal from "@/components/share/ShareModal.vue";
 import InsuranceFAQ from "@/components/insurance/InsuranceFAQ.vue";
 import InsuranceInput from "@/components/insurance/InsuranceInput.vue";
@@ -97,6 +99,14 @@ const share = useShare({
     <CompareSourceFooter :sources="INSURANCE_SOURCES" updated-at="2026-03-11" />
     <AdSlot slot-id="bottom" label="자동차보험 광고 영역" />
     <InsuranceFAQ :faqs="faqItems" />
+    <SeoRichGuide
+      :title="CAR_INSURANCE_GUIDE.title"
+      :intro="CAR_INSURANCE_GUIDE.intro"
+      :sections="CAR_INSURANCE_GUIDE.sections"
+      :checklist="CAR_INSURANCE_GUIDE.checklist"
+      :faqs="CAR_INSURANCE_GUIDE.faqs"
+      :disclaimer="CAR_INSURANCE_GUIDE.disclaimer"
+    />
     <AffiliateDisclosure v-if="carAffiliateItems.length > 0" />
 
     <ShareModal

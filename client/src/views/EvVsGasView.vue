@@ -3,6 +3,8 @@ import { computed, ref, watch } from "vue";
 import { Fuel, Zap, TrendingDown, BadgePercent, Car, UserRound, ArrowRightLeft } from "lucide-vue-next";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { CAR_EV_VS_GAS_GUIDE } from "@/data/seoGuides";
 import {
   Accordion,
   AccordionContent,
@@ -360,5 +362,13 @@ const subsidyResult = computed(() =>
         </AccordionItem>
       </Accordion>
     </div>
+
+    <SeoRichGuide
+      :title="CAR_EV_VS_GAS_GUIDE.title"
+      :intro="CAR_EV_VS_GAS_GUIDE.intro"
+      :sections="CAR_EV_VS_GAS_GUIDE.sections"
+      :faqs="CAR_EV_VS_GAS_GUIDE.faqs"
+      :disclaimer="CAR_EV_VS_GAS_GUIDE.disclaimer"
+    />
   </div>
 </template>

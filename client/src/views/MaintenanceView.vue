@@ -2,6 +2,8 @@
 import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import { CAR_MAINTENANCE_GUIDE } from "@/data/seoGuides";
 import { CAR_SERVICE_UPDATED_AT, maintenanceProfiles } from "@/data/ownershipData";
 import { formatWon } from "@/lib/utils";
 import { calculateMaintenanceBudget } from "@/utils/ownershipCalculator";
@@ -96,5 +98,14 @@ const chartSegments = computed(() => {
         </div>
       </div>
     </div>
+
+    <SeoRichGuide
+      :title="CAR_MAINTENANCE_GUIDE.title"
+      :intro="CAR_MAINTENANCE_GUIDE.intro"
+      :sections="CAR_MAINTENANCE_GUIDE.sections"
+      :checklist="CAR_MAINTENANCE_GUIDE.checklist"
+      :faqs="CAR_MAINTENANCE_GUIDE.faqs"
+      :disclaimer="CAR_MAINTENANCE_GUIDE.disclaimer"
+    />
   </div>
 </template>
