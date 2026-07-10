@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { ShSurface, ShText } from "@shakilabs/ui";
 import AdSlot from "@/components/common/AdSlot.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
 import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
@@ -86,15 +87,15 @@ const share = useShare({
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
-    <div class="retro-panel overflow-hidden">
+    <ShSurface padding="none" class="overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">자동차 취등록세 계산기</h1>
+        <ShText as="h1" variant="heading">자동차 취등록세 계산기</ShText>
         <FreshBadge :message="`${CAR_TAX_DATA_UPDATED} 기준`" />
       </div>
       <div class="retro-panel-content">
         <CarTaxInput v-model="form" />
       </div>
-    </div>
+    </ShSurface>
 
     <CarTaxResult :result="result" @share="share.openShare" />
     <AffiliateLinkPanel
