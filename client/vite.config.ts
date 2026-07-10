@@ -3,7 +3,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import tailwind from "tailwindcss";
 import autoprefixer from "autoprefixer";
-import { SEO_ROUTES } from "./scripts/seo-routes.mjs";
+import { PRERENDER_ROUTES } from "./scripts/seo-routes.mjs";
 
 const buildDate = process.env.BUILD_DATE ?? new Date().toISOString().slice(0, 10);
 
@@ -81,7 +81,7 @@ export default defineConfig({
   },
   ssgOptions: {
     includedRoutes() {
-      return SEO_ROUTES;
+      return [...PRERENDER_ROUTES, "/404"];
     },
   },
 });
