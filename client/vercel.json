@@ -36,6 +36,8 @@
     }
   ],
   "rewrites": [
+    { "source": "/car", "destination": "/" },
+    { "source": "/car/", "destination": "/" },
     { "source": "/car/:path*", "destination": "/:path*" }
   ]
 }

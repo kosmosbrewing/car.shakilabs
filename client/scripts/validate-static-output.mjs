@@ -32,9 +32,17 @@ function validateVercelConfig(configPath) {
   const routeRewrite = rewrites.find(
     (rewrite) => rewrite.source === "/car/:path*"
   );
+  const routeRewriteIndex = rewrites.indexOf(routeRewrite);
+  const aliasRewrites = ["/car", "/car/"].map((source) =>
+    rewrites.find((rewrite) => rewrite.source === source)
+  );
 
   assert(config.cleanUrls === true, configPath + ": cleanUrls must be true");
   assert(indexRewrites.length === 0, configPath + ": index.html catch-all rewrite is forbidden");
+  assert(aliasRewrites.every((rewrite) => rewrite?.destination === "/"),
+    configPath + ": car root aliases must rewrite to the root HTML");
+  assert(aliasRewrites.every((rewrite) => rewrites.indexOf(rewrite) < routeRewriteIndex),
+    configPath + ": car root aliases must precede the wildcard rewrite");
   assert(routeRewrite?.destination === "/:path*",
     configPath + ": car rewrite must preserve the requested path");
 }
