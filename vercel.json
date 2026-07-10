@@ -1,8 +1,10 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "installCommand": "cd client && npm ci",
   "buildCommand": "cd client && npm run build",
   "outputDirectory": "client/dist",
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/(.*)",
@@ -35,10 +37,6 @@
     }
   ],
   "rewrites": [
-    { "source": "/car/assets/:path*", "destination": "/assets/:path*" },
-    { "source": "/car/fonts/:path*", "destination": "/fonts/:path*" },
-    { "source": "/car/favicon.png", "destination": "/favicon.png" },
-    { "source": "/car/:path*", "destination": "/index.html" },
-    { "source": "/((?!assets|fonts|images|favicon|og-image|sitemap|robots|ads\\.txt).*)", "destination": "/index.html" }
+    { "source": "/car/:path*", "destination": "/:path*" }
   ]
 }
