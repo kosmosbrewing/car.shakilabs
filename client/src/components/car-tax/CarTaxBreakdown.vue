@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ShTable, ShTableBody, ShTableCell, ShTableHead, ShTableHeader, ShTableRow } from "@shakilabs/ui";
 import { formatWon } from "@/lib/utils";
 import type { CarTaxBreakdown } from "@/utils/calculator";
 
@@ -13,25 +14,22 @@ defineProps<{
       <h2 class="retro-title">세부 내역</h2>
     </div>
 
-    <div class="overflow-x-auto">
-      <table class="w-full text-body">
-        <thead>
-          <tr class="border-b border-border/70 bg-muted/20 text-left text-caption text-muted-foreground">
-            <th class="px-4 py-3 font-semibold">항목</th>
-            <th class="px-4 py-3 text-right font-semibold">금액</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr
+    <ShTable aria-label="자동차 세금 세부 내역" density="compact" min-width="18rem">
+        <ShTableHeader>
+          <ShTableRow>
+            <ShTableHead>항목</ShTableHead>
+            <ShTableHead numeric>금액</ShTableHead>
+          </ShTableRow>
+        </ShTableHeader>
+        <ShTableBody>
+          <ShTableRow
             v-for="item in result.items"
             :key="item.label"
-            class="border-b border-border/40 last:border-b-0"
           >
-            <td class="px-4 py-3">{{ item.label }}</td>
-            <td class="px-4 py-3 text-right font-semibold tabular-nums">{{ formatWon(item.value) }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+            <ShTableCell>{{ item.label }}</ShTableCell>
+            <ShTableCell numeric emphasis>{{ formatWon(item.value) }}</ShTableCell>
+          </ShTableRow>
+        </ShTableBody>
+    </ShTable>
   </section>
 </template>
