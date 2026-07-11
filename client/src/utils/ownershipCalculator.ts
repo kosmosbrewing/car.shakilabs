@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { maintenanceProfiles, PRICE_TIERS, YOUTH_BONUS_RATE, CONVERSION_BONUS, NATIONAL_SUBSIDY_MAX } from "@/data/ownershipData";
+import { calculationFailure, calculationSuccess } from "@/utils/calculationState";
 
 const parkingSchema = z.object({
   daysPerMonth: z.number().int().min(1).max(31),
@@ -23,7 +24,9 @@ const evVsGasSchema = z.object({
 });
 
 export function compareParkingOptions(input: z.input<typeof parkingSchema>) {
-  const parsed = parkingSchema.parse(input);
+  const parsedResult = parkingSchema.safeParse(input);
+  if (!parsedResult.success) return calculationFailure(parsedResult.error);
+  const parsed = parsedResult.data;
   const hourlyTotal = Math.round(parsed.daysPerMonth * parsed.hoursPerDay * parsed.hourlyRate);
   const dayCapTotal = Math.round(parsed.daysPerMonth * Math.min(parsed.hoursPerDay * parsed.hourlyRate, 15_000));
   const monthlyTotal = Math.round(parsed.monthlyPass);
@@ -33,15 +36,17 @@ export function compareParkingOptions(input: z.input<typeof parkingSchema>) {
     { key: "monthly", label: "월주차", total: monthlyTotal },
   ].sort((a, b) => a.total - b.total);
 
-  return {
+  return calculationSuccess({
     items,
     bestOption: items[0],
     spread: items[items.length - 1].total - items[0].total,
-  };
+  });
 }
 
 export function calculateMaintenanceBudget(input: z.input<typeof maintenanceSchema>) {
-  const parsed = maintenanceSchema.parse(input);
+  const parsedResult = maintenanceSchema.safeParse(input);
+  if (!parsedResult.success) return calculationFailure(parsedResult.error);
+  const parsed = parsedResult.data;
   const profile = maintenanceProfiles[parsed.fuelType];
   const oil = Math.ceil(parsed.annualKm / profile.oilIntervalKm) * profile.oilCost;
   const tires = Math.round((parsed.annualKm / 40_000) * profile.tireCost);
@@ -51,7 +56,7 @@ export function calculateMaintenanceBudget(input: z.input<typeof maintenanceSche
   const tax = profile.tax;
   const total = oil + tires + consumables + inspection + insurance + tax;
 
-  return {
+  return calculationSuccess({
     profile,
     oil,
     tires,
@@ -61,24 +66,26 @@ export function calculateMaintenanceBudget(input: z.input<typeof maintenanceSche
     tax,
     total,
     monthlyAverage: Math.round(total / 12),
-  };
+  });
 }
 
 export function compareEvVsGas(input: z.input<typeof evVsGasSchema>) {
-  const parsed = evVsGasSchema.parse(input);
+  const parsedResult = evVsGasSchema.safeParse(input);
+  if (!parsedResult.success) return calculationFailure(parsedResult.error);
+  const parsed = parsedResult.data;
   const gasFuel = Math.round((parsed.annualKm / parsed.gasEfficiency) * parsed.gasPrice);
   const evFuel = Math.round(parsed.annualKm * parsed.evKwhPerKm * parsed.electricityPrice);
   const gasTotal = gasFuel + 850_000 + 520_000;
   const evTotal = evFuel + 420_000 + 130_000 + 180_000;
 
-  return {
+  return calculationSuccess({
     gasFuel,
     evFuel,
     gasTotal,
     evTotal,
     winner: evTotal <= gasTotal ? "ev" : "gas",
     gap: Math.abs(gasTotal - evTotal),
-  };
+  });
 }
 
 // ── 전기차 보조금 계산 ──────────────────────────────
@@ -110,8 +117,10 @@ export interface EvSubsidyResult {
   effectivePrice: number;
 }
 
-export function calculateEvSubsidy(input: z.input<typeof evSubsidySchema>): EvSubsidyResult {
-  const parsed = evSubsidySchema.parse(input);
+export function calculateEvSubsidy(input: z.input<typeof evSubsidySchema>) {
+  const parsedResult = evSubsidySchema.safeParse(input);
+  if (!parsedResult.success) return calculationFailure(parsedResult.error);
+  const parsed = parsedResult.data;
 
   // 가격 구간별 지급률
   const tier = PRICE_TIERS.find((t) => parsed.vehiclePrice < t.maxPrice) ?? PRICE_TIERS[PRICE_TIERS.length - 1];
@@ -132,7 +141,7 @@ export function calculateEvSubsidy(input: z.input<typeof evSubsidySchema>): EvSu
   const totalSubsidy = adjustedNational + youthBonus + conversionBonus + adjustedLocal;
   const effectivePrice = Math.max(0, parsed.vehiclePrice - totalSubsidy);
 
-  return {
+  return calculationSuccess<EvSubsidyResult>({
     priceRate,
     priceRateLabel: tier.label,
     adjustedNational,
@@ -141,5 +150,5 @@ export function calculateEvSubsidy(input: z.input<typeof evSubsidySchema>): EvSu
     adjustedLocal,
     totalSubsidy,
     effectivePrice,
-  };
+  });
 }
