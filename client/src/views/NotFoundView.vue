@@ -8,7 +8,7 @@ import { RouterLink } from "vue-router";
 
   <div class="container space-y-5 py-20 text-center">
     <p class="text-display text-muted-foreground">404</p>
-    <p class="text-heading font-bold text-foreground">길을 잃었지만, 비용은 잃지 마세요</p>
+    <h1 class="text-heading font-bold text-foreground">길을 잃었지만, 비용은 잃지 마세요</h1>
     <p class="text-body text-muted-foreground">
       요청하신 페이지가 주차장 어딘가로 사라졌습니다. 아래 계산기에서 다시 출발해 보세요.
     </p>

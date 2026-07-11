@@ -15,21 +15,21 @@ defineProps<{
     </div>
 
     <ShTable aria-label="자동차 세금 세부 내역" density="compact" min-width="18rem">
-        <ShTableHeader>
-          <ShTableRow>
-            <ShTableHead>항목</ShTableHead>
-            <ShTableHead numeric>금액</ShTableHead>
-          </ShTableRow>
-        </ShTableHeader>
-        <ShTableBody>
-          <ShTableRow
-            v-for="item in result.items"
-            :key="item.label"
-          >
-            <ShTableCell>{{ item.label }}</ShTableCell>
-            <ShTableCell numeric emphasis>{{ formatWon(item.value) }}</ShTableCell>
-          </ShTableRow>
-        </ShTableBody>
+      <ShTableHeader>
+        <ShTableRow>
+          <ShTableHead>항목</ShTableHead>
+          <ShTableHead numeric>금액</ShTableHead>
+        </ShTableRow>
+      </ShTableHeader>
+      <ShTableBody>
+        <ShTableRow
+          v-for="item in result.items"
+          :key="item.label"
+        >
+          <ShTableCell>{{ item.label }}</ShTableCell>
+          <ShTableCell numeric emphasis>{{ formatWon(item.value) }}</ShTableCell>
+        </ShTableRow>
+      </ShTableBody>
     </ShTable>
   </section>
 </template>
