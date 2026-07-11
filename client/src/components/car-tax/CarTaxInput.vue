@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, useId } from "vue";
 import {
   DISPLACEMENT_LABELS,
   REGION_LABELS,
@@ -25,6 +25,8 @@ const vehicleTypes = Object.keys(VEHICLE_TYPE_LABELS) as VehicleType[];
 const displacementRanges = Object.keys(DISPLACEMENT_LABELS) as DisplacementRange[];
 const regions = Object.keys(REGION_LABELS) as Region[];
 const ageOptions = Array.from({ length: 15 }, (_, index) => index + 1);
+const vehiclePriceInputId = useId();
+const vehiclePriceRangeId = useId();
 
 const formattedPrice = computed(() => formatNumber(props.modelValue.vehiclePrice));
 const showDisplacementRange = computed(() => props.modelValue.vehicleType !== "motorcycle");
@@ -68,11 +70,13 @@ function selectVehicleType(vehicleType: VehicleType): void {
   <section class="divide-y divide-border/50">
     <!-- 차량 가격 -->
     <div class="space-y-3 pb-5">
-      <label class="block text-body font-bold text-foreground">차량 가격 (원)</label>
+      <label :for="vehiclePriceInputId" class="block text-body font-bold text-foreground">
+        차량 가격 (원)
+      </label>
       <div class="relative">
         <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-heading font-bold text-muted-foreground">₩</span>
         <input
-          aria-label="차량 가격"
+          :id="vehiclePriceInputId"
           :value="formattedPrice"
           type="text"
           inputmode="numeric"
@@ -81,10 +85,11 @@ function selectVehicleType(vehicleType: VehicleType): void {
         />
       </div>
       <input
-        aria-label="차량 가격 범위"
+        :id="vehiclePriceRangeId"
         :value="modelValue.vehiclePrice"
         type="range"
         class="retro-range"
+        aria-label="차량 가격 범위 조절"
         :min="CAR_PRICE_MIN"
         :max="CAR_PRICE_SLIDER_MAX"
         step="500000"
