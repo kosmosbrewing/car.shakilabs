@@ -1,12 +1,16 @@
 <script setup lang="ts">
+import { ShSurface } from "@shakilabs/ui";
 import AppHeader from "@/components/layout/AppHeader.vue";
 import AppFooter from "@/components/layout/AppFooter.vue";
 import TabNavigation from "@/components/common/TabNavigation.vue";
 </script>
 
 <template>
-  <div
-    class="min-h-screen flex flex-col bg-background bg-[radial-gradient(1200px_500px_at_50%_-120px,hsl(var(--primary)/0.12),transparent_70%)]"
+  <ShSurface
+    as="div"
+    variant="plain"
+    padding="none"
+    class="design-system-shell min-h-screen flex flex-col bg-background"
   >
     <a
       href="#main-content"
@@ -20,5 +24,5 @@ import TabNavigation from "@/components/common/TabNavigation.vue";
       <slot />
     </main>
     <AppFooter />
-  </div>
+  </ShSurface>
 </template>

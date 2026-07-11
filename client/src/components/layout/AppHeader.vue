@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 import { Moon, Sun } from "lucide-vue-next";
 import { RouterLink } from "vue-router";
+import { ShButton } from "@shakilabs/ui";
 import TickerBar from "@/components/common/TickerBar.vue";
 import { tickerMessages } from "@/data/tickerMessages";
 
@@ -53,15 +54,17 @@ onMounted(() => {
               <TickerBar :messages="tickerMessages" />
             </div>
 
-            <button
+            <ShButton
               type="button"
-              class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-transparent text-muted-foreground transition-colors duration-200 hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              variant="secondary"
+              size="sm"
+              class="design-system-theme-toggle shrink-0 text-muted-foreground"
               :aria-label="theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'"
               @click="toggleTheme"
             >
               <Moon v-if="theme === 'dark'" class="h-4 w-4" />
               <Sun v-else class="h-4 w-4" />
-            </button>
+            </ShButton>
           </div>
         </div>
       </div>

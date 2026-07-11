@@ -14,6 +14,7 @@ import {
 import {
   CAR_SERVICE_UPDATED_AT,
   EV_SUBSIDY_UPDATED,
+  EV_SUBSIDY_SOURCE_URL,
   MODEL_PRESETS,
   REGIONAL_SUBSIDIES,
   EV_SUBSIDY_FAQS,
@@ -287,6 +288,11 @@ const subsidyResult = computed(() =>
             <span class="font-semibold">내연차 전환 (3년+ 폐차·매도)</span>
           </label>
         </div>
+        <p class="text-[11px] leading-relaxed text-muted-foreground">
+          지자체 금액은 차종·시군구·접수 시점에 따라 달라집니다. 범위가 있는 지역은 보수적으로 최솟값을 적용했으며,
+          최종 신청 전
+          <a :href="EV_SUBSIDY_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">무공해차 통합누리집</a>에서 확인하세요.
+        </p>
       </div>
     </div>
 
