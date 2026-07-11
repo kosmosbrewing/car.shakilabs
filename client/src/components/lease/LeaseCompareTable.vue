@@ -36,11 +36,12 @@ const copyRows = computed(() => [
       <CopyTableButton :headers="copyHeaders" :rows="copyRows" />
     </div>
     <div class="rounded-2xl border border-border/70 bg-card">
-      <table class="w-full table-fixed text-body">
+      <table aria-label="차량 구매·리스·장기렌트 비용 비교" class="w-full table-fixed text-body">
         <thead class="sticky top-12 z-10">
           <tr class="border-b border-border/80 bg-muted">
-            <th class="rounded-tl-2xl px-4 py-3 text-left text-caption font-semibold text-muted-foreground">항목</th>
+            <th scope="col" class="rounded-tl-2xl px-4 py-3 text-left text-caption font-semibold text-muted-foreground">항목</th>
             <th
+              scope="col"
               v-for="(method, index) in sortedMethods"
               :key="method.method"
               class="px-4 py-3 text-center text-caption font-semibold"
