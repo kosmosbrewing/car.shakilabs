@@ -58,6 +58,7 @@ function optionClass(active: boolean): string {
       <div class="relative">
         <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-heading font-bold text-muted-foreground">₩</span>
         <input
+          aria-label="현재 자동차보험료"
           :value="formattedPremium"
           type="text"
           inputmode="numeric"
@@ -66,6 +67,7 @@ function optionClass(active: boolean): string {
         />
       </div>
       <input
+        aria-label="현재 자동차보험료 범위"
         :value="modelValue.currentPremium"
         type="range"
         class="retro-range"

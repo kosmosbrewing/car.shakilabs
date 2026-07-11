@@ -52,6 +52,7 @@ function onPriceInput(event: Event): void {
       <div class="relative">
         <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-heading font-bold text-muted-foreground">₩</span>
         <input
+          aria-label="차량 가격"
           :value="formattedPrice"
           type="text"
           inputmode="numeric"
@@ -60,6 +61,7 @@ function onPriceInput(event: Event): void {
         />
       </div>
       <input
+        aria-label="차량 가격 범위"
         :value="modelValue.vehiclePrice"
         type="range"
         class="retro-range"
