@@ -65,9 +65,9 @@ const chartSegments = computed(() => {
     <div class="retro-panel overflow-hidden">
       <div class="space-y-1 bg-gradient-to-br from-primary via-primary to-primary/80 px-4 py-4 sm:px-5 sm:py-5">
         <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">연간 총 유지비</p>
-        <p class="text-display font-bold leading-none tabular-nums text-white">{{ formatWon(result.total) }}</p>
+        <p class="car-result-amount font-bold tabular-nums text-white">{{ formatWon(result.total) }}</p>
       </div>
-      <div class="grid grid-cols-2 divide-x divide-border/40">
+      <div class="maintenance-metric-grid grid grid-cols-2 divide-x divide-border/40">
         <div class="px-4 py-3 sm:px-5">
           <p class="text-[11px] font-semibold text-muted-foreground">월 평균</p>
           <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ formatWon(result.monthlyAverage) }}</p>

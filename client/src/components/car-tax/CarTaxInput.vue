@@ -188,7 +188,7 @@ function selectVehicleType(vehicleType: VehicleType): void {
 
       <div class="space-y-2">
         <span class="block text-body font-bold text-foreground">등록 지역</span>
-        <div class="grid grid-cols-3 gap-2">
+        <div class="region-choice-grid grid grid-cols-3 gap-2">
           <button
             v-for="region in regions"
             :key="region"

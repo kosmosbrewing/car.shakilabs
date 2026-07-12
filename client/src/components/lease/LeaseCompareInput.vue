@@ -75,7 +75,7 @@ function onPriceInput(event: Event): void {
           v-for="preset in LEASE_PRICE_PRESETS"
           :key="preset"
           type="button"
-          class="retro-button-subtle min-h-11 px-3 py-1.5 text-caption"
+          class="retro-button-subtle min-h-11 whitespace-nowrap px-3 py-1.5 text-caption tabular-nums"
           @click="patch({ vehiclePrice: preset })"
         >
           {{ formatNumber(preset) }}원
@@ -85,12 +85,12 @@ function onPriceInput(event: Event): void {
 
     <div class="space-y-2">
       <span class="block text-caption font-semibold text-foreground">선수금 비율</span>
-      <div class="grid grid-cols-4 gap-2">
+      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <button
           v-for="deposit in depositOptions"
           :key="deposit"
           type="button"
-          class="touch-target rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
+          class="touch-target whitespace-nowrap rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
           :class="optionClass(modelValue.depositRate === deposit)"
           @click="patch({ depositRate: deposit })"
         >
@@ -101,12 +101,12 @@ function onPriceInput(event: Event): void {
 
     <div class="space-y-2">
       <span class="block text-caption font-semibold text-foreground">이용 기간</span>
-      <div class="grid grid-cols-4 gap-2">
+      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <button
           v-for="term in termOptions"
           :key="term"
           type="button"
-          class="touch-target rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
+          class="touch-target whitespace-nowrap rounded-xl border px-3 py-2 text-caption font-semibold transition-colors tabular-nums"
           :class="optionClass(modelValue.termMonths === term)"
           @click="patch({ termMonths: term })"
         >
@@ -117,12 +117,12 @@ function onPriceInput(event: Event): void {
 
     <div class="space-y-2">
       <span class="block text-caption font-semibold text-foreground">잔존가치율</span>
-      <div class="grid grid-cols-4 gap-2">
+      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
         <button
           v-for="residual in residualOptions"
           :key="residual"
           type="button"
-          class="touch-target rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
+          class="touch-target whitespace-nowrap rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
           :class="optionClass(modelValue.residualRate === residual)"
           @click="patch({ residualRate: residual })"
         >

@@ -89,8 +89,8 @@ const summaryFacts = computed(() => [
         <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">현금유출이 가장 적은 방식</p>
         <p class="text-display font-bold leading-none text-white">{{ result.bestResult.label }}</p>
       </div>
-      <div class="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
-        <span class="flex items-center gap-2 text-caption font-semibold text-muted-foreground">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-border/40 px-4 py-3 sm:px-5">
+        <span class="flex shrink-0 items-center gap-2 whitespace-nowrap text-caption font-semibold text-muted-foreground">
           <span class="h-2 w-2 shrink-0 rounded-full bg-muted-foreground" />
           최고/최저 차이
         </span>

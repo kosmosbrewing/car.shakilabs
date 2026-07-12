@@ -31,7 +31,7 @@ const statIconClasses = [
 
     <div class="retro-panel-content space-y-4">
       <!-- stat 카드 그리드 -->
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div class="insurance-stat-grid grid grid-cols-2 gap-2 sm:grid-cols-4">
         <div
           v-for="(stat, index) in [
             { label: '현재 보험료', value: result.currentPremium, cls: '' },
@@ -61,7 +61,7 @@ const statIconClasses = [
       <div class="flex items-start justify-between gap-3 rounded-2xl border border-profit/20 bg-profit/5 p-4">
         <div>
           <p class="text-caption font-semibold text-muted-foreground">다이렉트 포함 예상 보험료</p>
-          <p class="mt-1 text-display font-bold tabular-nums text-profit">{{ formatWon(result.finalPremium) }}</p>
+          <p class="car-result-amount mt-1 font-bold tabular-nums text-profit">{{ formatWon(result.finalPremium) }}</p>
           <p class="mt-1 text-caption text-muted-foreground">
             총 절감률 {{ formatPercent(result.totalDiscountRate, 1) }} · 누적 절약액 {{ formatWon(result.totalSavingsWithDirect) }}
           </p>
