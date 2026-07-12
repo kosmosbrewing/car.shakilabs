@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
 import { CAR_MAINTENANCE_GUIDE } from "@/data/seoGuides";
 import { CAR_SERVICE_UPDATED_AT, maintenanceProfiles } from "@/data/ownershipData";
 import { formatWon } from "@/lib/utils";
@@ -22,12 +23,11 @@ const result = computed(() => calculateMaintenanceBudget({
 }));
 
 const chartSegments = computed(() => {
-  const total = result.value.total || 1;
   return [
-    { label: "소모품", value: result.value.consumables, pct: (result.value.consumables / total) * 100, color: "bg-fee" },
-    { label: "오일", value: result.value.oil, pct: (result.value.oil / total) * 100, color: "bg-primary/70" },
-    { label: "타이어", value: result.value.tires, pct: (result.value.tires / total) * 100, color: "bg-muted-foreground/50" },
-    { label: "보험+세금", value: result.value.insurance + result.value.tax, pct: ((result.value.insurance + result.value.tax) / total) * 100, color: "bg-status-info/60" },
+    { key: "consumables", label: "소모품", value: result.value.consumables, tone: "fee" as const },
+    { key: "oil", label: "오일", value: result.value.oil, tone: "primary" as const },
+    { key: "tires", label: "타이어", value: result.value.tires, tone: "muted" as const },
+    { key: "fixed", label: "보험+세금", value: result.value.insurance + result.value.tax, tone: "info" as const },
   ];
 });
 </script>
@@ -79,28 +79,7 @@ const chartSegments = computed(() => {
       </div>
     </div>
 
-    <!-- 비율 차트 -->
-    <div class="space-y-3 rounded-2xl border border-border/60 bg-muted/20 p-4 shadow-sm">
-      <p class="text-caption font-semibold text-foreground">비용 구성</p>
-      <div class="flex h-5 gap-px overflow-hidden rounded-lg border border-border/40">
-        <div
-          v-for="seg in chartSegments"
-          :key="seg.label"
-          :class="seg.color"
-          class="transition-all duration-300"
-          :style="{ width: seg.pct + '%' }"
-        />
-      </div>
-      <div class="grid grid-cols-2 gap-2 text-caption sm:grid-cols-4">
-        <div v-for="seg in chartSegments" :key="seg.label" class="space-y-0.5">
-          <span class="flex items-center gap-1.5">
-            <span class="h-2.5 w-2.5 shrink-0 rounded-sm" :class="seg.color" />
-            <span class="text-muted-foreground">{{ seg.label }}</span>
-          </span>
-          <span class="block font-semibold tabular-nums">{{ formatWon(seg.value) }}</span>
-        </div>
-      </div>
-    </div>
+    <BreakdownStackedBar label="연간 유지비 구성" :segments="chartSegments" :format-value="formatWon" />
 
     <SeoRichGuide
       :title="CAR_MAINTENANCE_GUIDE.title"

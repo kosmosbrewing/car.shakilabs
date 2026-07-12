@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { Banknote, PiggyBank, TrendingDown, Shield } from "lucide-vue-next";
+import { computed } from "vue";
 import { Badge } from "@/components/ui/badge";
 import SectionShareButton from "@/components/common/SectionShareButton.vue";
+import StepFlowBars from "@/components/result-visualization/StepFlowBars.vue";
 import { formatPercent, formatWon } from "@/lib/utils";
 import type { InsuranceBreakdown } from "@/utils/calculator";
 
-defineProps<{
+const props = defineProps<{
   result: InsuranceBreakdown;
 }>();
 
@@ -20,6 +22,42 @@ const statIconClasses = [
   "bg-profit/10 text-profit",
   "bg-profit/10 text-profit",
 ] as const;
+
+type PremiumStep = {
+  key: string;
+  label: string;
+  value: number;
+  change?: number;
+};
+
+const premiumSteps = computed(() => {
+  let runningPremium = props.result.currentPremium;
+  const steps: PremiumStep[] = [{
+    key: "current",
+    label: "현재 보험료",
+    value: runningPremium,
+  }];
+
+  props.result.items.forEach((item, index) => {
+    runningPremium = Math.max(0, runningPremium + item.amount);
+    const isLast = index === props.result.items.length - 1;
+    steps.push({
+      key: `item-${index}`,
+      label: item.label,
+      value: isLast ? props.result.estimatedPremium : runningPremium,
+      change: item.amount,
+    });
+  });
+  if (props.result.directDiscountAmount > 0) {
+    steps.push({
+      key: "direct",
+      label: "다이렉트 전환 가정",
+      value: props.result.finalPremium,
+      change: -props.result.directDiscountAmount,
+    });
+  }
+  return steps;
+});
 </script>
 
 <template>
@@ -70,6 +108,12 @@ const statIconClasses = [
           최종 예상
         </Badge>
       </div>
+
+      <StepFlowBars
+        title="할인·할증 적용 흐름"
+        :steps="premiumSteps"
+        :format-value="formatWon"
+      />
 
       <div class="retro-board-list">
         <div

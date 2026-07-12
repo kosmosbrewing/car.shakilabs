@@ -22,6 +22,15 @@ const evVsGasSchema = z.object({
   evKwhPerKm: z.number().min(0.08).max(0.4),
 });
 
+export interface EvVsGasResult {
+  gasFuel: number;
+  evFuel: number;
+  gasTotal: number;
+  evTotal: number;
+  winner: "ev" | "gas";
+  gap: number;
+}
+
 export function compareParkingOptions(input: z.input<typeof parkingSchema>) {
   const parsed = parkingSchema.parse(input);
   const hourlyTotal = Math.round(parsed.daysPerMonth * parsed.hoursPerDay * parsed.hourlyRate);
@@ -64,7 +73,7 @@ export function calculateMaintenanceBudget(input: z.input<typeof maintenanceSche
   };
 }
 
-export function compareEvVsGas(input: z.input<typeof evVsGasSchema>) {
+export function compareEvVsGas(input: z.input<typeof evVsGasSchema>): EvVsGasResult {
   const parsed = evVsGasSchema.parse(input);
   const gasFuel = Math.round((parsed.annualKm / parsed.gasEfficiency) * parsed.gasPrice);
   const evFuel = Math.round(parsed.annualKm * parsed.evKwhPerKm * parsed.electricityPrice);

@@ -4,6 +4,7 @@ import { ParkingSquare, Trophy } from "lucide-vue-next";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import RankedBars from "@/components/result-visualization/RankedBars.vue";
 import { CAR_PARKING_GUIDE } from "@/data/seoGuides";
 import { CAR_SERVICE_UPDATED_AT } from "@/data/ownershipData";
 import { formatWon } from "@/lib/utils";
@@ -24,6 +25,12 @@ const result = computed(() => compareParkingOptions({
   hourlyRate: hourlyRate.value,
   monthlyPass: monthlyPass.value,
 }));
+const costItems = computed(() => result.value.items.map((item) => ({
+  key: item.key,
+  label: item.label,
+  value: item.total,
+  highlight: item.key === result.value.bestOption.key,
+})));
 </script>
 
 <template>
@@ -73,6 +80,13 @@ const result = computed(() => compareParkingOptions({
         </span>
       </div>
     </div>
+
+    <RankedBars
+      title="주차 방식별 월 비용"
+      note="동일한 이용 일수와 시간 기준이며 막대가 짧을수록 예상 월 비용이 낮습니다."
+      :items="costItems"
+      :format-value="formatWon"
+    />
 
     <div class="grid gap-3 md:grid-cols-3">
       <div
