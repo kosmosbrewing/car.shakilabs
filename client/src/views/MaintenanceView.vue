@@ -7,6 +7,7 @@ import { CAR_MAINTENANCE_GUIDE } from "@/data/seoGuides";
 import { CAR_SERVICE_UPDATED_AT, maintenanceProfiles } from "@/data/ownershipData";
 import { formatWon } from "@/lib/utils";
 import { calculateMaintenanceBudget } from "@/utils/ownershipCalculator";
+import CalculatorPageHeader from "@/components/car/CalculatorPageHeader.vue";
 
 const seoTitle = "차량 유지비 계산기 | 연간 정비·보험·세금 예산";
 const seoDescription = "연 주행거리와 연식, 연료 종류를 기준으로 연간 차량 유지비를 계산합니다.";
@@ -35,9 +36,11 @@ const chartSegments = computed(() => {
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
   <div class="container space-y-5 py-5">
+    <CalculatorPageHeader title="차량 유지비 계산기" />
+
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">차량 유지비 계산기</h1>
+        <h2 class="retro-title">유지비 조건 입력</h2>
         <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
       </div>
       <div class="retro-panel-content grid gap-3 md:grid-cols-3">

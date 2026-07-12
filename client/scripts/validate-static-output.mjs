@@ -53,11 +53,15 @@ function validateRoute(route) {
 
   const html = readFileSync(outputPath, "utf8");
   const expectedCanonical = canonicalBase + route;
+  const h1Count = html.match(/<h1\b/gi)?.length ?? 0;
 
   assert(canonicalFrom(html) === expectedCanonical,
     "Invalid canonical for " + route + ": expected " + expectedCanonical);
   assert(/<title>[^<]+<\/title>/.test(html), "Missing title for " + route);
   assert(html.includes('id="app"'), "Missing app root for " + route);
+  assert(h1Count === 1, "Expected one H1 for " + route + ", found " + h1Count);
+  assert(!/<noscript>/i.test(html),
+    "Rendered route must not retain the shell noscript for " + route);
 }
 
 function validateSitemap() {
@@ -78,6 +82,10 @@ validateSitemap();
 const rootHtml = readFileSync(resolve(distRoot, "index.html"), "utf8");
 assert(canonicalFrom(rootHtml) === canonicalBase + "/tax",
   "Root alias must canonicalize to /car/tax");
+assert((rootHtml.match(/<h1\b/gi)?.length ?? 0) === 1,
+  "Root alias must contain exactly one H1");
+assert(!/<noscript>/i.test(rootHtml),
+  "Root alias must not retain the shell noscript");
 
 const notFoundPath = resolve(distRoot, "404.html");
 assert(existsSync(notFoundPath), "Missing custom 404.html output");

@@ -15,6 +15,7 @@ import CarTaxBreakdown from "@/components/car-tax/CarTaxBreakdown.vue";
 import CarTaxFAQ from "@/components/car-tax/CarTaxFAQ.vue";
 import CarTaxInput from "@/components/car-tax/CarTaxInput.vue";
 import CarTaxResult from "@/components/car-tax/CarTaxResult.vue";
+import CalculatorPageHeader from "@/components/car/CalculatorPageHeader.vue";
 import { carAffiliateItems } from "@/data/affiliateLinks";
 import { CAR_TAX_DATA_UPDATED, CAR_TAX_SOURCES } from "@/data/carTaxRates";
 import { useCarTaxCalc } from "@/composables/useCarTaxCalc";
@@ -87,9 +88,11 @@ const share = useShare({
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="text-resize-layout container space-y-5 py-5">
+    <CalculatorPageHeader title="자동차 취등록세 계산기" />
+
     <ShSurface padding="none" class="overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <ShText as="h1" variant="heading">자동차 취등록세 계산기</ShText>
+        <ShText as="h2" variant="heading">차량 정보 입력</ShText>
         <FreshBadge :message="`${CAR_TAX_DATA_UPDATED} 기준`" />
       </div>
       <div class="retro-panel-content">

@@ -21,6 +21,7 @@ import {
 } from "@/data/ownershipData";
 import { formatWon, formatWonShort } from "@/lib/utils";
 import { compareEvVsGas, calculateEvSubsidy } from "@/utils/ownershipCalculator";
+import CalculatorPageHeader from "@/components/car/CalculatorPageHeader.vue";
 
 const seoTitle = "전기차 vs 내연기관 비교 + 보조금 계산기 | 2026";
 const seoDescription =
@@ -92,10 +93,12 @@ const subsidyResult = computed(() =>
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
+    <CalculatorPageHeader title="전기차·내연기관 비교" />
+
     <!-- ===== EV vs Gas 비교 ===== -->
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">전기차 vs 내연기관 비교</h1>
+        <h2 class="retro-title">주행 조건 입력</h2>
         <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
       </div>
       <div class="retro-panel-content grid gap-3 md:grid-cols-3">
