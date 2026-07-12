@@ -8,6 +8,7 @@ import { CAR_PARKING_GUIDE } from "@/data/seoGuides";
 import { CAR_SERVICE_UPDATED_AT } from "@/data/ownershipData";
 import { formatWon } from "@/lib/utils";
 import { compareParkingOptions } from "@/utils/ownershipCalculator";
+import CalculatorPageHeader from "@/components/car/CalculatorPageHeader.vue";
 
 const seoTitle = "주차비 비교 계산기 | 시간권·일 최대요금·월주차 비교";
 const seoDescription = "월 주차 일수와 시간당 요금을 넣으면 어떤 주차 방식이 가장 저렴한지 계산합니다.";
@@ -29,9 +30,11 @@ const result = computed(() => compareParkingOptions({
   <SEOHead :title="seoTitle" :description="seoDescription" />
 
   <div class="container space-y-5 py-5">
+    <CalculatorPageHeader title="주차비 비교 계산기" />
+
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">주차비 비교 계산기</h1>
+        <h2 class="retro-title">주차 조건 입력</h2>
         <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
       </div>
       <div class="retro-panel-content grid gap-3 md:grid-cols-2">

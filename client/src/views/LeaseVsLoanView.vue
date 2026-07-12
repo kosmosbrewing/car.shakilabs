@@ -15,6 +15,7 @@ import LeaseCompareCards from "@/components/lease/LeaseCompareCards.vue";
 import LeaseCompareInput from "@/components/lease/LeaseCompareInput.vue";
 import LeaseCompareTable from "@/components/lease/LeaseCompareTable.vue";
 import LeaseGuide from "@/components/lease/LeaseGuide.vue";
+import CalculatorPageHeader from "@/components/car/CalculatorPageHeader.vue";
 import { Button } from "@/components/ui/button";
 import { carAffiliateItems } from "@/data/affiliateLinks";
 import { LEASE_DATA_UPDATED, LEASE_SOURCES } from "@/data/leaseRates";
@@ -71,9 +72,11 @@ const summaryFacts = computed(() => [
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
+    <CalculatorPageHeader title="리스·할부·장기렌트 비교" />
+
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">리스 vs 할부 vs 장기렌트 비교</h1>
+        <h2 class="retro-title">비교 조건 입력</h2>
         <FreshBadge :message="`${LEASE_DATA_UPDATED} 기준`" />
       </div>
       <div class="retro-panel-content">

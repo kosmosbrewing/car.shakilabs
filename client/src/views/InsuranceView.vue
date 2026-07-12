@@ -12,6 +12,7 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import InsuranceFAQ from "@/components/insurance/InsuranceFAQ.vue";
 import InsuranceInput from "@/components/insurance/InsuranceInput.vue";
 import InsuranceResult from "@/components/insurance/InsuranceResult.vue";
+import CalculatorPageHeader from "@/components/car/CalculatorPageHeader.vue";
 import { carAffiliateItems } from "@/data/affiliateLinks";
 import { INSURANCE_DATA_UPDATED, INSURANCE_SOURCES } from "@/data/insuranceRates";
 import { useInsuranceCalc } from "@/composables/useInsuranceCalc";
@@ -80,9 +81,11 @@ const share = useShare({
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="container space-y-5 py-5">
+    <CalculatorPageHeader title="자동차보험 절약 계산기" />
+
     <div class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
-        <h1 class="retro-title">보험 갱신 절약 시뮬레이터</h1>
+        <h2 class="retro-title">갱신 조건 입력</h2>
         <FreshBadge :message="`${INSURANCE_DATA_UPDATED} 기준`" />
       </div>
       <div class="retro-panel-content">
