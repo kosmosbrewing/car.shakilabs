@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import {
   DEDUCTIBLE_LABELS,
   MILEAGE_LABELS,
@@ -28,6 +29,10 @@ const experienceYearOptions = Array.from({ length: 20 }, (_, index) => index + 1
 const vehicleAgeOptions = Array.from({ length: 21 }, (_, index) => index);
 const accidentOptions = [0, 1, 2, 3] as const;
 const formattedPremium = computed(() => formatNumber(props.modelValue.currentPremium));
+const premiumPresets = INSURANCE_PRESETS.map((value) => ({
+  label: `${formatNumber(value)}원`,
+  value,
+}));
 
 function patch(partial: Partial<InsuranceInput>): void {
   emit("update:modelValue", { ...props.modelValue, ...partial });
@@ -66,27 +71,21 @@ function optionClass(active: boolean): string {
           @input="onPremiumInput"
         />
       </div>
-      <input
-        aria-label="현재 자동차보험료 범위"
-        :value="modelValue.currentPremium"
-        type="range"
-        class="retro-range"
+      <ShSlider
+        :model-value="modelValue.currentPremium"
         :min="INSURANCE_PREMIUM_MIN"
         :max="INSURANCE_PREMIUM_MAX"
-        step="10000"
-        @input="patch({ currentPremium: Number(($event.target as HTMLInputElement).value) })"
+        :step="10000"
+        :value-text="`현재 자동차보험료 ${formatNumber(modelValue.currentPremium)}원`"
+        aria-label="현재 자동차보험료 슬라이더"
+        @update:model-value="patch({ currentPremium: $event })"
       />
-      <div class="flex flex-wrap gap-2">
-        <button
-          v-for="preset in INSURANCE_PRESETS"
-          :key="preset"
-          type="button"
-          class="retro-button-subtle min-h-11 px-3 py-1.5 text-caption"
-          @click="patch({ currentPremium: preset })"
-        >
-          {{ formatNumber(preset) }}원
-        </button>
-      </div>
+      <ShPresetGroup
+        :model-value="modelValue.currentPremium"
+        :options="premiumPresets"
+        label="현재 자동차보험료 빠른 선택"
+        @update:model-value="patch({ currentPremium: $event })"
+      />
     </div>
 
     <div class="grid gap-3 sm:grid-cols-2">
