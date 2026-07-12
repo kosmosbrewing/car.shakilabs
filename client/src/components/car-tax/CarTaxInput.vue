@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
+import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import {
   DISPLACEMENT_LABELS,
   REGION_LABELS,
@@ -29,6 +30,10 @@ const vehiclePriceInputId = useId();
 const vehiclePriceRangeId = useId();
 
 const formattedPrice = computed(() => formatNumber(props.modelValue.vehiclePrice));
+const pricePresets = TAX_PRICE_PRESETS.map((value) => ({
+  label: `${formatNumber(value)}원`,
+  value,
+}));
 const showDisplacementRange = computed(() => props.modelValue.vehicleType !== "motorcycle");
 const fixedDisplacementRange = computed<DisplacementRange | null>(() =>
   ["light", "motorcycle"].includes(props.modelValue.vehicleType) ? "under1000" : null
@@ -84,28 +89,22 @@ function selectVehicleType(vehicleType: VehicleType): void {
           @input="onPriceInput"
         />
       </div>
-      <input
+      <ShSlider
         :id="vehiclePriceRangeId"
-        :value="modelValue.vehiclePrice"
-        type="range"
-        class="retro-range"
-        aria-label="차량 가격 범위 조절"
+        :model-value="Math.min(modelValue.vehiclePrice, CAR_PRICE_SLIDER_MAX)"
         :min="CAR_PRICE_MIN"
         :max="CAR_PRICE_SLIDER_MAX"
-        step="500000"
-        @input="patch({ vehiclePrice: Number(($event.target as HTMLInputElement).value) })"
+        :step="500000"
+        :value-text="`차량 가격 ${formatNumber(Math.min(modelValue.vehiclePrice, CAR_PRICE_SLIDER_MAX))}원`"
+        aria-label="차량 가격 슬라이더"
+        @update:model-value="patch({ vehiclePrice: $event })"
       />
-      <div class="flex flex-wrap gap-2">
-        <button
-          v-for="preset in TAX_PRICE_PRESETS"
-          :key="preset"
-          type="button"
-          class="retro-button-subtle min-h-11 px-3 py-1.5 text-caption"
-          @click="patch({ vehiclePrice: preset })"
-        >
-          {{ formatNumber(preset) }}원
-        </button>
-      </div>
+      <ShPresetGroup
+        :model-value="modelValue.vehiclePrice"
+        :options="pricePresets"
+        label="차량 가격 빠른 선택"
+        @update:model-value="patch({ vehiclePrice: $event })"
+      />
     </div>
 
     <!-- 차종 + 신차/중고차 (2열) -->

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import {
   DEPOSIT_RATE_LABELS,
   RESIDUAL_RATE_LABELS,
@@ -25,6 +26,10 @@ const depositOptions = Object.keys(DEPOSIT_RATE_LABELS).map(Number) as DepositRa
 const termOptions = Object.keys(TERM_MONTH_LABELS).map(Number) as TermMonths[];
 const residualOptions = Object.keys(RESIDUAL_RATE_LABELS).map(Number) as ResidualRateOption[];
 const formattedPrice = computed(() => formatNumber(props.modelValue.vehiclePrice));
+const pricePresets = LEASE_PRICE_PRESETS.map((value) => ({
+  label: `${formatNumber(value)}원`,
+  value,
+}));
 
 function patch(partial: Partial<LeaseCompareInput>): void {
   emit("update:modelValue", { ...props.modelValue, ...partial });
@@ -60,27 +65,21 @@ function onPriceInput(event: Event): void {
           @input="onPriceInput"
         />
       </div>
-      <input
-        aria-label="차량 가격 범위"
-        :value="modelValue.vehiclePrice"
-        type="range"
-        class="retro-range"
+      <ShSlider
+        :model-value="Math.min(modelValue.vehiclePrice, CAR_PRICE_SLIDER_MAX)"
         :min="CAR_PRICE_MIN"
         :max="CAR_PRICE_SLIDER_MAX"
-        step="500000"
-        @input="patch({ vehiclePrice: Number(($event.target as HTMLInputElement).value) })"
+        :step="500000"
+        :value-text="`차량 가격 ${formatNumber(Math.min(modelValue.vehiclePrice, CAR_PRICE_SLIDER_MAX))}원`"
+        aria-label="차량 가격 슬라이더"
+        @update:model-value="patch({ vehiclePrice: $event })"
       />
-      <div class="flex flex-wrap gap-2">
-        <button
-          v-for="preset in LEASE_PRICE_PRESETS"
-          :key="preset"
-          type="button"
-          class="retro-button-subtle min-h-11 whitespace-nowrap px-3 py-1.5 text-caption tabular-nums"
-          @click="patch({ vehiclePrice: preset })"
-        >
-          {{ formatNumber(preset) }}원
-        </button>
-      </div>
+      <ShPresetGroup
+        :model-value="modelValue.vehiclePrice"
+        :options="pricePresets"
+        label="차량 가격 빠른 선택"
+        @update:model-value="patch({ vehiclePrice: $event })"
+      />
     </div>
 
     <div class="space-y-2">
