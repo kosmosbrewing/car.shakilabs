@@ -8,6 +8,7 @@ import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
+import RankedBars from "@/components/result-visualization/RankedBars.vue";
 import { CAR_LEASE_GUIDE } from "@/data/seoGuides";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { leaseGuideItems } from "@/data/leaseGuide";
@@ -66,6 +67,13 @@ const summaryFacts = computed(() => [
   { label: "월 납입금", value: formatWon(result.value.bestResult.monthlyPayment) },
   { label: "2위와 차이", value: formatWon(result.value.runnerUpGap) },
 ]);
+const costItems = computed(() => result.value.methods.map((method) => ({
+  key: method.method,
+  label: method.label,
+  value: method.totalCost,
+  detail: `월 납입 ${formatWon(method.monthlyPayment)} · ${method.comparisonNote}`,
+  highlight: method.method === result.value.bestMethod,
+})));
 </script>
 
 <template>
@@ -114,6 +122,13 @@ const summaryFacts = computed(() => [
         </Button>
       </div>
     </div>
+
+    <RankedBars
+      title="계약기간 총 현금유출 비교"
+      note="리스는 만기 반납, 할부는 차량 잔존가치 제외, 장기렌트는 보험·세금 포함 기준입니다."
+      :items="costItems"
+      :format-value="formatWon"
+    />
 
     <LeaseCompareCards :result="result" />
     <AffiliateLinkPanel

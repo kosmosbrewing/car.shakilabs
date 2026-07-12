@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { Receipt, Landmark, FileText, Percent } from "lucide-vue-next";
 import { Badge } from "@/components/ui/badge";
 import SectionShareButton from "@/components/common/SectionShareButton.vue";
+import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
 import { formatPercent, formatWon } from "@/lib/utils";
 import type { CarTaxBreakdown } from "@/utils/calculator";
 
@@ -15,11 +16,10 @@ defineEmits<{
 }>();
 
 const chartSegments = computed(() => {
-  const total = props.result.totalCost || 1;
   return [
-    { label: "취득세", value: props.result.acquisitionTax, pct: (props.result.acquisitionTax / total) * 100, color: "bg-fee" },
-    { label: "공채비", value: props.result.bondCost, pct: (props.result.bondCost / total) * 100, color: "bg-muted-foreground/50" },
-    { label: "부대비용", value: props.result.miscCost, pct: (props.result.miscCost / total) * 100, color: "bg-primary/70" },
+    { key: "tax", label: "취득세", value: props.result.acquisitionTax, tone: "fee" as const },
+    { key: "bond", label: "공채비", value: props.result.bondCost, tone: "muted" as const },
+    { key: "misc", label: "부대비용", value: props.result.miscCost, tone: "primary" as const },
   ];
 });
 
@@ -79,27 +79,11 @@ const statItems = computed(() => [
         </div>
       </div>
 
-      <!-- 비율 차트 -->
-      <div class="space-y-3 rounded-xl border border-border/60 bg-muted/20 p-3.5">
-        <div class="flex h-5 gap-px overflow-hidden rounded-lg border border-border/40">
-          <div
-            v-for="seg in chartSegments"
-            :key="seg.label"
-            :class="seg.color"
-            class="transition-all duration-300"
-            :style="{ width: seg.pct + '%' }"
-          />
-        </div>
-        <div class="grid gap-2 text-caption sm:grid-cols-3">
-          <div v-for="seg in chartSegments" :key="seg.label" class="flex items-center justify-between sm:block sm:space-y-0.5">
-            <span class="flex items-center gap-1.5">
-              <span class="h-2.5 w-2.5 shrink-0 rounded-sm" :class="seg.color" />
-              <span class="text-muted-foreground">{{ seg.label }}</span>
-            </span>
-            <span class="font-semibold tabular-nums">{{ formatWon(seg.value) }}</span>
-          </div>
-        </div>
-      </div>
+      <BreakdownStackedBar
+        label="등록비용 구성"
+        :segments="chartSegments"
+        :format-value="formatWon"
+      />
 
       <!-- 상세 지표 -->
       <div class="retro-board-list">
