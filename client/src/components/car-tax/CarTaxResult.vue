@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Receipt, Landmark, FileText, Percent } from "lucide-vue-next";
+import { ShBreakdownBar } from "@shakilabs/ui";
 import { Badge } from "@/components/ui/badge";
 import SectionShareButton from "@/components/common/SectionShareButton.vue";
-import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
 import { formatPercent, formatWon } from "@/lib/utils";
 import type { CarTaxBreakdown } from "@/utils/calculator";
 
@@ -17,7 +17,7 @@ defineEmits<{
 
 const chartSegments = computed(() => {
   return [
-    { key: "tax", label: "취득세", value: props.result.acquisitionTax, tone: "fee" as const },
+    { key: "tax", label: "취득세", value: props.result.acquisitionTax, tone: "danger" as const },
     { key: "bond", label: "공채비", value: props.result.bondCost, tone: "muted" as const },
     { key: "misc", label: "부대비용", value: props.result.miscCost, tone: "primary" as const },
   ];
@@ -79,10 +79,11 @@ const statItems = computed(() => [
         </div>
       </div>
 
-      <BreakdownStackedBar
+      <ShBreakdownBar
         label="등록비용 구성"
         :segments="chartSegments"
         :format-value="formatWon"
+        surface="outlined"
       />
 
       <!-- 상세 지표 -->

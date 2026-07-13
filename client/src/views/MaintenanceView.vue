@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { ShBreakdownBar } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
-import BreakdownStackedBar from "@/components/result-visualization/BreakdownStackedBar.vue";
 import { CAR_MAINTENANCE_GUIDE } from "@/data/seoGuides";
 import { CAR_SERVICE_UPDATED_AT, maintenanceProfiles } from "@/data/ownershipData";
 import { formatWon } from "@/lib/utils";
@@ -28,7 +28,7 @@ const { result, validationError } = useSafeCalculation(
 
 const chartSegments = computed(() => {
   return [
-    { key: "consumables", label: "소모품", value: result.value.consumables, tone: "fee" as const },
+    { key: "consumables", label: "소모품", value: result.value.consumables, tone: "danger" as const },
     { key: "oil", label: "오일", value: result.value.oil, tone: "primary" as const },
     { key: "tires", label: "타이어", value: result.value.tires, tone: "muted" as const },
     { key: "fixed", label: "보험+세금", value: result.value.insurance + result.value.tax, tone: "info" as const },
@@ -86,7 +86,7 @@ const chartSegments = computed(() => {
       </div>
     </div>
 
-    <BreakdownStackedBar label="연간 유지비 구성" :segments="chartSegments" :format-value="formatWon" />
+    <ShBreakdownBar label="연간 유지비 구성" :segments="chartSegments" :format-value="formatWon" surface="outlined" />
 
     <SeoRichGuide
       :title="CAR_MAINTENANCE_GUIDE.title"
