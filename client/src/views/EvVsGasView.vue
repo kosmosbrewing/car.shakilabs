@@ -3,15 +3,10 @@ import { ref, watch } from "vue";
 import { BadgePercent, Car, UserRound, ArrowRightLeft } from "lucide-vue-next";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import EvAnnualCostComparison from "@/components/ownership/EvAnnualCostComparison.vue";
 import { CAR_EV_VS_GAS_GUIDE } from "@/data/seoGuides";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import {
   CAR_SERVICE_UPDATED_AT,
   EV_SUBSIDY_UPDATED,
@@ -245,16 +240,7 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
       </div>
     </div>
 
-    <!-- FAQ -->
-    <div class="space-y-3 rounded-2xl border border-border/60 bg-muted/20 p-4 shadow-sm">
-      <p class="text-caption font-semibold text-foreground">자주 묻는 질문</p>
-      <Accordion type="single" collapsible>
-        <AccordionItem v-for="(faq, idx) in EV_SUBSIDY_FAQS" :key="idx" :value="`faq-${idx}`">
-          <AccordionTrigger class="text-left text-caption font-semibold">{{ faq.q }}</AccordionTrigger>
-          <AccordionContent class="text-caption text-muted-foreground">{{ faq.a }}</AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </div>
+    <FaqAccordionPanel :items="EV_SUBSIDY_FAQS" />
 
     <SeoRichGuide
       :title="CAR_EV_VS_GAS_GUIDE.title"
