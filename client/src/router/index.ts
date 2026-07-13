@@ -8,6 +8,12 @@ export const routes: RouteRecordRaw[] = [
     redirect: "/tax",
   },
   {
+    path: "/all",
+    name: "AllTools",
+    component: () => import("@/views/CarToolsView.vue"),
+    meta: { title: "차량 계산기 전체 보기 | 구매·보험·유지비 도구" },
+  },
+  {
     path: "/tax",
     name: "CarTax",
     component: () => import("@/views/CarTaxView.vue"),
