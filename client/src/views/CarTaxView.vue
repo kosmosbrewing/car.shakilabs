@@ -6,7 +6,7 @@ import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
 import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
 import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
-import RelatedServices from "@/components/common/RelatedServices.vue";
+import CarTaxNextActions from "@/components/car-tax/CarTaxNextActions.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { CAR_TAX_GUIDE } from "@/data/seoGuides";
@@ -101,6 +101,7 @@ const share = useShare({
     </ShSurface>
 
     <CarTaxResult :result="result" @share="share.openShare" />
+    <CarTaxNextActions />
     <AffiliateLinkPanel
       title="차량 구매 후 같이 챙기는 상품"
       description="등록비용을 계산했다면 블랙박스와 세차용품 가격도 함께 비교해 보세요."
@@ -118,7 +119,6 @@ const share = useShare({
       :faqs="CAR_TAX_GUIDE.faqs"
       :disclaimer="CAR_TAX_GUIDE.disclaimer"
     />
-    <RelatedServices />
     <AffiliateDisclosure v-if="carAffiliateItems.length > 0" />
 
     <ShareModal
