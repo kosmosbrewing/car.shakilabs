@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { BadgePercent, Car, UserRound, ArrowRightLeft } from "lucide-vue-next";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
@@ -23,6 +23,7 @@ import {
 import { formatWon, formatWonShort } from "@/lib/utils";
 import { compareEvVsGas, calculateEvSubsidy } from "@/utils/ownershipCalculator";
 import CalculatorPageHeader from "@/components/car/CalculatorPageHeader.vue";
+import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
 const seoTitle = "전기차 vs 내연기관 비교 + 보조금 계산기 | 2026";
 const seoDescription =
@@ -38,21 +39,21 @@ const faqJsonLd = {
   })),
 };
 
-// ── EV vs Gas 비교 ──
 const annualKm = ref(20_000);
 const gasPrice = ref(1_700);
 const electricityPrice = ref(180);
 const gasEfficiency = ref(11);
 const evKwhPerKm = ref(0.18);
 
-const result = computed(() =>
-  compareEvVsGas({
+const { result, validationError } = useSafeCalculation(
+  () => compareEvVsGas({
     annualKm: annualKm.value,
     gasPrice: gasPrice.value,
     electricityPrice: electricityPrice.value,
     gasEfficiency: gasEfficiency.value,
     evKwhPerKm: evKwhPerKm.value,
-  })
+  }),
+  compareEvVsGas({ annualKm: 20_000, gasPrice: 1_700, electricityPrice: 180, gasEfficiency: 11, evKwhPerKm: 0.18 }),
 );
 
 // ── 보조금 계산기 ──
@@ -63,7 +64,6 @@ const selectedRegionIdx = ref(0);
 const isYouth = ref(false);
 const isConversion = ref(false);
 
-// 모델 프리셋 변경 시 국고보조금 자동 반영
 watch(selectedModelIdx, (idx) => {
   const preset = MODEL_PRESETS[idx];
   if (preset && preset.subsidy > 0) {
@@ -71,14 +71,15 @@ watch(selectedModelIdx, (idx) => {
   }
 });
 
-const subsidyResult = computed(() =>
-  calculateEvSubsidy({
+const { result: subsidyResult, validationError: subsidyValidationError } = useSafeCalculation(
+  () => calculateEvSubsidy({
     vehiclePrice: vehiclePrice.value,
     nationalSubsidy: nationalSubsidy.value,
-    localSubsidy: REGIONAL_SUBSIDIES[selectedRegionIdx.value].subsidy,
+    localSubsidy: REGIONAL_SUBSIDIES[selectedRegionIdx.value]?.subsidy ?? REGIONAL_SUBSIDIES[0].subsidy,
     isYouth: isYouth.value,
     isConversion: isConversion.value,
-  })
+  }),
+  calculateEvSubsidy({ vehiclePrice: 45_000_000, nationalSubsidy: MODEL_PRESETS[0].subsidy, localSubsidy: REGIONAL_SUBSIDIES[0].subsidy, isYouth: false, isConversion: false }),
 );
 </script>
 
@@ -94,7 +95,7 @@ const subsidyResult = computed(() =>
         <h2 class="retro-title">주행 조건 입력</h2>
         <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
       </div>
-      <div class="retro-panel-content grid gap-3 md:grid-cols-3">
+      <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'ev-gas-error' : undefined">
         <label class="block space-y-1">
           <span class="text-caption font-semibold text-foreground">연 주행거리 (km)</span>
           <input v-model.number="annualKm" type="number" min="1000" class="retro-input" placeholder="연 주행거리" />
@@ -115,18 +116,20 @@ const subsidyResult = computed(() =>
           <span class="text-caption font-semibold text-foreground">전기차 전비 (kWh/km)</span>
           <input v-model.number="evKwhPerKm" type="number" min="0.08" step="0.01" class="retro-input" placeholder="전기차 전비(kWh/km)" />
         </label>
+        <p v-if="validationError" id="ev-gas-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+          {{ validationError }}
+        </p>
       </div>
     </div>
 
     <EvAnnualCostComparison :result="result" />
 
-    <!-- ===== 전기차 보조금 계산기 ===== -->
     <div id="subsidy" class="retro-panel overflow-hidden">
       <div class="retro-titlebar rounded-t-2xl">
         <h2 class="retro-title">2026 전기차 보조금 계산기</h2>
         <FreshBadge :message="`${EV_SUBSIDY_UPDATED} 기준`" />
       </div>
-      <div class="retro-panel-content space-y-4">
+      <div class="retro-panel-content space-y-4" role="group" :aria-describedby="subsidyValidationError ? 'ev-subsidy-error' : undefined">
         <div class="grid gap-3 md:grid-cols-2">
           <label class="block space-y-1">
             <span class="text-caption font-semibold text-foreground">차량 출고가 (원)</span>
@@ -175,10 +178,12 @@ const subsidyResult = computed(() =>
           최종 신청 전
           <a :href="EV_SUBSIDY_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">무공해차 통합누리집</a>에서 확인하세요.
         </p>
+        <p v-if="subsidyValidationError" id="ev-subsidy-error" class="text-caption font-semibold text-destructive" role="alert">
+          {{ subsidyValidationError }}
+        </p>
       </div>
     </div>
 
-    <!-- 보조금 결과: 히어로 -->
     <div class="retro-panel overflow-hidden">
       <div class="space-y-1 bg-gradient-to-br from-primary via-primary to-primary/80 px-4 py-4 sm:px-5 sm:py-5">
         <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">보조금 적용 실구매가</p>

@@ -10,6 +10,7 @@ import { CAR_SERVICE_UPDATED_AT } from "@/data/ownershipData";
 import { formatWon } from "@/lib/utils";
 import { compareParkingOptions } from "@/utils/ownershipCalculator";
 import CalculatorPageHeader from "@/components/car/CalculatorPageHeader.vue";
+import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
 const seoTitle = "주차비 비교 계산기 | 시간권·일 최대요금·월주차 비교";
 const seoDescription = "월 주차 일수와 시간당 요금을 넣으면 어떤 주차 방식이 가장 저렴한지 계산합니다.";
@@ -19,12 +20,15 @@ const hoursPerDay = ref(8);
 const hourlyRate = ref(2_000);
 const monthlyPass = ref(180_000);
 
-const result = computed(() => compareParkingOptions({
-  daysPerMonth: daysPerMonth.value,
-  hoursPerDay: hoursPerDay.value,
-  hourlyRate: hourlyRate.value,
-  monthlyPass: monthlyPass.value,
-}));
+const { result, validationError } = useSafeCalculation(
+  () => compareParkingOptions({
+    daysPerMonth: daysPerMonth.value,
+    hoursPerDay: hoursPerDay.value,
+    hourlyRate: hourlyRate.value,
+    monthlyPass: monthlyPass.value,
+  }),
+  compareParkingOptions({ daysPerMonth: 20, hoursPerDay: 8, hourlyRate: 2_000, monthlyPass: 180_000 }),
+);
 const costItems = computed(() => result.value.items.map((item) => ({
   key: item.key,
   label: item.label,
@@ -44,7 +48,7 @@ const costItems = computed(() => result.value.items.map((item) => ({
         <h2 class="retro-title">주차 조건 입력</h2>
         <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
       </div>
-      <div class="retro-panel-content grid gap-3 md:grid-cols-2">
+      <div class="retro-panel-content grid gap-3 md:grid-cols-2" role="group" :aria-describedby="validationError ? 'parking-error' : undefined">
         <label class="block space-y-1">
           <span class="text-caption font-semibold text-foreground">월 주차 일수</span>
           <input v-model.number="daysPerMonth" type="number" min="1" max="31" class="retro-input" placeholder="월 주차 일수" />
@@ -61,6 +65,9 @@ const costItems = computed(() => result.value.items.map((item) => ({
           <span class="text-caption font-semibold text-foreground">월주차 요금 (원)</span>
           <input v-model.number="monthlyPass" type="number" min="0" class="retro-input" placeholder="월주차 요금" />
         </label>
+        <p v-if="validationError" id="parking-error" class="text-caption font-semibold text-destructive md:col-span-2" role="alert">
+          {{ validationError }}
+        </p>
       </div>
     </div>
 
