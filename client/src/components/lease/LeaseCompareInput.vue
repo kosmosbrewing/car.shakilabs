@@ -25,6 +25,9 @@ const emit = defineEmits<{
 const depositOptions = Object.keys(DEPOSIT_RATE_LABELS).map(Number) as DepositRateOption[];
 const termOptions = Object.keys(TERM_MONTH_LABELS).map(Number) as TermMonths[];
 const residualOptions = Object.keys(RESIDUAL_RATE_LABELS).map(Number) as ResidualRateOption[];
+const depositPresetOptions = depositOptions.map((value) => ({ label: DEPOSIT_RATE_LABELS[value], value }));
+const termPresetOptions = termOptions.map((value) => ({ label: TERM_MONTH_LABELS[value], value }));
+const residualPresetOptions = residualOptions.map((value) => ({ label: RESIDUAL_RATE_LABELS[value], value }));
 const formattedPrice = computed(() => formatNumber(props.modelValue.vehiclePrice));
 const pricePresets = LEASE_PRICE_PRESETS.map((value) => ({
   label: `${formatNumber(value)}원`,
@@ -33,12 +36,6 @@ const pricePresets = LEASE_PRICE_PRESETS.map((value) => ({
 
 function patch(partial: Partial<LeaseCompareInput>): void {
   emit("update:modelValue", { ...props.modelValue, ...partial });
-}
-
-function optionClass(active: boolean): string {
-  return active
-    ? "border-primary bg-primary text-primary-foreground"
-    : "border-border text-muted-foreground hover:border-primary/45 hover:text-foreground";
 }
 
 function onPriceInput(event: Event): void {
@@ -84,50 +81,32 @@ function onPriceInput(event: Event): void {
 
     <div class="space-y-2">
       <span class="block text-caption font-semibold text-foreground">선수금 비율</span>
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <button
-          v-for="deposit in depositOptions"
-          :key="deposit"
-          type="button"
-          class="touch-target whitespace-nowrap rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
-          :class="optionClass(modelValue.depositRate === deposit)"
-          @click="patch({ depositRate: deposit })"
-        >
-          {{ DEPOSIT_RATE_LABELS[deposit] }}
-        </button>
-      </div>
+      <ShPresetGroup
+        :model-value="modelValue.depositRate"
+        :options="depositPresetOptions"
+        label="선수금 비율 선택"
+        @update:model-value="patch({ depositRate: $event })"
+      />
     </div>
 
     <div class="space-y-2">
       <span class="block text-caption font-semibold text-foreground">이용 기간</span>
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <button
-          v-for="term in termOptions"
-          :key="term"
-          type="button"
-          class="touch-target whitespace-nowrap rounded-xl border px-3 py-2 text-caption font-semibold transition-colors tabular-nums"
-          :class="optionClass(modelValue.termMonths === term)"
-          @click="patch({ termMonths: term })"
-        >
-          {{ TERM_MONTH_LABELS[term] }}
-        </button>
-      </div>
+      <ShPresetGroup
+        :model-value="modelValue.termMonths"
+        :options="termPresetOptions"
+        label="이용 기간 선택"
+        @update:model-value="patch({ termMonths: $event })"
+      />
     </div>
 
     <div class="space-y-2">
       <span class="block text-caption font-semibold text-foreground">잔존가치율</span>
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <button
-          v-for="residual in residualOptions"
-          :key="residual"
-          type="button"
-          class="touch-target whitespace-nowrap rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
-          :class="optionClass(modelValue.residualRate === residual)"
-          @click="patch({ residualRate: residual })"
-        >
-          {{ RESIDUAL_RATE_LABELS[residual] }}
-        </button>
-      </div>
+      <ShPresetGroup
+        :model-value="modelValue.residualRate"
+        :options="residualPresetOptions"
+        label="잔존가치율 선택"
+        @update:model-value="patch({ residualRate: $event })"
+      />
     </div>
 
     <details class="retro-details">

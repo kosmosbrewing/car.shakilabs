@@ -25,6 +25,12 @@ const emit = defineEmits<{
 const vehicleTypes = Object.keys(VEHICLE_TYPE_LABELS) as VehicleType[];
 const displacementRanges = Object.keys(DISPLACEMENT_LABELS) as DisplacementRange[];
 const regions = Object.keys(REGION_LABELS) as Region[];
+const vehicleTypeOptions = vehicleTypes.map((value) => ({ label: VEHICLE_TYPE_LABELS[value], value }));
+const conditionOptions = [
+  { label: "신차", value: "new" },
+  { label: "중고차", value: "used" },
+] as const;
+const regionOptions = regions.map((value) => ({ label: REGION_LABELS[value], value }));
 const ageOptions = Array.from({ length: 15 }, (_, index) => index + 1);
 const vehiclePriceInputId = useId();
 const vehiclePriceRangeId = useId();
@@ -41,6 +47,11 @@ const fixedDisplacementRange = computed<DisplacementRange | null>(() =>
 const visibleDisplacementRanges = computed<DisplacementRange[]>(() =>
   fixedDisplacementRange.value ? [fixedDisplacementRange.value] : displacementRanges
 );
+const displacementOptions = computed(() => visibleDisplacementRanges.value.map((value) => ({
+  label: DISPLACEMENT_LABELS[value],
+  value,
+  disabled: fixedDisplacementRange.value != null,
+})));
 
 function patch(partial: Partial<CarTaxInput>): void {
   const next = { ...props.modelValue, ...partial };
@@ -58,12 +69,6 @@ function onPriceInput(event: Event): void {
   patch({
     vehiclePrice: Math.min(CAR_PRICE_MAX, Math.max(CAR_PRICE_MIN, next || CAR_PRICE_MIN)),
   });
-}
-
-function optionClass(active: boolean): string {
-  return active
-    ? "border-primary bg-primary text-primary-foreground"
-    : "border-border text-muted-foreground hover:border-primary/45 hover:text-foreground";
 }
 
 function selectVehicleType(vehicleType: VehicleType): void {
@@ -111,40 +116,22 @@ function selectVehicleType(vehicleType: VehicleType): void {
     <div class="grid gap-5 py-5 sm:grid-cols-2">
       <div class="space-y-2">
         <span class="block text-body font-bold text-foreground">차종</span>
-        <div class="grid grid-cols-2 gap-2">
-          <button
-            v-for="vehicleType in vehicleTypes"
-            :key="vehicleType"
-            type="button"
-            class="touch-target rounded-xl border px-3 py-2 text-left text-caption font-semibold transition-colors"
-            :class="optionClass(modelValue.vehicleType === vehicleType)"
-            @click="selectVehicleType(vehicleType)"
-          >
-            {{ VEHICLE_TYPE_LABELS[vehicleType] }}
-          </button>
-        </div>
+        <ShPresetGroup
+          :model-value="modelValue.vehicleType"
+          :options="vehicleTypeOptions"
+          label="차종 선택"
+          @update:model-value="selectVehicleType"
+        />
       </div>
 
       <div class="space-y-2">
         <span class="block text-body font-bold text-foreground">신차 / 중고차</span>
-        <div class="grid grid-cols-2 gap-2">
-          <button
-            type="button"
-            class="touch-target rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
-            :class="optionClass(modelValue.condition === 'new')"
-            @click="patch({ condition: 'new', modelYearAge: 1 })"
-          >
-            신차
-          </button>
-          <button
-            type="button"
-            class="touch-target rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
-            :class="optionClass(modelValue.condition === 'used')"
-            @click="patch({ condition: 'used' })"
-          >
-            중고차
-          </button>
-        </div>
+        <ShPresetGroup
+          :model-value="modelValue.condition"
+          :options="conditionOptions"
+          label="신차 또는 중고차 선택"
+          @update:model-value="patch($event === 'new' ? { condition: 'new', modelYearAge: 1 } : { condition: 'used' })"
+        />
 
         <label v-if="modelValue.condition === 'used'" class="block space-y-1">
           <span class="text-caption text-muted-foreground">중고차 경과연수</span>
@@ -170,35 +157,22 @@ function selectVehicleType(vehicleType: VehicleType): void {
           {{ modelValue.vehicleType === "light" ? "경차는" : "이륜차는" }} 배기량 구간을
           1,000cc 미만으로 고정해 계산합니다.
         </p>
-        <div class="grid grid-cols-2 gap-2">
-          <button
-            v-for="range in visibleDisplacementRanges"
-            :key="range"
-            type="button"
-            class="touch-target rounded-xl border px-3 py-2 text-left text-caption font-semibold transition-colors"
-            :class="optionClass(modelValue.displacementRange === range)"
-            :disabled="fixedDisplacementRange != null"
-            @click="patch({ displacementRange: range })"
-          >
-            {{ DISPLACEMENT_LABELS[range] }}
-          </button>
-        </div>
+        <ShPresetGroup
+          :model-value="modelValue.displacementRange"
+          :options="displacementOptions"
+          label="배기량 구간 선택"
+          @update:model-value="patch({ displacementRange: $event })"
+        />
       </div>
 
       <div class="space-y-2">
         <span class="block text-body font-bold text-foreground">등록 지역</span>
-        <div class="region-choice-grid grid grid-cols-3 gap-2">
-          <button
-            v-for="region in regions"
-            :key="region"
-            type="button"
-            class="touch-target rounded-xl border px-3 py-2 text-caption font-semibold transition-colors"
-            :class="optionClass(modelValue.region === region)"
-            @click="patch({ region })"
-          >
-            {{ REGION_LABELS[region] }}
-          </button>
-        </div>
+        <ShPresetGroup
+          :model-value="modelValue.region"
+          :options="regionOptions"
+          label="등록 지역 선택"
+          @update:model-value="patch({ region: $event })"
+        />
       </div>
     </div>
 
