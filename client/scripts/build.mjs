@@ -27,6 +27,7 @@ const paramPaths = new Set([
 ]);
 
 const basePriority = {
+  "/all": "0.9",
   "/tax": "1.0",
   "/insurance": "0.9",
   "/lease-vs-loan": "0.9",

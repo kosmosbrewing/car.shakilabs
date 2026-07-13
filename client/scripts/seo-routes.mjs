@@ -4,6 +4,7 @@ export const INSURANCE_PREMIUMS = [30, 50, 70, 100, 150];
 export const LEASE_PRICES = [3000, 5000, 7000, 10000];
 
 export const SEO_ROUTES = [
+  "/all",
   "/tax",
   "/insurance",
   "/lease-vs-loan",
