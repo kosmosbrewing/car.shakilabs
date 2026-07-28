@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { BadgePercent, Car, UserRound, ArrowRightLeft } from "lucide-vue-next";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
@@ -90,31 +91,33 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
         <h2 class="retro-title">주행 조건 입력</h2>
         <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
       </div>
-      <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'ev-gas-error' : undefined">
-        <label class="block space-y-1">
-          <span class="text-caption font-semibold text-foreground">연 주행거리 (km)</span>
-          <input v-model.number="annualKm" type="number" min="1000" class="retro-input" placeholder="연 주행거리" />
-        </label>
-        <label class="block space-y-1">
-          <span class="text-caption font-semibold text-foreground">휘발유 단가 (원/L)</span>
-          <input v-model.number="gasPrice" type="number" min="1000" class="retro-input" placeholder="휘발유 단가" />
-        </label>
-        <label class="block space-y-1">
-          <span class="text-caption font-semibold text-foreground">전기 단가 (원/kWh)</span>
-          <input v-model.number="electricityPrice" type="number" min="100" class="retro-input" placeholder="전기 단가" />
-        </label>
-        <label class="block space-y-1">
-          <span class="text-caption font-semibold text-foreground">내연기관 연비 (km/L)</span>
-          <input v-model.number="gasEfficiency" type="number" min="5" step="0.1" class="retro-input" placeholder="내연기관 연비" />
-        </label>
-        <label class="block space-y-1 md:col-span-2">
-          <span class="text-caption font-semibold text-foreground">전기차 전비 (kWh/km)</span>
-          <input v-model.number="evKwhPerKm" type="number" min="0.08" step="0.01" class="retro-input" placeholder="전기차 전비(kWh/km)" />
-        </label>
-        <p v-if="validationError" id="ev-gas-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
-          {{ validationError }}
-        </p>
-      </div>
+      <CalculatorInteractionTracker calculator-id="ev_vs_gas" page-path="/car/ev-vs-gas">
+        <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'ev-gas-error' : undefined">
+          <label class="block space-y-1">
+            <span class="text-caption font-semibold text-foreground">연 주행거리 (km)</span>
+            <input v-model.number="annualKm" type="number" min="1000" class="retro-input" placeholder="연 주행거리" />
+          </label>
+          <label class="block space-y-1">
+            <span class="text-caption font-semibold text-foreground">휘발유 단가 (원/L)</span>
+            <input v-model.number="gasPrice" type="number" min="1000" class="retro-input" placeholder="휘발유 단가" />
+          </label>
+          <label class="block space-y-1">
+            <span class="text-caption font-semibold text-foreground">전기 단가 (원/kWh)</span>
+            <input v-model.number="electricityPrice" type="number" min="100" class="retro-input" placeholder="전기 단가" />
+          </label>
+          <label class="block space-y-1">
+            <span class="text-caption font-semibold text-foreground">내연기관 연비 (km/L)</span>
+            <input v-model.number="gasEfficiency" type="number" min="5" step="0.1" class="retro-input" placeholder="내연기관 연비" />
+          </label>
+          <label class="block space-y-1 md:col-span-2">
+            <span class="text-caption font-semibold text-foreground">전기차 전비 (kWh/km)</span>
+            <input v-model.number="evKwhPerKm" type="number" min="0.08" step="0.01" class="retro-input" placeholder="전기차 전비(kWh/km)" />
+          </label>
+          <p v-if="validationError" id="ev-gas-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+            {{ validationError }}
+          </p>
+        </div>
+      </CalculatorInteractionTracker>
     </div>
 
     <EvAnnualCostComparison :result="result" />
@@ -124,7 +127,8 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
         <h2 class="retro-title">2026 전기차 보조금 계산기</h2>
         <FreshBadge :message="`${EV_SUBSIDY_UPDATED} 기준`" />
       </div>
-      <div class="retro-panel-content space-y-4" role="group" :aria-describedby="subsidyValidationError ? 'ev-subsidy-error' : undefined">
+      <CalculatorInteractionTracker calculator-id="ev_subsidy" page-path="/car/ev-vs-gas">
+        <div class="retro-panel-content space-y-4" role="group" :aria-describedby="subsidyValidationError ? 'ev-subsidy-error' : undefined">
         <div class="grid gap-3 md:grid-cols-2">
           <label class="block space-y-1">
             <span class="text-caption font-semibold text-foreground">차량 출고가 (원)</span>
@@ -176,7 +180,8 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
         <p v-if="subsidyValidationError" id="ev-subsidy-error" class="text-caption font-semibold text-destructive" role="alert">
           {{ subsidyValidationError }}
         </p>
-      </div>
+        </div>
+      </CalculatorInteractionTracker>
     </div>
 
     <div class="retro-panel overflow-hidden">

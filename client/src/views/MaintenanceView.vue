@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { ShBreakdownBar } from "@shakilabs/ui";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
@@ -47,25 +48,27 @@ const chartSegments = computed(() => {
         <h2 class="retro-title">유지비 조건 입력</h2>
         <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
       </div>
-      <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'maintenance-error' : undefined">
-        <label class="block space-y-1">
-          <span class="text-caption font-semibold text-foreground">연 주행거리 (km)</span>
-          <input v-model.number="annualKm" type="number" min="1000" class="retro-input" placeholder="연 주행거리" />
-        </label>
-        <label class="block space-y-1">
-          <span class="text-caption font-semibold text-foreground">차량 연식 (년)</span>
-          <input v-model.number="vehicleAge" type="number" min="0" max="20" class="retro-input" placeholder="차량 연식(년)" />
-        </label>
-        <label class="block space-y-1">
-          <span class="text-caption font-semibold text-foreground">연료 종류</span>
-          <select v-model="fuelType" class="retro-input">
-            <option v-for="(item, key) in maintenanceProfiles" :key="key" :value="key">{{ item.label }}</option>
-          </select>
-        </label>
-        <p v-if="validationError" id="maintenance-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
-          {{ validationError }}
-        </p>
-      </div>
+      <CalculatorInteractionTracker calculator-id="maintenance" page-path="/car/maintenance">
+        <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'maintenance-error' : undefined">
+          <label class="block space-y-1">
+            <span class="text-caption font-semibold text-foreground">연 주행거리 (km)</span>
+            <input v-model.number="annualKm" type="number" min="1000" class="retro-input" placeholder="연 주행거리" />
+          </label>
+          <label class="block space-y-1">
+            <span class="text-caption font-semibold text-foreground">차량 연식 (년)</span>
+            <input v-model.number="vehicleAge" type="number" min="0" max="20" class="retro-input" placeholder="차량 연식(년)" />
+          </label>
+          <label class="block space-y-1">
+            <span class="text-caption font-semibold text-foreground">연료 종류</span>
+            <select v-model="fuelType" class="retro-input">
+              <option v-for="(item, key) in maintenanceProfiles" :key="key" :value="key">{{ item.label }}</option>
+            </select>
+          </label>
+          <p v-if="validationError" id="maintenance-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+            {{ validationError }}
+          </p>
+        </div>
+      </CalculatorInteractionTracker>
     </div>
 
     <!-- 히어로: 연간 총 유지비 -->
