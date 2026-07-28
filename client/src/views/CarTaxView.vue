@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { ShSurface, ShText } from "@shakilabs/ui";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
 import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
@@ -96,7 +97,9 @@ const share = useShare({
         <FreshBadge :message="`${CAR_TAX_DATA_UPDATED} 기준`" />
       </div>
       <div class="retro-panel-content">
-        <CarTaxInput v-model="form" />
+        <CalculatorInteractionTracker calculator-id="car_tax" page-path="/car/tax">
+          <CarTaxInput v-model="form" />
+        </CalculatorInteractionTracker>
       </div>
     </ShSurface>
 

@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { ParkingSquare, Trophy } from "lucide-vue-next";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import RankedBars from "@/components/result-visualization/RankedBars.vue";
 import { CAR_PARKING_GUIDE } from "@/data/seoGuides";
@@ -48,6 +49,7 @@ const costItems = computed(() => result.value.items.map((item) => ({
         <h2 class="retro-title">주차 조건 입력</h2>
         <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
       </div>
+      <CalculatorInteractionTracker calculator-id="parking" page-path="/car/parking">
       <div class="retro-panel-content grid gap-3 md:grid-cols-2" role="group" :aria-describedby="validationError ? 'parking-error' : undefined">
         <label class="block space-y-1">
           <span class="text-caption font-semibold text-foreground">월 주차 일수</span>
@@ -69,6 +71,7 @@ const costItems = computed(() => result.value.items.map((item) => ({
           {{ validationError }}
         </p>
       </div>
+      </CalculatorInteractionTracker>
     </div>
 
     <!-- 히어로: 최저 비용 결론 -->

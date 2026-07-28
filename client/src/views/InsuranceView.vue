@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
 import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
@@ -89,7 +90,9 @@ const share = useShare({
         <FreshBadge :message="`${INSURANCE_DATA_UPDATED} 기준`" />
       </div>
       <div class="retro-panel-content">
-        <InsuranceInput v-model="form" />
+        <CalculatorInteractionTracker calculator-id="car_insurance" page-path="/car/insurance">
+          <InsuranceInput v-model="form" />
+        </CalculatorInteractionTracker>
       </div>
     </div>
 

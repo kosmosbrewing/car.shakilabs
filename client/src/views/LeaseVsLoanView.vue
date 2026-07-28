@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Share2 } from "lucide-vue-next";
+import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
 import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
@@ -88,7 +89,9 @@ const costItems = computed(() => result.value.methods.map((method) => ({
         <FreshBadge :message="`${LEASE_DATA_UPDATED} 기준`" />
       </div>
       <div class="retro-panel-content">
-        <LeaseCompareInput v-model="form" />
+        <CalculatorInteractionTracker calculator-id="lease_vs_loan" page-path="/car/lease-vs-loan">
+          <LeaseCompareInput v-model="form" />
+        </CalculatorInteractionTracker>
       </div>
     </div>
 
