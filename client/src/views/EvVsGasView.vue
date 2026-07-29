@@ -245,14 +245,12 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
       </div>
     </div>
 
-    <FaqAccordionPanel :items="EV_SUBSIDY_FAQS" />
+    <FaqAccordionPanel :items="EV_SUBSIDY_FAQS" :extra="CAR_EV_VS_GAS_GUIDE.faqs" />
 
     <SeoRichGuide
       :title="CAR_EV_VS_GAS_GUIDE.title"
       :intro="CAR_EV_VS_GAS_GUIDE.intro"
-      :sections="CAR_EV_VS_GAS_GUIDE.sections"
-      :faqs="CAR_EV_VS_GAS_GUIDE.faqs"
-      :disclaimer="CAR_EV_VS_GAS_GUIDE.disclaimer"
+      :sections="CAR_EV_VS_GAS_GUIDE.sections"      :disclaimer="CAR_EV_VS_GAS_GUIDE.disclaimer"
     />
   </div>
 </template>

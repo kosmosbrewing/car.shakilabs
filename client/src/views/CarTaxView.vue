@@ -113,14 +113,12 @@ const share = useShare({
     <CarTaxBreakdown :result="result" />
     <CompareSourceFooter :sources="CAR_TAX_SOURCES" updated-at="2026-03-11" />
     <AdSlot slot-id="top" label="자동차 금융 광고 영역" />
-    <CarTaxFAQ :faqs="faqItems" />
+    <CarTaxFAQ :faqs="faqItems" :extra="CAR_TAX_GUIDE.faqs" />
     <SeoRichGuide
       :title="CAR_TAX_GUIDE.title"
       :intro="CAR_TAX_GUIDE.intro"
       :sections="CAR_TAX_GUIDE.sections"
-      :checklist="CAR_TAX_GUIDE.checklist"
-      :faqs="CAR_TAX_GUIDE.faqs"
-      :disclaimer="CAR_TAX_GUIDE.disclaimer"
+      :checklist="CAR_TAX_GUIDE.checklist"      :disclaimer="CAR_TAX_GUIDE.disclaimer"
     />
     <AffiliateDisclosure v-if="carAffiliateItems.length > 0" />
 

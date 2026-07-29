@@ -104,14 +104,12 @@ const share = useShare({
     />
     <CompareSourceFooter :sources="INSURANCE_SOURCES" updated-at="2026-03-11" />
     <AdSlot slot-id="bottom" label="자동차보험 광고 영역" />
-    <InsuranceFAQ :faqs="faqItems" />
+    <InsuranceFAQ :faqs="faqItems" :extra="CAR_INSURANCE_GUIDE.faqs" />
     <SeoRichGuide
       :title="CAR_INSURANCE_GUIDE.title"
       :intro="CAR_INSURANCE_GUIDE.intro"
       :sections="CAR_INSURANCE_GUIDE.sections"
-      :checklist="CAR_INSURANCE_GUIDE.checklist"
-      :faqs="CAR_INSURANCE_GUIDE.faqs"
-      :disclaimer="CAR_INSURANCE_GUIDE.disclaimer"
+      :checklist="CAR_INSURANCE_GUIDE.checklist"      :disclaimer="CAR_INSURANCE_GUIDE.disclaimer"
     />
     <AffiliateDisclosure v-if="carAffiliateItems.length > 0" />
 
