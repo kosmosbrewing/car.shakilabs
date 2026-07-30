@@ -140,7 +140,7 @@ const costItems = computed(() => result.value.methods.map((method) => ({
       :items="carAffiliateItems"
     />
     <LeaseCompareTable :result="result" />
-    <LeaseGuide />
+    <LeaseGuide :extra="CAR_LEASE_GUIDE.faqs" />
     <CompareSourceFooter :sources="LEASE_SOURCES" updated-at="2026-03-11" />
     <div class="rounded-2xl border border-border/60 bg-muted/20 px-4 py-3 text-caption text-muted-foreground">
       <p class="mb-2 font-semibold text-foreground">비교 기준</p>
@@ -154,7 +154,6 @@ const costItems = computed(() => result.value.methods.map((method) => ({
       :intro="CAR_LEASE_GUIDE.intro"
       :sections="CAR_LEASE_GUIDE.sections"
       :checklist="CAR_LEASE_GUIDE.checklist"
-      :faqs="CAR_LEASE_GUIDE.faqs"
       :disclaimer="CAR_LEASE_GUIDE.disclaimer"
     />
     <AffiliateDisclosure v-if="carAffiliateItems.length > 0" />
