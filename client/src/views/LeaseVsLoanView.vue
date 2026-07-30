@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { mergeFaqs } from "@/lib/faqMerge";
 import { Share2 } from "lucide-vue-next";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
@@ -38,10 +39,13 @@ const seoDescription = computed(() =>
     : "같은 차를 리스·할부·장기렌트로 이용할 때 계약기간 동안 실제로 나가는 현금유출과 월 납입금 차이를 비교합니다.",
 );
 
+// LeaseGuide 내부에서도 동일한 입력(leaseGuideItems, CAR_LEASE_GUIDE.faqs)으로 병합하므로
+// 화면에 실제 렌더되는 항목과 구조화 데이터가 일치한다 (스키마 규칙)
+const mergedFaqs = mergeFaqs(leaseGuideItems, CAR_LEASE_GUIDE.faqs);
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: leaseGuideItems.map((faq) => ({
+  mainEntity: mergedFaqs.map((faq) => ({
     "@type": "Question",
     name: faq.q,
     acceptedAnswer: {
