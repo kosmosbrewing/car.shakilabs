@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { mergeFaqs } from "@/lib/faqMerge";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
@@ -52,10 +53,13 @@ const faqItems = [
   },
 ] as const;
 
+// 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
+const mergedFaqs = mergeFaqs(faqItems, CAR_INSURANCE_GUIDE.faqs);
+
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: faqItems.map((faq) => ({
+  mainEntity: mergedFaqs.map((faq) => ({
     "@type": "Question",
     name: faq.q,
     acceptedAnswer: {
@@ -104,7 +108,7 @@ const share = useShare({
     />
     <CompareSourceFooter :sources="INSURANCE_SOURCES" updated-at="2026-03-11" />
     <AdSlot slot-id="bottom" label="자동차보험 광고 영역" />
-    <InsuranceFAQ :faqs="faqItems" :extra="CAR_INSURANCE_GUIDE.faqs" />
+    <InsuranceFAQ :faqs="mergedFaqs" />
     <SeoRichGuide
       :title="CAR_INSURANCE_GUIDE.title"
       :intro="CAR_INSURANCE_GUIDE.intro"

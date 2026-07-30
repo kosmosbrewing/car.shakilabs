@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import { mergeFaqs } from "@/lib/faqMerge";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { BadgePercent, Car, UserRound, ArrowRightLeft } from "lucide-vue-next";
 import FreshBadge from "@/components/common/FreshBadge.vue";
@@ -25,10 +26,12 @@ const seoTitle = "전기차 vs 내연기관 비교 + 보조금 계산기 | 2026"
 const seoDescription =
   "전기차와 내연기관차 연간 비용 비교, 2026년 전기차 국고·지자체 보조금까지 한번에 계산합니다.";
 
+// 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
+const mergedFaqs = mergeFaqs(EV_SUBSIDY_FAQS, CAR_EV_VS_GAS_GUIDE.faqs);
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: EV_SUBSIDY_FAQS.map((f) => ({
+  mainEntity: mergedFaqs.map((f) => ({
     "@type": "Question",
     name: f.q,
     acceptedAnswer: { "@type": "Answer", text: f.a },
@@ -245,7 +248,7 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
       </div>
     </div>
 
-    <FaqAccordionPanel :items="EV_SUBSIDY_FAQS" :extra="CAR_EV_VS_GAS_GUIDE.faqs" />
+    <FaqAccordionPanel :items="mergedFaqs" />
 
     <SeoRichGuide
       :title="CAR_EV_VS_GAS_GUIDE.title"

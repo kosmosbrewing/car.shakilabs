@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { mergeFaqs } from "@/lib/faqMerge";
 import { ShSurface, ShText } from "@shakilabs/ui";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
@@ -59,10 +60,13 @@ const faqItems = [
   },
 ] as const;
 
+// 화면에 실제 렌더되는 병합 FAQ와 구조화 데이터를 일치시킨다 (스키마 규칙)
+const mergedFaqs = mergeFaqs(faqItems, CAR_TAX_GUIDE.faqs);
+
 const faqJsonLd = {
   "@context": "https://schema.org",
   "@type": "FAQPage",
-  mainEntity: faqItems.map((faq) => ({
+  mainEntity: mergedFaqs.map((faq) => ({
     "@type": "Question",
     name: faq.q,
     acceptedAnswer: {
@@ -113,7 +117,7 @@ const share = useShare({
     <CarTaxBreakdown :result="result" />
     <CompareSourceFooter :sources="CAR_TAX_SOURCES" updated-at="2026-03-11" />
     <AdSlot slot-id="top" label="자동차 금융 광고 영역" />
-    <CarTaxFAQ :faqs="faqItems" :extra="CAR_TAX_GUIDE.faqs" />
+    <CarTaxFAQ :faqs="mergedFaqs" />
     <SeoRichGuide
       :title="CAR_TAX_GUIDE.title"
       :intro="CAR_TAX_GUIDE.intro"
