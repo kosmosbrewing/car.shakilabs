@@ -26,7 +26,7 @@ const costItems = computed(() => [
 
 <template>
   <section class="retro-panel overflow-hidden">
-    <div class="space-y-1 bg-gradient-to-br from-primary via-primary to-primary/80 px-4 py-4 sm:px-5 sm:py-5">
+    <div class="space-y-1 bg-primary px-4 py-4 sm:px-5 sm:py-5">
       <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">더 유리한 쪽</p>
       <p class="text-display font-bold leading-none text-white">{{ result.winner === "ev" ? "전기차" : "내연기관" }}</p>
     </div>
