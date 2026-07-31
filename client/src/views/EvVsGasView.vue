@@ -188,7 +188,7 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
     </div>
 
     <div class="retro-panel overflow-hidden">
-      <div class="space-y-1 bg-gradient-to-br from-primary via-primary to-primary/80 px-4 py-4 sm:px-5 sm:py-5">
+      <div class="space-y-1 bg-primary px-4 py-4 sm:px-5 sm:py-5">
         <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">보조금 적용 실구매가</p>
         <p class="car-result-amount font-bold text-white tabular-nums">{{ formatWon(subsidyResult.effectivePrice) }}</p>
       </div>

@@ -76,7 +76,7 @@ const costItems = computed(() => result.value.items.map((item) => ({
 
     <!-- 히어로: 최저 비용 결론 -->
     <div class="retro-panel overflow-hidden">
-      <div class="space-y-1 bg-gradient-to-br from-primary via-primary to-primary/80 px-4 py-4 sm:px-5 sm:py-5">
+      <div class="space-y-1 bg-primary px-4 py-4 sm:px-5 sm:py-5">
         <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">가장 저렴한 방식</p>
         <p class="text-display font-bold leading-none text-white">{{ result.bestOption.label }}</p>
       </div>
