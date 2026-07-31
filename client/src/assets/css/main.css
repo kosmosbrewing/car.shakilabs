@@ -422,3 +422,53 @@
   border-radius: 1px;
   background: currentColor;
 }
+
+/* ui 0.3.10 차트 승격: 패키지 톤을 앱 의미색으로 고정 (승격 전 색 그대로 유지).
+   패키지 styles.css가 main.css보다 뒤에 로드되므로 단일 클래스로는 못 이긴다 —
+   .sh-chart 하위 선택자로 명시도를 올려 확실히 덮어쓴다. */
+.sh-chart .sh-chart-fill--success { fill: hsl(var(--profit)); }
+.sh-chart .sh-chart-fill--danger { fill: hsl(var(--fee)); }
+.sh-chart .sh-metric-bars__label--success { color: hsl(var(--profit)); }
+.sh-chart .sh-metric-bars__label--danger { color: hsl(var(--fee)); }
+
+/* 승격 전 비강조 막대는 fill-primary/70 이었다 — 불투명도까지 재현한다. */
+.retro-ranked-bars .sh-chart-fill--primary { fill: hsl(var(--primary) / 0.7); }
+
+/* 승격 전에는 라벨이 항상 foreground였고 강조색은 값(strong)에만 붙었다.
+   패키지는 라벨·값 모두에 톤 색을 주므로 라벨과 비강조 값만 foreground로 되돌린다. */
+.retro-ranked-bars .sh-ranked-bars__label { color: hsl(var(--foreground)); }
+.retro-ranked-bars .sh-ranked-bars__value.sh-metric-bars__label--primary { color: hsl(var(--foreground)); }
+
+/* 레트로 패널 크롬: 타이틀바는 패널 폭 전체를 쓰고(풀블리드),
+   설명문과 목록에만 retro-panel-content와 동일한 패딩을 준다. */
+.retro-ranked-bars.sh-chart,
+.retro-ranked-bars .sh-chart__header { gap: 0; }
+
+.retro-ranked-bars .sh-chart__note,
+.retro-ranked-bars .sh-ranked-bars__list,
+.retro-ranked-bars .sh-chart__empty {
+  padding-left: 0.875rem;
+  padding-right: 0.875rem;
+}
+
+.retro-ranked-bars .sh-chart__note { padding-top: 0.75rem; }
+
+.retro-ranked-bars .sh-ranked-bars__list,
+.retro-ranked-bars .sh-chart__empty {
+  padding-top: 1rem;
+  padding-bottom: 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .retro-ranked-bars .sh-chart__note,
+  .retro-ranked-bars .sh-ranked-bars__list,
+  .retro-ranked-bars .sh-chart__empty {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .retro-ranked-bars .sh-chart__note { padding-top: 1rem; }
+
+  .retro-ranked-bars .sh-ranked-bars__list,
+  .retro-ranked-bars .sh-chart__empty { padding-bottom: 1rem; }
+}
