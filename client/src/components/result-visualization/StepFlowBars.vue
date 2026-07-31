@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from "vue";
-import { positiveBarWidth } from "@/utils/chartMath";
+// 막대 폭 계산은 @shakilabs/ui로 승격됐다 — 로컬 chartMath 복사본은 제거했다.
+import { positiveBarWidth } from "@shakilabs/ui";
 
 type FlowStep = { key: string; label: string; value: number; change?: number };
 const props = defineProps<{
