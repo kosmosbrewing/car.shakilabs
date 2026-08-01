@@ -8,6 +8,8 @@
     "build": "node scripts/build.mjs",
     "verify:static": "node scripts/validate-static-output.mjs",
     "sbom:prod": "node scripts/sbom.mjs",
+    "verify:vendor": "node scripts/verify-vendor-artifact.mjs",
+    "verify:sbom": "node scripts/verify-sbom-identity.mjs",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "test": "vitest run",
     "test:watch": "vitest",
