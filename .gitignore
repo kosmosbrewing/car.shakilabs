@@ -37,6 +37,10 @@ coverage/
 .vercel/
 client/.vercel/
 
+# SBOM 등 생성 산출물 — 비결정적 필드(timestamp·documentNamespace) 때문에 커밋하지 않는다.
+# CI가 매 실행마다 생성해 workflow artifact로 보관한다.
+client/artifacts/
+
 # UI audit generated evidence; keep only review documents
 /artifacts/ui-audit/*
 !/artifacts/ui-audit/report.md
