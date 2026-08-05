@@ -253,7 +253,9 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
     <SeoRichGuide
       :title="CAR_EV_VS_GAS_GUIDE.title"
       :intro="CAR_EV_VS_GAS_GUIDE.intro"
-      :sections="CAR_EV_VS_GAS_GUIDE.sections"      :disclaimer="CAR_EV_VS_GAS_GUIDE.disclaimer"
+      :sections="CAR_EV_VS_GAS_GUIDE.sections"
+      :sources="CAR_EV_VS_GAS_GUIDE.sources"
+      :disclaimer="CAR_EV_VS_GAS_GUIDE.disclaimer"
     />
   </div>
 </template>

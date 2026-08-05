@@ -1,7 +1,13 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { PRERENDER_ROUTES, SEO_ROUTES } from "./seo-routes.mjs";
+import {
+  PRERENDER_ROUTES,
+  SEO_ROUTES,
+  SITEMAP_ROUTES,
+  PARAM_ROUTES,
+  canonicalPathFor,
+} from "./seo-routes.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, "..");
@@ -52,7 +58,9 @@ function validateRoute(route) {
   assert(existsSync(outputPath), "Missing static output for " + route + ": " + outputPath);
 
   const html = readFileSync(outputPath, "utf8");
-  const expectedCanonical = canonicalBase + route;
+  // Amount variants must canonicalize to their base page (doorway
+  // consolidation); every other route stays self-canonical.
+  const expectedCanonical = canonicalBase + canonicalPathFor(route);
   const h1Count = html.match(/<h1\b/gi)?.length ?? 0;
 
   assert(canonicalFrom(html) === expectedCanonical,
@@ -67,15 +75,20 @@ function validateRoute(route) {
 function validateSitemap() {
   const sitemap = readFileSync(resolve(distRoot, "sitemap.xml"), "utf8");
   const actualUrls = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
-  const expectedUrls = SEO_ROUTES.map((route) => canonicalBase + route);
+  const expectedUrls = SITEMAP_ROUTES.map((route) => canonicalBase + route);
+  const variantUrls = new Set(PARAM_ROUTES.map((route) => canonicalBase + route));
 
   assert(JSON.stringify(actualUrls) === JSON.stringify(expectedUrls),
-    "Sitemap must contain only indexable routes");
+    "Sitemap must contain exactly the self-canonical routes");
+  assert(actualUrls.every((url) => !variantUrls.has(url)),
+    "Sitemap must not list canonicalized amount-variant routes");
 }
 
 validateVercelConfig(resolve(repositoryRoot, "vercel.json"));
 validateVercelConfig(resolve(projectRoot, "vercel.json"));
 assert(PRERENDER_ROUTES[0] === "/", "Root alias must remain prerendered");
+// validateRoute also runs for PARAM_ROUTES: their static HTML must keep
+// existing (soft-404 guard) even though they are absent from the sitemap.
 SEO_ROUTES.forEach(validateRoute);
 validateSitemap();
 
@@ -94,4 +107,5 @@ assert(/name="robots" content="noindex,nofollow"/.test(notFoundHtml),
   "404.html must be noindex,nofollow");
 
 console.log("Validated " + SEO_ROUTES.length
-  + " indexable routes, root alias, and custom 404 output.");
+  + " prerendered routes (" + SITEMAP_ROUTES.length + " sitemap + "
+  + PARAM_ROUTES.length + " canonicalized variants), root alias, and custom 404 output.");

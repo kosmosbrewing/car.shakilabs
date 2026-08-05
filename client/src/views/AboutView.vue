@@ -47,13 +47,21 @@ const constantsStore = useConstantsStore();
           따라서 계산 결과는 비교용 참고값으로 활용해 주세요.
         </p>
 
-        <h2 class="text-heading font-bold">문의</h2>
+        <h2 class="text-heading font-bold">검증 방법</h2>
         <p class="text-body text-muted-foreground">
-          오류 제보나 데이터 수정 요청은
+          모든 세율·요율은 지방세법령과 자동차365(국토교통부), 위택스 등 공공 기관이 공개한 자료를 기준으로 교차 검증합니다.
+          법령이나 요율이 개정되면 확인 즉시 계산 로직에 반영하고, 각 계산기에 데이터 기준일을 함께 표기합니다.
+        </p>
+
+        <h2 class="text-heading font-bold">운영자 정보</h2>
+        <p class="text-body text-muted-foreground">
+          운영: ShakiLabs · 문의:
           <a :href="`mailto:${constantsStore.supportEmail}`" class="retro-link">
             {{ constantsStore.supportEmail }}
           </a>
-          로 보내주세요.
+        </p>
+        <p class="text-body text-muted-foreground">
+          오류 제보나 데이터 수정 요청도 같은 주소로 보내주시면 확인 후 반영합니다.
         </p>
       </div>
     </div>

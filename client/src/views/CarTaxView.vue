@@ -36,6 +36,9 @@ const seoDescription = computed(() =>
     ? `차량가 ${amountLabel.value}원 기준 취등록세, 공채매입비, 부대비용을 한번에 계산합니다.`
     : "신차·중고차 취등록세, 공채매입비, 부대비용을 한번에 계산합니다. 차종·지역·연식별 초기 등록비용을 빠르게 확인하세요.",
 );
+// Amount variants (/tax/:amount) render the same prerendered body, so they
+// canonicalize to the base calculator instead of competing as duplicates.
+const canonicalPath = computed(() => (props.initialVehiclePrice ? "/tax" : undefined));
 
 const faqItems = [
   {
@@ -90,7 +93,12 @@ const share = useShare({
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
+  <SEOHead
+    :title="seoTitle"
+    :description="seoDescription"
+    :canonical-path="canonicalPath"
+    :json-ld="faqJsonLd"
+  />
 
   <div class="text-resize-layout container space-y-5 py-5">
     <CalculatorPageHeader title="자동차 취등록세 계산기" />
@@ -122,7 +130,9 @@ const share = useShare({
       :title="CAR_TAX_GUIDE.title"
       :intro="CAR_TAX_GUIDE.intro"
       :sections="CAR_TAX_GUIDE.sections"
-      :checklist="CAR_TAX_GUIDE.checklist"      :disclaimer="CAR_TAX_GUIDE.disclaimer"
+      :checklist="CAR_TAX_GUIDE.checklist"
+      :sources="CAR_TAX_GUIDE.sources"
+      :disclaimer="CAR_TAX_GUIDE.disclaimer"
     />
     <AffiliateDisclosure v-if="carAffiliateItems.length > 0" />
 

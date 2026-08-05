@@ -2,13 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
-import {
-  SEO_ROUTES,
-  PRERENDER_ROUTES,
-  TAX_PRICES,
-  INSURANCE_PREMIUMS,
-  LEASE_PRICES,
-} from "./seo-routes.mjs";
+import { SITEMAP_ROUTES, PRERENDER_ROUTES } from "./seo-routes.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, "..");
@@ -19,12 +13,6 @@ const viteSsgBin = resolve(
   ".bin",
   process.platform === "win32" ? "vite-ssg.cmd" : "vite-ssg"
 );
-
-const paramPaths = new Set([
-  ...TAX_PRICES.map((a) => `/tax/${a}`),
-  ...INSURANCE_PREMIUMS.map((a) => `/insurance/${a}`),
-  ...LEASE_PRICES.map((a) => `/lease-vs-loan/${a}`),
-]);
 
 const basePriority = {
   "/all": "0.9",
@@ -47,9 +35,6 @@ function getRouteConfig(path) {
       priority: basePriority[path],
     };
   }
-  if (paramPaths.has(path)) {
-    return { changefreq: "monthly", priority: "0.7" };
-  }
   return { changefreq: "monthly", priority: "0.5" };
 }
 
@@ -63,8 +48,11 @@ function resolveBuildDate() {
 }
 
 function renderSitemap(buildDate) {
+  // Amount-variant routes (PARAM_ROUTES) are intentionally absent: they
+  // canonicalize to their base page, so listing them would send crawlers
+  // to URLs that immediately point elsewhere.
   const baseUrl = "https://shakilabs.com/car";
-  const urls = SEO_ROUTES.map((path) => {
+  const urls = SITEMAP_ROUTES.map((path) => {
     const { changefreq, priority } = getRouteConfig(path);
     return `  <url>
     <loc>${path === "/" ? `${baseUrl}/` : `${baseUrl}${path}`}</loc>
