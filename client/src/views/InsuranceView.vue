@@ -33,6 +33,9 @@ const seoDescription = computed(() =>
     ? `현재 보험료 ${amountLabel.value}원 기준, 할인 특약과 다이렉트 전환으로 줄일 수 있는 비용을 비교합니다.`
     : "마일리지, 블랙박스, 자기부담금, 다이렉트 전환까지 자동차보험 갱신 시 줄일 수 있는 비용을 한눈에 비교합니다.",
 );
+// Amount variants (/insurance/:amount) render the same prerendered body, so
+// they canonicalize to the base calculator instead of competing as duplicates.
+const canonicalPath = computed(() => (props.initialPremium ? "/insurance" : undefined));
 
 const faqItems = [
   {
@@ -83,7 +86,12 @@ const share = useShare({
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
+  <SEOHead
+    :title="seoTitle"
+    :description="seoDescription"
+    :canonical-path="canonicalPath"
+    :json-ld="faqJsonLd"
+  />
 
   <div class="container space-y-5 py-5">
     <CalculatorPageHeader title="자동차보험 절약 계산기" />

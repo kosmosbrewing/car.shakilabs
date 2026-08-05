@@ -38,6 +38,9 @@ const seoDescription = computed(() =>
     ? `차량가 ${amountLabel.value}원 기준, 리스·할부·장기렌트 계약기간 현금유출과 월 납입금을 비교합니다.`
     : "같은 차를 리스·할부·장기렌트로 이용할 때 계약기간 동안 실제로 나가는 현금유출과 월 납입금 차이를 비교합니다.",
 );
+// Amount variants (/lease-vs-loan/:amount) render the same prerendered body,
+// so they canonicalize to the base page instead of competing as duplicates.
+const canonicalPath = computed(() => (props.initialVehiclePrice ? "/lease-vs-loan" : undefined));
 
 // LeaseGuide 내부에서도 동일한 입력(leaseGuideItems, CAR_LEASE_GUIDE.faqs)으로 병합하므로
 // 화면에 실제 렌더되는 항목과 구조화 데이터가 일치한다 (스키마 규칙)
@@ -82,7 +85,12 @@ const costItems = computed(() => result.value.methods.map((method) => ({
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
+  <SEOHead
+    :title="seoTitle"
+    :description="seoDescription"
+    :canonical-path="canonicalPath"
+    :json-ld="faqJsonLd"
+  />
 
   <div class="container space-y-5 py-5">
     <CalculatorPageHeader title="리스·할부·장기렌트 비교" />

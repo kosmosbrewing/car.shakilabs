@@ -13,12 +13,20 @@ export interface GuideChecklist {
   title: string;
   items: string[];
 }
+// Official/government reference links rendered as a plain-text source list.
+// Follow links on purpose (no nofollow): citing primary sources is a trust
+// signal for both readers and ad review.
+export interface GuideSource {
+  label: string;
+  url: string;
+}
 export interface GuideData {
   title: string;
   intro: string;
   sections?: GuideSection[];
   faqs?: GuideFaq[];
   checklist?: GuideChecklist;
+  sources?: GuideSource[];
   disclaimer?: string;
 }
 
@@ -135,6 +143,20 @@ export const CAR_TAX_GUIDE: GuideData = {
       a: "관례적으로 중고차 딜러는 '등록비 포함' 가격을 제시하지만, 실제로는 취득세·공채·부대비용이 포함되어 있는지 계약서에 명시되어 있는지 반드시 확인해야 합니다.",
     },
   ],
+  sources: [
+    {
+      label: "자동차365 (국토교통부 자동차 대국민 포털) — 등록 절차·비용 안내",
+      url: "https://www.car365.go.kr",
+    },
+    {
+      label: "위택스 — 취득세(지방세) 신고·납부",
+      url: "https://www.wetax.go.kr",
+    },
+    {
+      label: "국토교통부 — 자동차 등록 제도·법령",
+      url: "https://www.molit.go.kr",
+    },
+  ],
   disclaimer: COMMON_DISCLAIMER,
 };
 
@@ -247,6 +269,16 @@ export const CAR_EV_VS_GAS_GUIDE: GuideData = {
     {
       q: "세금·통행료 혜택은 언제까지인가요?",
       a: "전기차 개별소비세·취득세 감면은 2026년까지 연장된 상태이며, 고속도로 통행료 50% 할인도 동일 기간 유지됩니다. 이후 연장 여부는 환경부·기재부 정책에 따라 결정됩니다.",
+    },
+  ],
+  sources: [
+    {
+      label: "자동차365 (국토교통부 자동차 대국민 포털)",
+      url: "https://www.car365.go.kr",
+    },
+    {
+      label: "국토교통부 — 자동차 정책·통계",
+      url: "https://www.molit.go.kr",
     },
   ],
   disclaimer: COMMON_DISCLAIMER,
