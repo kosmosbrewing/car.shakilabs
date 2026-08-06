@@ -36,7 +36,6 @@ const maximum = computed(() => Math.max(...props.steps.map((step) => step.value)
             <rect
               :width="positiveBarWidth(step.value, maximum)"
               height="12"
-              rx="4"
               :class="step.change && step.change > 0 ? 'fill-fee' : 'fill-primary'"
             />
           </svg>
