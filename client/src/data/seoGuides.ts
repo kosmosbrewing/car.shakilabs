@@ -16,6 +16,8 @@ export interface GuideChecklist {
 // Official/government reference links rendered as a plain-text source list.
 // Follow links on purpose (no nofollow): citing primary sources is a trust
 // signal for both readers and ad review.
+// 주의: molit.go.kr 대문은 쿠키 없는 클라이언트(크롤러·curl)에서 307 리다이렉트
+// 루프를 돌아 죽은 링크로 판정된다. 무쿠키 GET 200이 확인된 car365·wetax만 쓴다.
 export interface GuideSource {
   label: string;
   url: string;
@@ -152,10 +154,6 @@ export const CAR_TAX_GUIDE: GuideData = {
       label: "위택스 — 취득세(지방세) 신고·납부",
       url: "https://www.wetax.go.kr",
     },
-    {
-      label: "국토교통부 — 자동차 등록 제도·법령",
-      url: "https://www.molit.go.kr",
-    },
   ],
   disclaimer: COMMON_DISCLAIMER,
 };
@@ -277,8 +275,8 @@ export const CAR_EV_VS_GAS_GUIDE: GuideData = {
       url: "https://www.car365.go.kr",
     },
     {
-      label: "국토교통부 — 자동차 정책·통계",
-      url: "https://www.molit.go.kr",
+      label: "위택스 — 전기차 취득세 감면·지방세 신고·납부",
+      url: "https://www.wetax.go.kr",
     },
   ],
   disclaimer: COMMON_DISCLAIMER,
