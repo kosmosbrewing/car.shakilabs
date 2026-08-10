@@ -105,6 +105,17 @@ assert(existsSync(notFoundPath), "Missing custom 404.html output");
 const notFoundHtml = readFileSync(notFoundPath, "utf8");
 assert(/name="robots" content="noindex,nofollow"/.test(notFoundHtml),
   "404.html must be noindex,nofollow");
+assert(notFoundHtml.includes('href="/car/tax"'),
+  "404.html must contain a recovery link back into the calculators");
+// Valuable Inventory: 콘텐츠가 없는 화면에는 광고 로더 자체가 있으면 안 된다.
+// noindex는 색인만 막고 정책은 로더의 존재를 본다 — 셸에서 물려받은 태그를
+// build.mjs가 지우는데, 그 제거가 조용히 깨지면 이 어서션이 잡는다.
+assert(!/adsbygoogle|googlesyndication/i.test(notFoundHtml),
+  "404.html must not load the AdSense script (Valuable Inventory: no ads on a contentless screen)");
+// 역방향 검증: 정상 라우트의 광고 배선까지 같이 날아가면 안 된다.
+const taxHtml = readFileSync(routeOutputPath("/tax"), "utf8");
+assert(/googlesyndication\.com/i.test(taxHtml),
+  "Content routes must keep the AdSense loader (404-only strip must not leak)");
 
 console.log("Validated " + SEO_ROUTES.length
   + " prerendered routes (" + SITEMAP_ROUTES.length + " sitemap + "

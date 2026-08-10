@@ -89,6 +89,24 @@ function removeRenderedNoscriptFallbacks() {
   }
 }
 
+// 404 화면은 제목 한 줄과 복귀 링크 세 개가 전부다 — 게시자 콘텐츠가 없는 화면에
+// 광고 로더를 싣는 것이 Google "Valuable Inventory" 정책이 금지하는 바로 그것이다.
+// 모든 라우트가 같은 셸(index.html)에서 나오므로 404도 셸의 AdSense 태그를 물려받는다.
+// noindex는 색인만 막을 뿐 로더의 존재 여부를 바꾸지 않으므로 태그 자체를 지운다.
+// NotFoundView는 AdSlot을 렌더하지 않고, 광고가 필요한 뷰는 AdSlot이 런타임에
+// 로더를 직접 주입(ensureAdsenseScript)하므로 정상 라우트 배선은 영향받지 않는다.
+function removeAdsenseLoaderFromNotFound() {
+  const outputPath = routeOutputPath("/404");
+  if (!existsSync(outputPath)) return;
+
+  const html = readFileSync(outputPath, "utf8");
+  const nextHtml = html.replace(
+    /\n?\s*<script[^>]*pagead2\.googlesyndication\.com[^>]*>\s*<\/script>/i,
+    "",
+  );
+  writeFileSync(outputPath, nextHtml, "utf8");
+}
+
 const buildDate = resolveBuildDate();
 
 mkdirSync(dirname(sitemapPath), { recursive: true });
@@ -108,6 +126,7 @@ if (result.status !== 0) {
 }
 
 removeRenderedNoscriptFallbacks();
+removeAdsenseLoaderFromNotFound();
 
 const validationResult = spawnSync(
   process.execPath,

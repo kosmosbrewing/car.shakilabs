@@ -36,6 +36,20 @@ const costItems = computed(() => result.value.items.map((item) => ({
   value: item.total,
   highlight: item.key === result.value.bestOption.key,
 })));
+
+// 계산기가 쓰는 일 최대요금 상한. compareParkingOptions의 Math.min(..., 15_000)과
+// 같은 값이어야 화면 설명이 실제 계산과 어긋나지 않는다.
+const DAILY_CAP = 15_000;
+
+const dailyHourlyCost = computed(() => hoursPerDay.value * hourlyRate.value);
+const cappedDailyCost = computed(() => Math.min(dailyHourlyCost.value, DAILY_CAP));
+
+// 월주차권이 시간권보다 싸지는 최소 주차 일수. 하루 요금이 0이면 판단 불가.
+const breakEvenDays = computed(() => {
+  const daily = cappedDailyCost.value;
+  if (!Number.isFinite(daily) || daily <= 0) return null;
+  return Math.ceil(monthlyPass.value / daily);
+});
 </script>
 
 <template>
@@ -134,6 +148,46 @@ const costItems = computed(() => result.value.items.map((item) => ({
           <Trophy class="h-3 w-3" />
           가장 저렴
         </span>
+      </div>
+    </div>
+
+    <!-- 계산 근거 공개: 세 방식의 산식과 일 최대요금 상한을 화면에서 밝힌다.
+         상한(15,000원)은 계산 로직에 하드코딩된 값이라 설명이 없으면 결과를 재현할 수 없다. -->
+    <div class="retro-panel overflow-hidden">
+      <div class="retro-titlebar rounded-t-2xl">
+        <h2 class="retro-title">이 결과는 이렇게 계산했습니다</h2>
+      </div>
+      <div class="retro-panel-content space-y-3">
+        <p class="text-body text-muted-foreground">
+          같은 주차 습관을 세 가지 요금제로 각각 환산해 월 비용을 비교합니다.
+          입력한 조건은 월 {{ daysPerMonth }}일 · 하루 {{ hoursPerDay }}시간 · 시간당 {{ formatWon(hourlyRate) }}이며,
+          이때 하루 시간권 요금은 {{ formatWon(dailyHourlyCost) }}입니다.
+        </p>
+        <ul class="list-inside list-disc space-y-1 text-body text-muted-foreground">
+          <li>
+            <span class="font-semibold text-foreground">시간권</span> — 하루 주차 시간 × 시간당 요금 × 월 주차 일수.
+            상한 없이 세운 시간만큼 그대로 누적한 경우입니다.
+          </li>
+          <li>
+            <span class="font-semibold text-foreground">일 최대요금</span> — 하루 요금에
+            {{ formatWon(DAILY_CAP) }}의 상한을 적용한 뒤 월 주차 일수를 곱합니다.
+            입력 조건에서는 하루 {{ formatWon(cappedDailyCost) }}이 적용됐습니다.
+            상한 금액은 주차장마다 다르므로 실제 안내판의 일 최대요금과 비교해 보세요.
+          </li>
+          <li>
+            <span class="font-semibold text-foreground">월주차</span> — 이용 일수와 무관한 정액 월정기권 요금입니다.
+          </li>
+        </ul>
+        <p v-if="breakEvenDays" class="text-body text-muted-foreground">
+          월주차 요금 {{ formatWon(monthlyPass) }}을 하루 {{ formatWon(cappedDailyCost) }}(상한 적용 후)으로 나누면
+          손익분기는 <span class="font-semibold text-foreground">월 {{ breakEvenDays }}일</span>입니다.
+          실제로 차를 세우는 날이 이보다 적으면 정기권을 끊지 않는 편이 유리하고, 많으면 정기권이 유리합니다.
+          휴가·출장·재택으로 세우지 않는 날을 빼고 세어 보세요.
+        </p>
+        <p class="text-caption text-muted-foreground">
+          경차·전기차는 공영주차장에서 50% 감면을 받는 경우가 많고, 다자녀·장애인 감면이 중복 적용되는 지자체도 있습니다.
+          감면 대상이라면 위 결과에서 해당 비율만큼 낮춰 해석하세요.
+        </p>
       </div>
     </div>
 
