@@ -1,6 +1,7 @@
 import {
   ACCIDENT_SURCHARGES,
   BLACKBOX_DISCOUNT,
+  BLACKBOX_DISCOUNT_MAX_VEHICLE_AGE,
   DEDUCTIBLE_DISCOUNTS,
   DIRECT_DISCOUNT_RATE,
   EXPERIENCE_DISCOUNTS,
@@ -90,12 +91,14 @@ export function calcInsurance(input: InsuranceInput): InsuranceBreakdown {
   if (mileageStep.item) items.push(mileageStep.item);
   runningPremium = mileageStep.nextPremium;
 
-  if (input.hasBlackbox && input.vehicleAgeYears <= 12) {
+  if (input.hasBlackbox && input.vehicleAgeYears <= BLACKBOX_DISCOUNT_MAX_VEHICLE_AGE) {
     const blackboxStep = applyDiscount(runningPremium, BLACKBOX_DISCOUNT, "블랙박스 할인");
     if (blackboxStep.item) items.push(blackboxStep.item);
     runningPremium = blackboxStep.nextPremium;
-  } else if (input.hasBlackbox && input.vehicleAgeYears > 12) {
-    notes.push("차량 연식 13년 이상은 블랙박스 할인 적용을 보수적으로 제외했습니다.");
+  } else if (input.hasBlackbox) {
+    notes.push(
+      `차량 연식 ${BLACKBOX_DISCOUNT_MAX_VEHICLE_AGE + 1}년 이상은 블랙박스 할인 적용을 보수적으로 제외했습니다.`,
+    );
   }
 
   const deductibleDiscount = DEDUCTIBLE_DISCOUNTS[input.deductibleLevel];

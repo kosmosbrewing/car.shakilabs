@@ -153,7 +153,7 @@ const costItems = computed(() => result.value.methods.map((method) => ({
     />
     <LeaseCompareTable :result="result" />
     <LeaseGuide :extra="CAR_LEASE_GUIDE.faqs" />
-    <CompareSourceFooter :sources="LEASE_SOURCES" updated-at="2026-03-11" />
+    <CompareSourceFooter :sources="LEASE_SOURCES" :updated-at="LEASE_DATA_UPDATED" />
     <div class="rounded-2xl border border-border/60 bg-muted/20 px-4 py-3 text-caption text-muted-foreground">
       <p class="mb-2 font-semibold text-foreground">비교 기준</p>
       <p>• 리스: 만기 반납 기준 현금유출 비교, 잔존가치 인수비용 제외</p>

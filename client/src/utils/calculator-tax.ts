@@ -7,6 +7,7 @@ import {
 } from "@/data/carTaxRates";
 import type { CarTaxBreakdown, CarTaxInput, TaxItem } from "./calculator-types";
 import { roundWon } from "./calculator-helpers";
+import { formatWonShort } from "@/lib/utils";
 
 function getResidualRate(modelYearAge: number): number {
   const safeAge = Math.min(15, Math.max(1, Math.round(modelYearAge)));
@@ -38,10 +39,12 @@ export function calcCarTax(input: CarTaxInput): CarTaxBreakdown {
     notes.push("장애인 감면 가정으로 취득세를 0원 처리했습니다.");
   } else if (input.vehicleType === "light") {
     acquisitionTax = Math.max(0, rawAcquisitionTax - LIGHT_CAR_TAX_EXEMPT_LIMIT);
+    // 한도 금액은 상수에서 렌더한다 — 안내 문구에 숫자를 다시 적으면 한도를 고쳤을 때 설명만 낡는다.
+    const limitLabel = formatWonShort(LIGHT_CAR_TAX_EXEMPT_LIMIT);
     if (rawAcquisitionTax <= LIGHT_CAR_TAX_EXEMPT_LIMIT) {
-      notes.push("경차 취득세 감면 한도(75만원) 안으로 계산되었습니다.");
+      notes.push(`경차 취득세 감면 한도(${limitLabel}) 안으로 계산되었습니다.`);
     } else {
-      notes.push("경차 감면 한도 75만원을 초과한 금액만 취득세에 반영했습니다.");
+      notes.push(`경차 감면 한도 ${limitLabel}을 초과한 금액만 취득세에 반영했습니다.`);
     }
   } else if (input.isDisabledOwner && input.displacementRange === "over2000") {
     notes.push("장애인 감면은 2,000cc 초과 승용 조건에서는 적용하지 않았습니다.");

@@ -16,7 +16,11 @@ import InsuranceInput from "@/components/insurance/InsuranceInput.vue";
 import InsuranceResult from "@/components/insurance/InsuranceResult.vue";
 import CalculatorPageHeader from "@/components/car/CalculatorPageHeader.vue";
 import { carAffiliateItems } from "@/data/affiliateLinks";
-import { INSURANCE_DATA_UPDATED, INSURANCE_SOURCES } from "@/data/insuranceRates";
+import {
+  BLACKBOX_DISCOUNT_MAX_VEHICLE_AGE,
+  INSURANCE_DATA_UPDATED,
+  INSURANCE_SOURCES,
+} from "@/data/insuranceRates";
 import { useInsuranceCalc } from "@/composables/useInsuranceCalc";
 import { useShare } from "@/composables/useShare";
 import { formatWon, formatManWon } from "@/lib/utils";
@@ -52,7 +56,7 @@ const faqItems = [
   },
   {
     q: "블랙박스 할인은 연식이 오래된 차도 적용되나요?",
-    a: "보험사별 조건이 달라 오래된 차량은 할인폭이 줄거나 제외될 수 있습니다. 계산기에서는 연식 13년 이상일 때 보수적으로 제외했습니다.",
+    a: `보험사별 조건이 달라 오래된 차량은 할인폭이 줄거나 제외될 수 있습니다. 계산기에서는 연식 ${BLACKBOX_DISCOUNT_MAX_VEHICLE_AGE + 1}년 이상일 때 보수적으로 제외했습니다.`,
   },
 ] as const;
 
@@ -114,7 +118,7 @@ const share = useShare({
       description="보험료를 점검했다면 차량 안전용품과 셀프 관리 용품 가격도 함께 확인해 보세요."
       :items="carAffiliateItems"
     />
-    <CompareSourceFooter :sources="INSURANCE_SOURCES" updated-at="2026-03-11" />
+    <CompareSourceFooter :sources="INSURANCE_SOURCES" :updated-at="INSURANCE_DATA_UPDATED" />
     <AdSlot slot-id="bottom" label="자동차보험 광고 영역" />
     <InsuranceFAQ :faqs="mergedFaqs" />
     <SeoRichGuide
