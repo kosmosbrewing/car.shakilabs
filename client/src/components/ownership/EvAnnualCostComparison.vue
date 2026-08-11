@@ -27,8 +27,8 @@ const costItems = computed(() => [
 <template>
   <section class="retro-panel overflow-hidden">
     <div class="space-y-1 bg-primary px-4 py-4 sm:px-5 sm:py-5">
-      <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">더 유리한 쪽</p>
-      <p class="text-display font-bold leading-none text-white">{{ result.winner === "ev" ? "전기차" : "내연기관" }}</p>
+      <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-primary-foreground/80 sm:text-caption">더 유리한 쪽</p>
+      <p class="text-display font-bold leading-none text-primary-foreground">{{ result.winner === "ev" ? "전기차" : "내연기관" }}</p>
     </div>
     <div class="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
       <span class="flex items-center gap-2 text-caption font-semibold text-muted-foreground">
@@ -64,7 +64,7 @@ const costItems = computed(() => [
           <Zap v-else class="h-5 w-5" />
         </span>
       </div>
-      <span v-if="result.winner === option.key" class="mt-3 inline-flex items-center gap-1 rounded-full bg-profit px-2.5 py-0.5 text-[11px] font-semibold text-white">
+      <span v-if="result.winner === option.key" class="mt-3 inline-flex items-center gap-1 rounded-full bg-profit px-2.5 py-0.5 text-[11px] font-semibold text-profit-foreground">
         <TrendingDown class="h-3 w-3" /> 더 유리
       </span>
     </article>

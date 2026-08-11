@@ -99,12 +99,15 @@ const premiumSteps = computed(() => {
       <div class="flex items-start justify-between gap-3 rounded-2xl border border-profit/20 bg-profit/5 p-4">
         <div>
           <p class="text-caption font-semibold text-muted-foreground">다이렉트 포함 예상 보험료</p>
-          <p class="car-result-amount mt-1 font-bold tabular-nums text-profit">{{ formatWon(result.finalPremium) }}</p>
+          <!-- 총 보험료는 지출 총액이지 이익도 손실도 아니다. --profit(초록)을 칠하면
+               숫자가 갖지 않은 "유리하다"는 판단을 주장하게 되므로 중립 전경색을 쓴다.
+               아래 절감률·절약액은 실제 절약분이라 초록 맥락(bg-profit/5)을 유지한다. -->
+          <p class="car-result-amount mt-1 font-bold tabular-nums text-foreground">{{ formatWon(result.finalPremium) }}</p>
           <p class="mt-1 text-caption text-muted-foreground">
             총 절감률 {{ formatPercent(result.totalDiscountRate, 1) }} · 누적 절약액 {{ formatWon(result.totalSavingsWithDirect) }}
           </p>
         </div>
-        <Badge variant="default" class="shrink-0 rounded-full border-transparent bg-profit text-white">
+        <Badge variant="default" class="shrink-0 rounded-full border-transparent bg-profit text-profit-foreground">
           최종 예상
         </Badge>
       </div>

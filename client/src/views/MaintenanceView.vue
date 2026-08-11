@@ -74,8 +74,8 @@ const chartSegments = computed(() => {
     <!-- 히어로: 연간 총 유지비 -->
     <div class="retro-panel overflow-hidden">
       <div class="space-y-1 bg-primary px-4 py-4 sm:px-5 sm:py-5">
-        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">연간 총 유지비</p>
-        <p class="car-result-amount font-bold tabular-nums text-white">{{ formatWon(result.total) }}</p>
+        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-primary-foreground/80 sm:text-caption">연간 총 유지비</p>
+        <p class="car-result-amount font-bold tabular-nums text-primary-foreground">{{ formatWon(result.total) }}</p>
       </div>
       <div class="maintenance-metric-grid grid grid-cols-2 divide-x divide-border/40">
         <div class="px-4 py-3 sm:px-5">

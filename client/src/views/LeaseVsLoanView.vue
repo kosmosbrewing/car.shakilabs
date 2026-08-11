@@ -109,8 +109,8 @@ const costItems = computed(() => result.value.methods.map((method) => ({
 
     <div class="retro-panel overflow-hidden">
       <div class="space-y-1 bg-primary px-4 py-4 sm:px-5 sm:py-5">
-        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">현금유출이 가장 적은 방식</p>
-        <p class="text-display font-bold leading-none text-white">{{ result.bestResult.label }}</p>
+        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-primary-foreground/80 sm:text-caption">현금유출이 가장 적은 방식</p>
+        <p class="text-display font-bold leading-none text-primary-foreground">{{ result.bestResult.label }}</p>
       </div>
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-border/40 px-4 py-3 sm:px-5">
         <span class="flex shrink-0 items-center gap-2 whitespace-nowrap text-caption font-semibold text-muted-foreground">
