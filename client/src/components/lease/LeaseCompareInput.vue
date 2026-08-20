@@ -116,7 +116,7 @@ function onPriceInput(event: Event): void {
       </summary>
       <div class="grid gap-3 p-3 sm:grid-cols-2">
         <label class="space-y-1">
-          <span class="text-caption text-muted-foreground">리스 금리 <span class="text-[10px] text-muted-foreground/70">(소수, 예: 5.5% → 0.055)</span></span>
+          <span class="text-caption text-muted-foreground">리스 금리 <span class="text-[10px] text-muted-foreground">(소수, 예: 5.5% → 0.055)</span></span>
           <input
             :value="modelValue.leaseRate"
             type="number"
@@ -128,7 +128,7 @@ function onPriceInput(event: Event): void {
           />
         </label>
         <label class="space-y-1">
-          <span class="text-caption text-muted-foreground">할부 금리 <span class="text-[10px] text-muted-foreground/70">(소수, 예: 5.5% → 0.055)</span></span>
+          <span class="text-caption text-muted-foreground">할부 금리 <span class="text-[10px] text-muted-foreground">(소수, 예: 5.5% → 0.055)</span></span>
           <input
             :value="modelValue.loanRate"
             type="number"

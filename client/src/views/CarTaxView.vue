@@ -19,10 +19,13 @@ import CarTaxInput from "@/components/car-tax/CarTaxInput.vue";
 import CarTaxResult from "@/components/car-tax/CarTaxResult.vue";
 import CalculatorPageHeader from "@/components/car/CalculatorPageHeader.vue";
 import { carAffiliateItems } from "@/data/affiliateLinks";
-import { CAR_TAX_DATA_UPDATED, CAR_TAX_SOURCES } from "@/data/carTaxRates";
+import { CAR_TAX_DATA_UPDATED, CAR_TAX_SOURCES, LIGHT_CAR_TAX_EXEMPT_LIMIT } from "@/data/carTaxRates";
 import { useCarTaxCalc } from "@/composables/useCarTaxCalc";
 import { useShare } from "@/composables/useShare";
-import { formatWon, formatManWon } from "@/lib/utils";
+import { formatWon, formatManWon, formatWonShort } from "@/lib/utils";
+
+// 경차 감면 한도는 계산 로직이 쓰는 상수에서 렌더한다 (FAQ에 숫자를 다시 적지 않는다)
+const lightCarLimitLabel = formatWonShort(LIGHT_CAR_TAX_EXEMPT_LIMIT);
 
 const props = defineProps<{ initialVehiclePrice?: number }>();
 const amountLabel = computed(() => props.initialVehiclePrice ? formatManWon(props.initialVehiclePrice / 10000) : null);
@@ -47,7 +50,7 @@ const faqItems = [
   },
   {
     q: "경차는 항상 취득세가 0원인가요?",
-    a: "경차는 취득세 75만원 한도까지 감면됩니다. 세액이 75만원을 넘으면 초과분만 부담합니다.",
+    a: `경차는 취득세 ${lightCarLimitLabel} 한도까지 감면됩니다. 세액이 ${lightCarLimitLabel}을 넘으면 초과분만 부담합니다.`,
   },
   {
     q: "공채비는 실제 납부액과 왜 다를 수 있나요?",
@@ -123,7 +126,7 @@ const share = useShare({
       :items="carAffiliateItems"
     />
     <CarTaxBreakdown :result="result" />
-    <CompareSourceFooter :sources="CAR_TAX_SOURCES" updated-at="2026-03-11" />
+    <CompareSourceFooter :sources="CAR_TAX_SOURCES" :updated-at="CAR_TAX_DATA_UPDATED" />
     <AdSlot slot-id="top" label="자동차 금융 광고 영역" />
     <CarTaxFAQ :faqs="mergedFaqs" />
     <SeoRichGuide

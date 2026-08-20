@@ -2,25 +2,64 @@ import { z } from "zod";
 import { maintenanceProfiles, PRICE_TIERS, YOUTH_BONUS_RATE, CONVERSION_BONUS, NATIONAL_SUBSIDY_MAX } from "@/data/ownershipData";
 import { calculationFailure, calculationSuccess } from "@/utils/calculationState";
 
+/**
+ * 주차 계산의 일 최대요금 상한.
+ * 화면(ParkingView)의 "이 결과는 이렇게 계산했습니다" 설명이 이 값을 그대로 렌더한다.
+ * 상한을 로직과 화면에 각각 박아두면 한쪽만 고쳤을 때 설명이 결과를 배신하므로
+ * 계산 모듈을 유일한 출처로 삼는다.
+ */
+export const PARKING_DAILY_CAP = 15_000;
+
+export interface InputBound {
+  min: number;
+  max: number;
+}
+
+/**
+ * 입력 허용 범위. zod 스키마와 화면의 min/max 속성이 같은 출처를 봐야
+ * 범위를 좁혔을 때 입력창이 조용히 낡지 않는다.
+ */
+export const PARKING_INPUT_LIMITS = {
+  daysPerMonth: { min: 1, max: 31 },
+  hoursPerDay: { min: 1, max: 24 },
+  hourlyRate: { min: 500, max: 20_000 },
+  monthlyPass: { min: 0, max: 1_000_000 },
+} as const satisfies Record<string, InputBound>;
+
+export const MAINTENANCE_INPUT_LIMITS = {
+  annualKm: { min: 1_000, max: 100_000 },
+  vehicleAge: { min: 0, max: 20 },
+} as const satisfies Record<string, InputBound>;
+
+export const EV_VS_GAS_INPUT_LIMITS = {
+  annualKm: { min: 1_000, max: 100_000 },
+  gasPrice: { min: 1_000, max: 3_500 },
+  electricityPrice: { min: 100, max: 600 },
+  gasEfficiency: { min: 5, max: 25 },
+  evKwhPerKm: { min: 0.08, max: 0.4 },
+} as const satisfies Record<string, InputBound>;
+
+const bounded = (limit: InputBound) => z.number().min(limit.min).max(limit.max);
+
 const parkingSchema = z.object({
-  daysPerMonth: z.number().int().min(1).max(31),
-  hoursPerDay: z.number().min(1).max(24),
-  hourlyRate: z.number().min(500).max(20_000),
-  monthlyPass: z.number().min(0).max(1_000_000),
+  daysPerMonth: bounded(PARKING_INPUT_LIMITS.daysPerMonth).int(),
+  hoursPerDay: bounded(PARKING_INPUT_LIMITS.hoursPerDay),
+  hourlyRate: bounded(PARKING_INPUT_LIMITS.hourlyRate),
+  monthlyPass: bounded(PARKING_INPUT_LIMITS.monthlyPass),
 });
 
 const maintenanceSchema = z.object({
-  annualKm: z.number().min(1_000).max(100_000),
-  vehicleAge: z.number().int().min(0).max(20),
+  annualKm: bounded(MAINTENANCE_INPUT_LIMITS.annualKm),
+  vehicleAge: bounded(MAINTENANCE_INPUT_LIMITS.vehicleAge).int(),
   fuelType: z.enum(["gasoline", "hybrid", "ev"]),
 });
 
 const evVsGasSchema = z.object({
-  annualKm: z.number().min(1_000).max(100_000),
-  gasPrice: z.number().min(1_000).max(3_500),
-  electricityPrice: z.number().min(100).max(600),
-  gasEfficiency: z.number().min(5).max(25),
-  evKwhPerKm: z.number().min(0.08).max(0.4),
+  annualKm: bounded(EV_VS_GAS_INPUT_LIMITS.annualKm),
+  gasPrice: bounded(EV_VS_GAS_INPUT_LIMITS.gasPrice),
+  electricityPrice: bounded(EV_VS_GAS_INPUT_LIMITS.electricityPrice),
+  gasEfficiency: bounded(EV_VS_GAS_INPUT_LIMITS.gasEfficiency),
+  evKwhPerKm: bounded(EV_VS_GAS_INPUT_LIMITS.evKwhPerKm),
 });
 
 export interface EvVsGasResult {
@@ -37,7 +76,7 @@ export function compareParkingOptions(input: z.input<typeof parkingSchema>) {
   if (!parsedResult.success) return calculationFailure(parsedResult.error);
   const parsed = parsedResult.data;
   const hourlyTotal = Math.round(parsed.daysPerMonth * parsed.hoursPerDay * parsed.hourlyRate);
-  const dayCapTotal = Math.round(parsed.daysPerMonth * Math.min(parsed.hoursPerDay * parsed.hourlyRate, 15_000));
+  const dayCapTotal = Math.round(parsed.daysPerMonth * Math.min(parsed.hoursPerDay * parsed.hourlyRate, PARKING_DAILY_CAP));
   const monthlyTotal = Math.round(parsed.monthlyPass);
   const items = [
     { key: "hourly", label: "시간권", total: hourlyTotal },

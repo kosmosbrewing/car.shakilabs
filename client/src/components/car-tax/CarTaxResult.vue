@@ -52,7 +52,7 @@ const statItems = computed(() => [
             </strong>
           </p>
         </div>
-        <Badge variant="default" class="shrink-0 rounded-full border-transparent bg-primary text-white">
+        <Badge variant="default" class="shrink-0 rounded-full border-transparent bg-primary text-primary-foreground">
           총비용
         </Badge>
       </div>

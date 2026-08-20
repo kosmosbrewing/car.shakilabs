@@ -38,18 +38,19 @@ defineEmits<{
 <template>
   <div class="retro-panel overflow-hidden">
     <!-- 히어로 영역 -->
+    <!-- highlight 밴드는 토큰을 우회한 주황 그라디언트(rgba(249,115,22,...))였고
+         그 위 흰 글자가 2.70:1(라이트)·2.98:1(다크)로 대형 텍스트 기준 3:1마저 미달이었다.
+         다른 5개 히어로 밴드와 같은 bg-primary + text-primary-foreground 규약으로 통일한다. -->
     <div
       :class="[
         'space-y-1 px-4 py-4 sm:px-5 sm:py-5',
-        highlight
-          ? 'bg-[linear-gradient(135deg,rgba(249,115,22,0.96),rgba(251,146,60,0.88))]'
-          : 'border-b border-border/40 bg-primary/6'
+        highlight ? 'bg-primary' : 'border-b border-border/40 bg-primary/6'
       ]"
     >
       <p
         :class="[
           'text-[11px] font-bold uppercase tracking-[0.14em] sm:text-caption',
-          highlight ? 'text-white/80' : 'text-muted-foreground'
+          highlight ? 'text-primary-foreground/80' : 'text-muted-foreground'
         ]"
       >
         {{ leaderLabel ?? "비교 결과" }}
@@ -57,7 +58,7 @@ defineEmits<{
       <p
         :class="[
           'text-display font-bold leading-none tabular-nums',
-          highlight ? 'text-white' : 'text-foreground'
+          highlight ? 'text-primary-foreground' : 'text-foreground'
         ]"
       >
         {{ leaderValue }}
@@ -99,7 +100,7 @@ defineEmits<{
         <button
           v-if="showDetail"
           type="button"
-          class="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-primary bg-primary px-3.5 py-2 text-caption font-semibold text-white shadow-sm transition-colors duration-200 hover:bg-primary/90 active:bg-primary/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+          class="inline-flex min-h-10 items-center gap-1.5 rounded-lg border border-primary bg-primary px-3.5 py-2 text-caption font-semibold text-primary-foreground shadow-sm transition-colors duration-200 hover:bg-primary/90 active:bg-primary/95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           @click="$emit('detail')"
         >
           {{ detailLabel ?? "상세 비교 보기" }}

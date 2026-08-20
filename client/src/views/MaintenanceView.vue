@@ -8,7 +8,7 @@ import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import { CAR_MAINTENANCE_GUIDE } from "@/data/seoGuides";
 import { CAR_SERVICE_UPDATED_AT, maintenanceProfiles } from "@/data/ownershipData";
 import { formatWon } from "@/lib/utils";
-import { calculateMaintenanceBudget } from "@/utils/ownershipCalculator";
+import { calculateMaintenanceBudget, MAINTENANCE_INPUT_LIMITS } from "@/utils/ownershipCalculator";
 import CalculatorPageHeader from "@/components/car/CalculatorPageHeader.vue";
 import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
@@ -52,11 +52,25 @@ const chartSegments = computed(() => {
         <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'maintenance-error' : undefined">
           <label class="block space-y-1">
             <span class="text-caption font-semibold text-foreground">연 주행거리 (km)</span>
-            <input v-model.number="annualKm" type="number" min="1000" class="retro-input" placeholder="연 주행거리" />
+            <input
+              v-model.number="annualKm"
+              type="number"
+              :min="MAINTENANCE_INPUT_LIMITS.annualKm.min"
+              :max="MAINTENANCE_INPUT_LIMITS.annualKm.max"
+              class="retro-input"
+              placeholder="연 주행거리"
+            />
           </label>
           <label class="block space-y-1">
             <span class="text-caption font-semibold text-foreground">차량 연식 (년)</span>
-            <input v-model.number="vehicleAge" type="number" min="0" max="20" class="retro-input" placeholder="차량 연식(년)" />
+            <input
+              v-model.number="vehicleAge"
+              type="number"
+              :min="MAINTENANCE_INPUT_LIMITS.vehicleAge.min"
+              :max="MAINTENANCE_INPUT_LIMITS.vehicleAge.max"
+              class="retro-input"
+              placeholder="차량 연식(년)"
+            />
           </label>
           <label class="block space-y-1">
             <span class="text-caption font-semibold text-foreground">연료 종류</span>
@@ -74,8 +88,8 @@ const chartSegments = computed(() => {
     <!-- 히어로: 연간 총 유지비 -->
     <div class="retro-panel overflow-hidden">
       <div class="space-y-1 bg-primary px-4 py-4 sm:px-5 sm:py-5">
-        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">연간 총 유지비</p>
-        <p class="car-result-amount font-bold tabular-nums text-white">{{ formatWon(result.total) }}</p>
+        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-primary-foreground/80 sm:text-caption">연간 총 유지비</p>
+        <p class="car-result-amount font-bold tabular-nums text-primary-foreground">{{ formatWon(result.total) }}</p>
       </div>
       <div class="maintenance-metric-grid grid grid-cols-2 divide-x divide-border/40">
         <div class="px-4 py-3 sm:px-5">

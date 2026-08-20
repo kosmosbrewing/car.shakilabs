@@ -16,9 +16,11 @@ import {
   MODEL_PRESETS,
   REGIONAL_SUBSIDIES,
   EV_SUBSIDY_FAQS,
+  NATIONAL_SUBSIDY_MAX,
+  YOUTH_BONUS_RATE,
 } from "@/data/ownershipData";
-import { formatWon, formatWonShort } from "@/lib/utils";
-import { compareEvVsGas, calculateEvSubsidy } from "@/utils/ownershipCalculator";
+import { formatWon, formatWonShort, formatPercent } from "@/lib/utils";
+import { compareEvVsGas, calculateEvSubsidy, EV_VS_GAS_INPUT_LIMITS } from "@/utils/ownershipCalculator";
 import CalculatorPageHeader from "@/components/car/CalculatorPageHeader.vue";
 import { useSafeCalculation } from "@/composables/useSafeCalculation";
 
@@ -98,23 +100,60 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
         <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'ev-gas-error' : undefined">
           <label class="block space-y-1">
             <span class="text-caption font-semibold text-foreground">연 주행거리 (km)</span>
-            <input v-model.number="annualKm" type="number" min="1000" class="retro-input" placeholder="연 주행거리" />
+            <input
+              v-model.number="annualKm"
+              type="number"
+              :min="EV_VS_GAS_INPUT_LIMITS.annualKm.min"
+              :max="EV_VS_GAS_INPUT_LIMITS.annualKm.max"
+              class="retro-input"
+              placeholder="연 주행거리"
+            />
           </label>
           <label class="block space-y-1">
             <span class="text-caption font-semibold text-foreground">휘발유 단가 (원/L)</span>
-            <input v-model.number="gasPrice" type="number" min="1000" class="retro-input" placeholder="휘발유 단가" />
+            <input
+              v-model.number="gasPrice"
+              type="number"
+              :min="EV_VS_GAS_INPUT_LIMITS.gasPrice.min"
+              :max="EV_VS_GAS_INPUT_LIMITS.gasPrice.max"
+              class="retro-input"
+              placeholder="휘발유 단가"
+            />
           </label>
           <label class="block space-y-1">
             <span class="text-caption font-semibold text-foreground">전기 단가 (원/kWh)</span>
-            <input v-model.number="electricityPrice" type="number" min="100" class="retro-input" placeholder="전기 단가" />
+            <input
+              v-model.number="electricityPrice"
+              type="number"
+              :min="EV_VS_GAS_INPUT_LIMITS.electricityPrice.min"
+              :max="EV_VS_GAS_INPUT_LIMITS.electricityPrice.max"
+              class="retro-input"
+              placeholder="전기 단가"
+            />
           </label>
           <label class="block space-y-1">
             <span class="text-caption font-semibold text-foreground">내연기관 연비 (km/L)</span>
-            <input v-model.number="gasEfficiency" type="number" min="5" step="0.1" class="retro-input" placeholder="내연기관 연비" />
+            <input
+              v-model.number="gasEfficiency"
+              type="number"
+              :min="EV_VS_GAS_INPUT_LIMITS.gasEfficiency.min"
+              :max="EV_VS_GAS_INPUT_LIMITS.gasEfficiency.max"
+              step="0.1"
+              class="retro-input"
+              placeholder="내연기관 연비"
+            />
           </label>
           <label class="block space-y-1 md:col-span-2">
             <span class="text-caption font-semibold text-foreground">전기차 전비 (kWh/km)</span>
-            <input v-model.number="evKwhPerKm" type="number" min="0.08" step="0.01" class="retro-input" placeholder="전기차 전비(kWh/km)" />
+            <input
+              v-model.number="evKwhPerKm"
+              type="number"
+              :min="EV_VS_GAS_INPUT_LIMITS.evKwhPerKm.min"
+              :max="EV_VS_GAS_INPUT_LIMITS.evKwhPerKm.max"
+              step="0.01"
+              class="retro-input"
+              placeholder="전기차 전비(kWh/km)"
+            />
           </label>
           <p v-if="validationError" id="ev-gas-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
             {{ validationError }}
@@ -150,8 +189,17 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
         <div class="grid gap-3 md:grid-cols-2">
           <label class="block space-y-1">
             <span class="text-caption font-semibold text-foreground">국고보조금 (원)</span>
-            <input v-model.number="nationalSubsidy" type="number" min="0" max="5800000" class="retro-input" placeholder="국고보조금" />
-            <span class="text-[11px] text-muted-foreground">차종별 성능보조금 (최대 580만원)</span>
+            <input
+              v-model.number="nationalSubsidy"
+              type="number"
+              min="0"
+              :max="NATIONAL_SUBSIDY_MAX"
+              class="retro-input"
+              placeholder="국고보조금"
+            />
+            <span class="text-[11px] text-muted-foreground">
+              차종별 성능보조금 (최대 {{ formatWonShort(NATIONAL_SUBSIDY_MAX) }})
+            </span>
           </label>
           <label class="block space-y-1">
             <span class="text-caption font-semibold text-foreground">지자체</span>
@@ -189,8 +237,8 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
 
     <div class="retro-panel overflow-hidden">
       <div class="space-y-1 bg-primary px-4 py-4 sm:px-5 sm:py-5">
-        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-white/80 sm:text-caption">보조금 적용 실구매가</p>
-        <p class="car-result-amount font-bold text-white tabular-nums">{{ formatWon(subsidyResult.effectivePrice) }}</p>
+        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-primary-foreground/80 sm:text-caption">보조금 적용 실구매가</p>
+        <p class="car-result-amount font-bold text-primary-foreground tabular-nums">{{ formatWon(subsidyResult.effectivePrice) }}</p>
       </div>
       <div class="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
         <span class="flex items-center gap-2 text-caption font-semibold text-muted-foreground">
@@ -230,7 +278,7 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
         <div v-if="subsidyResult.youthBonus > 0" class="flex items-center justify-between py-2">
           <span class="flex items-center gap-2 text-caption text-muted-foreground">
             <UserRound class="h-4 w-4" />
-            청년 가산 (국고 20%)
+            청년 가산 (국고 {{ formatPercent(YOUTH_BONUS_RATE, 0) }})
           </span>
           <span class="text-caption font-semibold tabular-nums text-profit">+{{ formatWon(subsidyResult.youthBonus) }}</span>
         </div>
