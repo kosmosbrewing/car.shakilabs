@@ -15,8 +15,10 @@ const viteSsgBin = resolve(
 );
 
 const basePriority = {
+  // 홈이 최상위. 다른 앱(invest/loan/biz 등)도 "/" 1.0 / 나머지 0.9 이하를 쓴다.
+  "/": "1.0",
   "/all": "0.9",
-  "/tax": "1.0",
+  "/tax": "0.9",
   "/insurance": "0.9",
   "/lease-vs-loan": "0.9",
   "/parking": "0.8",
@@ -54,8 +56,10 @@ function renderSitemap(buildDate) {
   const baseUrl = "https://shakilabs.com/car";
   const urls = SITEMAP_ROUTES.map((path) => {
     const { changefreq, priority } = getRouteConfig(path);
+    // cleanUrls가 "/car/"를 "/car"로 리다이렉트하므로 홈은 슬래시 없이 실어야 한다
+    // (canonical·og:url도 슬래시 없는 형태다 — 셋이 어긋나면 모순 신호가 된다).
     return `  <url>
-    <loc>${path === "/" ? `${baseUrl}/` : `${baseUrl}${path}`}</loc>
+    <loc>${path === "/" ? baseUrl : `${baseUrl}${path}`}</loc>
     <lastmod>${buildDate}</lastmod>
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>

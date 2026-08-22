@@ -16,6 +16,10 @@ export const PARAM_ROUTES = [
 ];
 
 export const SEO_ROUTES = [
+  // "/" must stay listed here, not only in PRERENDER_ROUTES: SITEMAP_ROUTES is
+  // derived from this array, so an omission silently drops the app home — the
+  // most authoritative URL we own — out of the sitemap entirely.
+  "/",
   "/all",
   "/tax",
   "/insurance",
@@ -46,4 +50,4 @@ export function canonicalPathFor(route) {
 // PARAM_ROUTES stay prerendered on purpose: without a static HTML file the
 // Vercel rewrite would serve the SPA shell for these URLs, which is a
 // soft-404 for crawlers. Never drop them from PRERENDER_ROUTES.
-export const PRERENDER_ROUTES = ["/", ...SEO_ROUTES];
+export const PRERENDER_ROUTES = SEO_ROUTES;
