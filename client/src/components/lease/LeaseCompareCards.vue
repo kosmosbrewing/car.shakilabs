@@ -42,7 +42,7 @@ function rankLabel(index: number): string {
         <div class="flex shrink-0 items-center gap-2.5">
           <span
             class="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-xl"
-            :class="index === 0 ? 'bg-primary/12 text-primary' : 'bg-muted text-muted-foreground'"
+            :class="index === 0 ? 'bg-primary/[12%] text-primary' : 'bg-muted text-muted-foreground'"
           >
             <Trophy v-if="index === 0" class="h-4 w-4" />
             <Medal v-else class="h-4 w-4" />

@@ -35,7 +35,7 @@ const costItems = computed(() => [
         <span class="h-2 w-2 shrink-0 rounded-full bg-profit" />
         연간 절감 차이
       </span>
-      <span class="rounded-full bg-profit/12 px-3 py-1 text-heading font-bold tabular-nums text-profit sm:text-h1">
+      <span class="rounded-full bg-profit/[12%] px-3 py-1 text-heading font-bold tabular-nums text-profit sm:text-h1">
         {{ formatWon(result.gap) }}
       </span>
     </div>

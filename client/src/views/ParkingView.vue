@@ -123,7 +123,7 @@ const breakEvenDays = computed(() => {
           <span class="h-2 w-2 shrink-0 rounded-full bg-profit" />
           최고/최저 차이
         </span>
-        <span class="inline-flex items-center rounded-full bg-profit/12 px-3 py-1 text-heading font-bold tabular-nums text-profit sm:text-h1">
+        <span class="inline-flex items-center rounded-full bg-profit/[12%] px-3 py-1 text-heading font-bold tabular-nums text-profit sm:text-h1">
           {{ formatWon(result.spread) }}
         </span>
       </div>
@@ -159,7 +159,7 @@ const breakEvenDays = computed(() => {
           </div>
           <span
             class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl"
-            :class="item.key === result.bestOption.key ? 'bg-profit/12 text-profit' : 'bg-muted text-muted-foreground'"
+            :class="item.key === result.bestOption.key ? 'bg-profit/[12%] text-profit' : 'bg-muted text-muted-foreground'"
           >
             <Trophy v-if="item.key === result.bestOption.key" class="h-5 w-5" />
             <ParkingSquare v-else class="h-5 w-5" />

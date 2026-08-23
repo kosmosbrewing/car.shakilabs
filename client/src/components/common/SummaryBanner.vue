@@ -22,8 +22,8 @@ const props = defineProps<{
 }>();
 
 const toneClasses = {
-  success: { badge: "bg-profit/12 text-profit", dot: "bg-profit" },
-  danger: { badge: "bg-fee/12 text-fee", dot: "bg-fee" },
+  success: { badge: "bg-profit/[12%] text-profit", dot: "bg-profit" },
+  danger: { badge: "bg-fee/[12%] text-fee", dot: "bg-fee" },
   neutral: { badge: "bg-muted text-foreground", dot: "bg-muted-foreground" },
 } as const;
 
@@ -44,7 +44,7 @@ defineEmits<{
     <div
       :class="[
         'space-y-1 px-4 py-4 sm:px-5 sm:py-5',
-        highlight ? 'bg-primary' : 'border-b border-border/40 bg-primary/6'
+        highlight ? 'bg-primary' : 'border-b border-border/40 bg-primary/[6%]'
       ]"
     >
       <p
