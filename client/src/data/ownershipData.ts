@@ -10,7 +10,11 @@ export const maintenanceProfiles = {
 // 근거: 환경부 2026년 전기차 보급 사업 공고 (2025.12.31)
 export const EV_SUBSIDY_UPDATED = "2026-07-10";
 
-export const EV_SUBSIDY_SOURCE_URL = "https://www.ev.or.kr/nportal/buySupprt/initBuySubsidySupprtAction.do";
+// 기존 initBuySubsidySupprtAction.do는 500을 반환하며 "페이지를 표시할 수 없습니다"를 띄운다
+// (2026-08-23 헤드리스 브라우저 확인). 죽은 링크는 근거가 아니라 역효과다.
+// 이 문장이 안내하는 것은 "지자체 금액을 최종 확인하라"이므로, 그 화면을 그대로 가리키는
+// 현행 페이지(지자체별 보조금 현황, 200 확인)로 교체한다.
+export const EV_SUBSIDY_SOURCE_URL = "https://www.ev.or.kr/nportal/buySupprt/initSubsidyPaymentCheckAction.do";
 
 /** 국고보조금 최대 (성능보조금) */
 export const NATIONAL_SUBSIDY_MAX = 5_800_000;

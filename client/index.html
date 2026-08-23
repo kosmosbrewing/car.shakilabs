@@ -113,7 +113,10 @@
         --accent-foreground: 175 64% 24%;
         --popover: 0 0% 100%;
         --popover-foreground: 222 47% 11%;
-        --destructive: 0 72% 52%;
+        /* --fee가 고친 것과 같은 결함이 여기 남아 있었다: 0 72% 52%는 카드 위 4.70:1로만
+           통과하고 --background(210 40% 98%) 위 text-destructive는 4.49:1, bg-destructive 위
+           --destructive-foreground도 4.49:1로 미달이었다. --fee와 같은 값으로 통일 → 6.12:1. */
+        --destructive: 0 74% 42%;
         --destructive-foreground: 210 40% 98%;
         --border: 214 16% 85%;
         --input: 214 16% 85%;
@@ -144,8 +147,12 @@
         --accent-foreground: 174 62% 78%;
         --popover: 217 33% 17%;
         --popover-foreground: 210 40% 96%;
-        --destructive: 0 72% 58%;
-        --destructive-foreground: 0 0% 100%;
+        /* 다크에서 0 72% 58%는 카드 위 text-destructive 3.67:1, 그 위 흰 글자 4.04:1로
+           양쪽 다 미달이었다. 하나의 색이 "어두운 면 위의 글자"와 "흰 글자를 얹는 면"을
+           동시에 만족할 수 없어, --fee와 같은 해법(면을 밝히고 전경을 어둡게)으로 통일한다.
+           → 카드 위 5.74:1 / 그 위 전경 6.83:1. */
+        --destructive: 0 75% 72%;
+        --destructive-foreground: 0 62% 12%;
         --border: 214 16% 26%;
         --input: 214 16% 30%;
         --ring: 172 66% 50%;

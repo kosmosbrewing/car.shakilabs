@@ -212,12 +212,12 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
         </div>
 
         <div class="flex flex-wrap gap-3">
-          <label class="inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-caption transition-colors" :class="isYouth ? 'border-primary/50 bg-primary/8 text-primary' : 'border-border/60 text-muted-foreground'">
+          <label class="inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-caption transition-colors" :class="isYouth ? 'border-primary/50 bg-primary/[8%] text-primary' : 'border-border/60 text-muted-foreground'">
             <input v-model="isYouth" type="checkbox" class="sr-only" />
             <UserRound class="h-4 w-4" />
             <span class="font-semibold">청년 (19~34세) 생애 첫 차</span>
           </label>
-          <label class="inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-caption transition-colors" :class="isConversion ? 'border-primary/50 bg-primary/8 text-primary' : 'border-border/60 text-muted-foreground'">
+          <label class="inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-caption transition-colors" :class="isConversion ? 'border-primary/50 bg-primary/[8%] text-primary' : 'border-border/60 text-muted-foreground'">
             <input v-model="isConversion" type="checkbox" class="sr-only" />
             <ArrowRightLeft class="h-4 w-4" />
             <span class="font-semibold">내연차 전환 (3년+ 폐차·매도)</span>
@@ -245,14 +245,14 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
           <BadgePercent class="h-4 w-4" />
           총 보조금
         </span>
-        <span class="inline-flex items-center rounded-full bg-profit/12 px-3 py-1 text-heading font-bold tabular-nums text-profit sm:text-h1">
+        <span class="inline-flex items-center rounded-full bg-profit/[12%] px-3 py-1 text-heading font-bold tabular-nums text-profit sm:text-h1">
           {{ formatWon(subsidyResult.totalSubsidy) }}
         </span>
       </div>
-      <div v-if="subsidyResult.priceRate === 0" class="bg-destructive/8 px-4 py-3 text-caption font-semibold text-destructive sm:px-5">
+      <div v-if="subsidyResult.priceRate === 0" class="bg-destructive/[8%] px-4 py-3 text-caption font-semibold text-destructive sm:px-5">
         {{ subsidyResult.priceRateLabel }} — 보조금 대상에서 제외됩니다.
       </div>
-      <div v-else-if="subsidyResult.priceRate < 1" class="bg-warning/8 px-4 py-3 text-caption font-semibold text-warning sm:px-5">
+      <div v-else-if="subsidyResult.priceRate < 1" class="bg-status-warning/[8%] px-4 py-3 text-caption font-semibold text-status-warning sm:px-5">
         {{ subsidyResult.priceRateLabel }}
       </div>
     </div>
