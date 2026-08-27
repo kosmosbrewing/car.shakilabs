@@ -114,9 +114,9 @@ const breakEvenDays = computed(() => {
 
     <!-- 히어로: 최저 비용 결론 -->
     <div class="retro-panel overflow-hidden">
-      <div class="space-y-1 bg-primary px-4 py-4 sm:px-5 sm:py-5">
-        <p class="text-[11px] font-bold uppercase tracking-[0.14em] text-primary-foreground/80 sm:text-caption">가장 저렴한 방식</p>
-        <p class="text-display font-bold leading-none text-primary-foreground">{{ result.bestOption.label }}</p>
+      <div class="space-y-1 border-b border-border/40 px-4 py-4 sm:px-5 sm:py-5">
+        <p class="text-caption font-semibold text-muted-foreground">가장 저렴한 방식</p>
+        <p class="text-display font-bold leading-none text-primary">{{ result.bestOption.label }}</p>
       </div>
       <div class="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
         <span class="flex items-center gap-2 text-caption font-semibold text-muted-foreground">
