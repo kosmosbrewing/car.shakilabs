@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import { BadgePercent, Car, UserRound, ArrowRightLeft } from "lucide-vue-next";
+import CountUpAmount from "@/components/common/CountUpAmount.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import FaqAccordionPanel from "@/components/common/FaqAccordionPanel.vue";
@@ -238,7 +239,7 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
     <div class="retro-panel overflow-hidden">
       <div class="space-y-1 border-b border-border/40 px-4 py-4 sm:px-5 sm:py-5">
         <p class="text-caption font-semibold text-muted-foreground">보조금 적용 실구매가</p>
-        <p class="car-result-amount font-bold text-primary tabular-nums">{{ formatWon(subsidyResult.effectivePrice) }}</p>
+        <p class="car-result-amount font-bold text-primary tabular-nums"><CountUpAmount :value="formatWon(subsidyResult.effectivePrice)" /></p>
       </div>
       <div class="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
         <span class="flex items-center gap-2 text-caption font-semibold text-muted-foreground">

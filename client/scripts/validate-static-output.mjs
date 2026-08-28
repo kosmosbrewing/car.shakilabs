@@ -180,6 +180,40 @@ function validateOpacityUtilitiesAreGenerated() {
     "이 투명도 유틸리티는 CSS로 생성되지 않았다 — Tailwind opacity 스케일 밖 값이면 "
       + "임의값 문법(/[8%])을 쓰고, 색 이름은 테마에 있는 것인지 확인하라:\n  "
       + missing.join("\n  "));
+
+  // 확장 축 1 — spacing: mt-13, p-4.5 처럼 spacing 스케일 밖 값도 색과 똑같이
+  // 조용히 사라진다(빌드는 통과, CSS 미생성). 숫자값 spacing 유틸만 좁게 잡아
+  // 동적 문자열 오탐을 피하면서 산출 CSS와 대조한다.
+  const spacingUtility =
+    /(?<![\w/[-])(?:[a-z-]+:)*-?(?:m[trblxyse]?|p[trblxyse]?|gap(?:-[xy])?|space-[xy])-(?:\d+(?:\.\d+)?|px)(?![\w/%.[-])/g;
+  const missingSpacing = [];
+  for (const file of collectSourceFiles(resolve(projectRoot, "src"))) {
+    const source = readFileSync(file, "utf8");
+    for (const cls of new Set(source.match(spacingUtility) ?? [])) {
+      if (css.includes("." + toSelector(cls))) continue;
+      missingSpacing.push(cls + "  (" + file.slice(projectRoot.length + 1) + ")");
+    }
+  }
+  assert(missingSpacing.length === 0,
+    "이 spacing 유틸리티는 CSS로 생성되지 않았다 — Tailwind spacing 스케일 밖 값이다. "
+      + "스케일 안 값이나 임의값 문법(mt-[52px])을 쓰라:\n  "
+      + missingSpacing.join("\n  "));
+
+  // 확장 축 2 — 후행 `!`: Tailwind v3의 important는 접두사(!mt-4)다. 접미사(mt-4!)는
+  // v4 문법이라 v3에선 클래스가 아예 생성되지 않고 마크업에만 남는다.
+  const trailingBang =
+    /(?:[a-z-]+:)*(?:bg|text|border|ring|shadow|rounded|opacity|flex|grid|gap|w|h|z|m[trblxy]?|p[trblxy]?)-[a-z0-9[\]/.%-]+!(?=[\s"'`])/g;
+  const bangHits = [];
+  for (const file of collectSourceFiles(resolve(projectRoot, "src"))) {
+    if (!file.endsWith(".vue")) continue;
+    const source = readFileSync(file, "utf8");
+    for (const cls of new Set(source.match(trailingBang) ?? [])) {
+      bangHits.push(cls + "  (" + file.slice(projectRoot.length + 1) + ")");
+    }
+  }
+  assert(bangHits.length === 0,
+    "후행 `!` 유틸리티는 Tailwind v3에서 생성되지 않는다 — 접두사 문법(!mt-4)으로 바꾸라:\n  "
+      + bangHits.join("\n  "));
 }
 
 validateVercelConfig(resolve(repositoryRoot, "vercel.json"));
