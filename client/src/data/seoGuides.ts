@@ -1,5 +1,8 @@
 // 각 뷰별 SEO 리치 가이드 데이터 (car 앱)
 // SeoRichGuide 컴포넌트에서 렌더링되며 vite-ssg SSR 시 HTML에 반영됨
+// 데이터 확인일을 상수에서 가져와 about 문구와 실제 검증 이력의 드리프트를 막는다.
+import { CAR_TAX_DATA_VERIFIED } from "./carTaxRates";
+import { EV_SUBSIDY_UPDATED } from "./ownershipData";
 
 export interface GuideSection {
   h2: string;
@@ -511,7 +514,7 @@ export const CAR_ABOUT_GUIDE: GuideData = {
     },
     {
       h2: "데이터 출처",
-      body: "취득세율·자동차세율·공채매입률은 지방세법과 각 지자체 고시, 보험료는 금융감독원 공시 자료, 유가 정보는 오피넷 평균가, 충전 요금은 환경부 전기차 충전 공시 자료를 기반으로 합니다. 매년 1월 세율 개정 시 즉시 반영하며, 주요 정책 변경이 있을 때마다 업데이트합니다.",
+      body: `취득세율·자동차세율·공채매입률은 지방세법과 각 지자체 고시, 보험료는 금융감독원 공시 자료, 유가 정보는 오피넷 평균가, 충전 요금은 환경부 전기차 충전 공시 자료를 기반으로 합니다. 세율·요율 개정 사항은 확인 후 반영합니다(최근 확인: 세율·보험 ${CAR_TAX_DATA_VERIFIED}, 전기차 보조금 ${EV_SUBSIDY_UPDATED}).`,
     },
     {
       h2: "운영 원칙",

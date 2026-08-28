@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { Receipt, Landmark, FileText, Percent } from "lucide-vue-next";
 import { ShBreakdownBar } from "@shakilabs/ui";
 import { Badge } from "@/components/ui/badge";
+import CountUpAmount from "@/components/common/CountUpAmount.vue";
 import SectionShareButton from "@/components/common/SectionShareButton.vue";
 import { formatPercent, formatWon } from "@/lib/utils";
 import type { CarTaxBreakdown } from "@/utils/calculator";
@@ -43,7 +44,7 @@ const statItems = computed(() => [
         <div>
           <p class="text-caption font-semibold text-muted-foreground">예상 총 등록비용</p>
           <p class="mt-1 text-display font-bold tabular-nums text-primary">
-            {{ formatWon(result.totalCost) }}
+            <CountUpAmount :value="formatWon(result.totalCost)" />
           </p>
           <p class="mt-1 text-caption text-muted-foreground">
             차량가 대비

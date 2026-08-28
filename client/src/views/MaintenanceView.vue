@@ -2,6 +2,7 @@
 import { computed, ref } from "vue";
 import { ShBreakdownBar } from "@shakilabs/ui";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
+import CountUpAmount from "@/components/common/CountUpAmount.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
@@ -89,7 +90,7 @@ const chartSegments = computed(() => {
     <div class="retro-panel overflow-hidden">
       <div class="space-y-1 border-b border-border/40 px-4 py-4 sm:px-5 sm:py-5">
         <p class="text-caption font-semibold text-muted-foreground">연간 총 유지비</p>
-        <p class="car-result-amount font-bold tabular-nums text-primary">{{ formatWon(result.total) }}</p>
+        <p class="car-result-amount font-bold tabular-nums text-primary"><CountUpAmount :value="formatWon(result.total)" /></p>
       </div>
       <div class="maintenance-metric-grid grid grid-cols-2 divide-x divide-border/40">
         <div class="px-4 py-3 sm:px-5">

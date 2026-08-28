@@ -2,6 +2,7 @@
 import { Banknote, PiggyBank, TrendingDown, Shield } from "lucide-vue-next";
 import { computed } from "vue";
 import { Badge } from "@/components/ui/badge";
+import CountUpAmount from "@/components/common/CountUpAmount.vue";
 import SectionShareButton from "@/components/common/SectionShareButton.vue";
 import StepFlowBars from "@/components/result-visualization/StepFlowBars.vue";
 import { formatPercent, formatWon } from "@/lib/utils";
@@ -102,7 +103,7 @@ const premiumSteps = computed(() => {
           <!-- 총 보험료는 지출 총액이지 이익도 손실도 아니다. --profit(초록)을 칠하면
                숫자가 갖지 않은 "유리하다"는 판단을 주장하게 되므로 중립 전경색을 쓴다.
                아래 절감률·절약액은 실제 절약분이라 초록 맥락(bg-profit/5)을 유지한다. -->
-          <p class="car-result-amount mt-1 font-bold tabular-nums text-foreground">{{ formatWon(result.finalPremium) }}</p>
+          <p class="car-result-amount mt-1 font-bold tabular-nums text-foreground"><CountUpAmount :value="formatWon(result.finalPremium)" /></p>
           <p class="mt-1 text-caption text-muted-foreground">
             총 절감률 {{ formatPercent(result.totalDiscountRate, 1) }} · 누적 절약액 {{ formatWon(result.totalSavingsWithDirect) }}
           </p>
