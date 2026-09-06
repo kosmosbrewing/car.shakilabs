@@ -1,8 +1,20 @@
 // 각 뷰별 SEO 리치 가이드 데이터 (car 앱)
 // SeoRichGuide 컴포넌트에서 렌더링되며 vite-ssg SSR 시 HTML에 반영됨
 // 데이터 확인일을 상수에서 가져와 about 문구와 실제 검증 이력의 드리프트를 막는다.
-import { CAR_TAX_DATA_VERIFIED } from "./carTaxRates";
-import { EV_SUBSIDY_UPDATED } from "./ownershipData";
+import { CAR_TAX_DATA_UPDATED, CAR_TAX_DATA_VERIFIED } from "./carTaxRates";
+import { INSURANCE_DATA_UPDATED } from "./insuranceRates";
+import { LEASE_DATA_UPDATED } from "./leaseRates";
+import { CAR_SERVICE_UPDATED_AT, EV_SUBSIDY_UPDATED } from "./ownershipData";
+// 파생 다이제스트 — 계산 엔진을 여러 조건으로 돌려 "경계·역전점·차액"을 적은 페이지 고유 산문.
+// 가이드 인트로 바로 뒤, 일반 안내 절보다 앞에 둔다: 이 페이지에서만 나오는 내용이 먼저다.
+import {
+  CAR_TAX_DIGEST,
+  EV_VS_GAS_DIGEST,
+  INSURANCE_DIGEST,
+  LEASE_VS_LOAN_DIGEST,
+  MAINTENANCE_DIGEST,
+  PARKING_DIGEST,
+} from "./digests";
 
 export interface GuideSection {
   h2: string;
@@ -33,6 +45,20 @@ export interface GuideData {
   checklist?: GuideChecklist;
   sources?: GuideSource[];
   disclaimer?: string;
+}
+
+/**
+ * 다이제스트 뒤에 붙는 계산 기준 문단. 기준일은 화면의 FreshBadge와 같은 상수에서 읽어
+ * "배지는 3월인데 산문은 7월" 같은 드리프트를 막는다. 페이지별 기본 가정을 넣어 문단이 페이지마다 다르다.
+ * 갱신 주기는 약속하지 않는다 — 확인일만 적는다.
+ */
+export function digestBasis(dataDate: string, assumptions: string): GuideSection {
+  return {
+    h2: "위 발견의 계산 기준",
+    body:
+      `위 항목의 숫자는 이 페이지 계산기와 같은 산식을 여러 조건으로 반복 실행해 얻은 값이며, 계산에 쓴 요율·상수의 확인일은 ${dataDate}입니다. ` +
+      `${assumptions} 금액·요율·기간은 결과를 설명하기 위한 가정값이므로, 본인 조건을 계산기에 직접 넣어 확인하세요.`,
+  };
 }
 
 const COMMON_DISCLAIMER =
@@ -94,6 +120,8 @@ export const CAR_TAX_GUIDE: GuideData = {
   intro:
     "자동차 구매 시 한 번에 납부해야 하는 초기 등록 비용(취득세·공채매입·번호판 대행·부대비용)을 정확히 이해하고 계산해야 예산 초과를 방지할 수 있습니다. 신차 기준 차량 가격의 약 7~8%, 중고차는 4~6% 수준의 추가 비용이 발생합니다.",
   sections: [
+    ...CAR_TAX_DIGEST,
+    digestBasis(CAR_TAX_DATA_UPDATED, "기본 가정은 3,000만원 신차 비영업 승용차, 서울 등록, 1,600~2,000cc, 번호판 대행 포함이며 중고차 비교에는 같은 차값의 시가표준액 잔존가치율을 적용했습니다."),
     {
       h2: "취득세율 구조",
       body: "2026년 기준 자동차 취득세율은 승용차 7%(경차 4%, 친환경 4% 감면), 화물차 5%, 이륜차 2%입니다. 취득세는 차량 가격(부가세 제외)을 기준으로 부과되며, 수입차의 경우 관세·개별소비세가 추가된 과세표준에 부과됩니다.",
@@ -166,6 +194,8 @@ export const CAR_INSURANCE_GUIDE: GuideData = {
   intro:
     "자동차 보험은 의무보험(책임보험)과 임의보험(종합보험)으로 나뉘며, 차종·운전자 나이·사고 이력·보장 범위·특약에 따라 크게 달라집니다. 동일 조건에서도 보험사별로 최대 30% 차이가 나기 때문에 갱신 시 비교 견적은 필수입니다.",
   sections: [
+    ...INSURANCE_DIGEST,
+    digestBasis(INSURANCE_DATA_UPDATED, "기본 가정은 현재 보험료 70만원, 가입 경력 5년, 무사고, 연 1만km 마일리지, 블랙박스 장착, 차령 5년, 자기부담금 20만원입니다."),
     {
       h2: "의무보험 vs 임의보험",
       body: "의무보험(책임보험)은 자동차손해배상보장법에 따라 모든 자동차 소유자가 반드시 가입해야 하는 대인·대물 배상 보험으로, 미가입 시 500만원 이하 과태료가 부과됩니다. 임의보험(종합보험)은 의무보험 외에 자차·자손·무보험차 상해·긴급출동 등을 추가 보장하는 선택 보험으로, 한국 운전자의 약 80%가 가입합니다.",
@@ -229,6 +259,8 @@ export const CAR_EV_VS_GAS_GUIDE: GuideData = {
   intro:
     "전기차는 구매가가 비싸지만 연료비·유지보수비가 가솔린의 30~50% 수준입니다. 연 주행거리와 보유 기간에 따라 가솔린 대비 더 경제적일 수 있습니다. 이 페이지는 5년 보유 기준 전기차와 가솔린차의 총 보유 비용(TCO)을 정확히 비교할 수 있는 기준을 제공합니다.",
   sections: [
+    ...EV_VS_GAS_DIGEST,
+    digestBasis(`${CAR_SERVICE_UPDATED_AT}(운행비)·${EV_SUBSIDY_UPDATED}(보조금)`, "운행비의 기본 가정은 연 2만km, 휘발유 1,700원/L에 연비 11km/L, 충전 180원/kWh에 전비 0.18kWh/km이고, 보조금의 기본 가정은 출고가 4,500만원에 국고 570만원·지자체 194만원입니다."),
     {
       h2: "전기차 연료비",
       body: "전기차 충전 비용은 공공 급속 충전기 기준 kWh당 약 330~450원, 가정용 완속 충전은 kWh당 약 100~130원입니다. 평균 전비가 5.5km/kWh인 전기차 기준 연 1.5만km 주행 시 충전비는 급속 90만원, 가정 30만원 수준입니다. 가솔린차(리터당 약 9km) 기준 연 1.5만km 시 연료비는 약 290만원이므로 전기차가 약 200~260만원 저렴합니다.",
@@ -290,6 +322,8 @@ export const CAR_LEASE_GUIDE: GuideData = {
   intro:
     "자동차 구매 방식은 크게 현금·할부·리스(오픈 리스, 클로즈드 리스)·렌트(장기)·구독으로 나뉩니다. 각 방식은 총비용·세금·잔존가치 처리·회계 처리에서 차이가 있어 개인·사업자·용도에 따라 최적 선택이 다릅니다.",
   sections: [
+    ...LEASE_VS_LOAN_DIGEST,
+    digestBasis(LEASE_DATA_UPDATED, "기본 가정은 차량가 5,000만원, 보증금 20%, 36개월, 잔가 40%, 리스 연 5.5%·할부 연 5.0%, 연 보험료 80만원, 취득세율 7%, 장기렌트 관리료율 15%입니다."),
     {
       h2: "현금 구매",
       body: "가장 단순한 방식으로 취득세·공채·등록비 외 추가 금융 비용이 없습니다. 단점은 현금 유동성이 크게 감소하고, 사업자의 경우 비용 처리(감가상각)가 길어져 세금 공제 효과가 지연됩니다. 장점은 금융 비용 0원과 중도 해지 페널티 없음, 자유로운 처분권입니다.",
@@ -353,6 +387,8 @@ export const CAR_PARKING_GUIDE: GuideData = {
   intro:
     "도심 주차비는 자동차 보유 비용의 10~20%를 차지할 수 있는 큰 지출 항목입니다. 월 정기 주차, 시간대별 공영/민영 주차장, 공공 할인 혜택, 주차 앱 이용 등 다양한 방법으로 주차비를 절약할 수 있습니다.",
   sections: [
+    ...PARKING_DIGEST,
+    digestBasis(CAR_SERVICE_UPDATED_AT, "기본 가정은 월 20일, 하루 8시간, 시간당 2,000원, 월주차권 18만원이며 일 최대요금 상한은 계산 모듈의 단일 출처 값을 그대로 씁니다."),
     {
       h2: "도심 주차비 시세",
       body: "2026년 서울·경기 주요 지역 월 정기 주차비는 빌딩 지하주차장 기준 15~30만원, 아파트 주차비는 세대당 5~10만원, 공영주차장 월정기권은 10~20만원 수준입니다. 강남·여의도·광화문 등 업무 중심지는 월 35~50만원까지 올라갑니다.",
@@ -445,6 +481,8 @@ export const CAR_MAINTENANCE_GUIDE: GuideData = {
   intro:
     "자동차를 오래 사용하려면 정기 점검과 소모품 교체가 필수입니다. 주기와 비용을 미리 계획하면 연간 100~300만원 수준의 유지보수비를 효율적으로 관리할 수 있습니다. 이 페이지는 주요 소모품 교체 주기, 평균 비용, 절약 팁을 제공합니다.",
   sections: [
+    ...MAINTENANCE_DIGEST,
+    digestBasis(CAR_SERVICE_UPDATED_AT, "기본 가정은 연 1만 5,000km, 차령 5년, 가솔린이며 연료별 비교에는 같은 주행거리·차령을 적용했습니다."),
     {
       h2: "주요 소모품 교체 주기",
       body: "엔진오일은 5,000~1만km 주기(합성유는 1.5만km까지 연장 가능), 브레이크 패드는 3~4만km, 타이어는 6~8만km(안전상 4년마다 교체 권장), 에어필터 2~3만km, 배터리 3~5년 주기로 교체가 필요합니다. 제조사 권장 주기를 지키면 장기적으로 차량 수명과 성능을 유지할 수 있습니다.",
