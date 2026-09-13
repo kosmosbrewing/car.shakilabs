@@ -31,8 +31,8 @@ const props = defineProps<{ initialVehiclePrice?: number }>();
 const amountLabel = computed(() => props.initialVehiclePrice ? formatManWon(props.initialVehiclePrice / 10000) : null);
 const seoTitle = computed(() =>
   amountLabel.value
-    ? `${amountLabel.value} 자동차 취등록세 계산기 | shakilabs.com/car`
-    : "자동차 취등록세 계산기 — 신차·중고차 총비용",
+    ? `${amountLabel.value} 자동차 취등록세 계산기`
+    : "자동차 취등록세 계산기 | 신차·중고차 총비용",
 );
 const seoDescription = computed(() =>
   amountLabel.value

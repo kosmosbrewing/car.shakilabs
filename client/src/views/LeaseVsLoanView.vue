@@ -30,8 +30,8 @@ const props = defineProps<{ initialVehiclePrice?: number }>();
 const amountLabel = computed(() => props.initialVehiclePrice ? formatManWon(props.initialVehiclePrice / 10000) : null);
 const seoTitle = computed(() =>
   amountLabel.value
-    ? `${amountLabel.value} 리스 vs 할부 vs 장기렌트 비교 | shakilabs.com/car`
-    : "리스 vs 할부 vs 장기렌트 비교 — 계약기간 현금유출 비교",
+    ? `${amountLabel.value} 리스 vs 할부 vs 장기렌트 비교`
+    : "리스 vs 할부 vs 장기렌트 비교 | 계약기간 현금유출 비교",
 );
 const seoDescription = computed(() =>
   amountLabel.value

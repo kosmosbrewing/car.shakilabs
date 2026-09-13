@@ -29,8 +29,8 @@ const props = defineProps<{ initialPremium?: number }>();
 const amountLabel = computed(() => props.initialPremium ? formatManWon(props.initialPremium / 10000) : null);
 const seoTitle = computed(() =>
   amountLabel.value
-    ? `보험료 ${amountLabel.value} 자동차보험 절약 시뮬레이터 | shakilabs.com/car`
-    : "자동차보험 갱신 절약 시뮬레이터 — 할인 항목별 절감액",
+    ? `보험료 ${amountLabel.value} 자동차보험 절약 시뮬레이터`
+    : "자동차보험 갱신 절약 시뮬레이터 | 할인 항목별 절감액",
 );
 const seoDescription = computed(() =>
   amountLabel.value
