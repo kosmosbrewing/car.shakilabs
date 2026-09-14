@@ -27,9 +27,11 @@
   font-display: swap;
 }
 
+/* 강조 숫자 전용(BL-020). 결과 히어로 금액(font-brand)에서만 쓰고 값은 formatWon 등
+   포맷터 출력이라 숫자·통화/수량 단위 문자면 충분하다. 전체 글자셋 944KB → 14.5KB. */
 @font-face {
   font-family: "GmarketSans";
-  src: url("/fonts/GmarketSansBold.woff") format("woff");
+  src: url("/fonts/GmarketSansBold-num-v1.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
