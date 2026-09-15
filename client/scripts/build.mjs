@@ -141,4 +141,19 @@ const validationResult = spawnSync(
   }
 );
 
-process.exit(validationResult.status ?? 1);
+if (validationResult.status !== 0) {
+  process.exit(validationResult.status ?? 1);
+}
+
+// 브랜드 폰트가 조용히 원본 966KB .woff로 되돌아가지 않도록 빌드마다 검증한다
+// (이 4개 앱이 서브셋 없이 966KB를 그대로 내려받고 있던 사고의 재발 방지).
+const fontVerifyResult = spawnSync(
+  process.execPath,
+  [resolve(projectRoot, "scripts", "verify-fonts.mjs")],
+  {
+    cwd: projectRoot,
+    stdio: "inherit",
+  }
+);
+
+process.exit(fontVerifyResult.status ?? 1);

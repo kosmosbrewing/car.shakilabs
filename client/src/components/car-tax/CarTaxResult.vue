@@ -43,7 +43,7 @@ const statItems = computed(() => [
       <div class="car-result-hero flex items-start justify-between gap-4 rounded-2xl border border-primary/20 bg-primary/[8%] p-4">
         <div>
           <p class="text-caption font-semibold text-muted-foreground">예상 총 등록비용</p>
-          <p class="mt-1 text-display font-bold tabular-nums text-primary">
+          <p class="mt-1 text-display font-bold font-brand tabular-nums text-primary">
             <CountUpAmount :value="formatWon(result.totalCost)" />
           </p>
           <p class="mt-1 text-caption text-muted-foreground">

@@ -108,9 +108,10 @@
 }
 
 .car-result-amount {
-  /* 상한 1.625rem(26px) = 전 앱 결과 히어로 공통 text-display 스케일.
-     40px 상한은 다른 앱 대비 1.5배 커서 문법 수렴 대상이었다. */
-  font-size: clamp(1rem, 9vw, 1.625rem);
+  /* BL-020(2026-09-14): vw 클램프를 없애고 1.625rem(26px) 고정으로 수렴했다.
+     클램프값이 실사용 뷰포트 대부분에서 26px 상한 아래로 렌더돼(실측: 20px) 다른 앱의
+     결과 히어로(text-display, 고정 26px)와 어긋났다. */
+  font-size: 1.625rem;
   line-height: 1.2;
 }
 
