@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node scripts/build.mjs",
+    "fonts:subset": "node scripts/subset-fonts.mjs",
     "verify:static": "node scripts/validate-static-output.mjs",
     "sbom:prod": "node scripts/sbom.mjs",
     "verify:vendor": "node scripts/verify-vendor-artifact.mjs",
