@@ -4,6 +4,7 @@ import { ParkingSquare, Trophy } from "lucide-vue-next";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
+import CountUpAmount from "@/components/common/CountUpAmount.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
 import RankedBars from "@/components/result-visualization/RankedBars.vue";
 import { CAR_PARKING_GUIDE } from "@/data/seoGuides";
@@ -115,8 +116,13 @@ const breakEvenDays = computed(() => {
     <!-- 히어로: 최저 비용 결론 -->
     <div class="retro-panel overflow-hidden">
       <div class="space-y-1 border-b border-border/40 px-4 py-4 sm:px-5 sm:py-5">
-        <p class="text-caption font-semibold text-muted-foreground">가장 저렴한 방식</p>
-        <p class="text-display font-bold leading-none text-primary">{{ result.bestOption.label }}</p>
+        <p class="text-caption font-semibold text-muted-foreground">가장 저렴한 방식의 월 주차비</p>
+        <p class="car-result-amount font-bold font-brand tabular-nums text-primary">
+          <CountUpAmount :value="formatWon(result.bestOption.total)" />
+        </p>
+        <p class="text-caption text-muted-foreground">
+          <strong class="font-semibold text-primary">{{ result.bestOption.label }}</strong> 기준 월 예상 비용
+        </p>
       </div>
       <div class="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
         <span class="flex items-center gap-2 text-caption font-semibold text-muted-foreground">

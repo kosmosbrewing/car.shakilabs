@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
 import { Share2 } from "lucide-vue-next";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
+import CountUpAmount from "@/components/common/CountUpAmount.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
 import AffiliateLinkPanel from "@/components/common/AffiliateLinkPanel.vue";
@@ -70,8 +71,8 @@ const share = useShare({
   query: shareQuery,
 });
 
+// 최저 총비용은 히어로가 이미 대표 수치로 보여준다 — 여기서 다시 세지 않는다.
 const summaryFacts = computed(() => [
-  { label: "최저 총비용", value: formatWon(result.value.bestResult.totalCost) },
   { label: "월 납입금", value: formatWon(result.value.bestResult.monthlyPayment) },
   { label: "2위와 차이", value: formatWon(result.value.runnerUpGap) },
 ]);
@@ -110,7 +111,12 @@ const costItems = computed(() => result.value.methods.map((method) => ({
     <div class="retro-panel overflow-hidden">
       <div class="space-y-1 border-b border-border/40 px-4 py-4 sm:px-5 sm:py-5">
         <p class="text-caption font-semibold text-muted-foreground">현금유출이 가장 적은 방식</p>
-        <p class="text-display font-bold leading-none text-primary">{{ result.bestResult.label }}</p>
+        <p class="car-result-amount font-bold font-brand tabular-nums text-primary">
+          <CountUpAmount :value="formatWon(result.bestResult.totalCost)" />
+        </p>
+        <p class="text-caption text-muted-foreground">
+          <strong class="font-semibold text-primary">{{ result.bestResult.label }}</strong> 기준 계약기간 총 현금유출
+        </p>
       </div>
       <div class="flex flex-wrap items-center justify-between gap-2 border-b border-border/40 px-4 py-3 sm:px-5">
         <span class="flex shrink-0 items-center gap-2 whitespace-nowrap text-caption font-semibold text-muted-foreground">
@@ -121,7 +127,7 @@ const costItems = computed(() => result.value.methods.map((method) => ({
           {{ formatWon(result.spread) }}
         </span>
       </div>
-      <div class="divide-y divide-border/40 sm:grid sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+      <div class="divide-y divide-border/40 sm:grid sm:grid-cols-2 sm:divide-x sm:divide-y-0">
         <div v-for="fact in summaryFacts" :key="fact.label" class="px-4 py-3 sm:px-5">
           <p class="text-[11px] font-semibold text-muted-foreground">{{ fact.label }}</p>
           <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ fact.value }}</p>
