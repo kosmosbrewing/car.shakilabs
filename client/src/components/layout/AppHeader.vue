@@ -12,6 +12,8 @@ import {
   type PrimaryNavigationItem,
 } from "@shakilabs/ui";
 import { CAR_TOOLS } from "@/data/carNavigation";
+import TickerBar from "@/components/common/TickerBar.vue";
+import { tickerMessages } from "@/data/tickerMessages";
 
 const THEME_STORAGE_KEY = "car:theme:v1";
 type ThemeMode = "light" | "dark";
@@ -65,6 +67,14 @@ const links: GlobalHeaderLink[] = [{ href: "/blog", label: "블로그" }];
     nav-title="차량 도구"
     :link-component="RouterLink"
   >
+    <!-- 헤더 가운데 회전 안내. 패키지가 흐름 밖에 절대 배치하므로 문구 길이가
+         56px 헤더 높이를 바꾸지 못한다(옛 캡션 줄 분리 조치 BL-005의 재발 방지). -->
+    <template #tip>
+      <span class="inline-flex items-center whitespace-nowrap">
+        <TickerBar :key="route.path" :messages="tickerMessages" />
+      </span>
+    </template>
+
     <template #utility>
       <ShButton
         type="button"
