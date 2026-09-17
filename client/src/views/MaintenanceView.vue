@@ -28,9 +28,11 @@ const { result, validationError } = useSafeCalculation(
   calculateMaintenanceBudget({ annualKm: 15_000, vehicleAge: 5, fuelType: "gasoline" }),
 );
 
+// 소모품 비용은 위험이 아니라 유지비 구성요소 하나일 뿐이다(DESIGN_CLEANUP_PLAN §4.2-2) —
+// danger는 진짜 위험 표시에만 남긴다.
 const chartSegments = computed(() => {
   return [
-    { key: "consumables", label: "소모품", value: result.value.consumables, tone: "danger" as const },
+    { key: "consumables", label: "소모품", value: result.value.consumables, tone: "muted" as const },
     { key: "oil", label: "오일", value: result.value.oil, tone: "primary" as const },
     { key: "tires", label: "타이어", value: result.value.tires, tone: "muted" as const },
     { key: "fixed", label: "보험+세금", value: result.value.insurance + result.value.tax, tone: "info" as const },

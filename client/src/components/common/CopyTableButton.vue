@@ -39,7 +39,7 @@ onBeforeUnmount(() => {
   <button
     type="button"
     class="inline-flex h-6 items-center gap-0.5 rounded-lg border bg-background px-1.5 text-[11px] font-semibold leading-none text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-    :class="copied ? 'border-profit/50 text-profit' : 'border-border'"
+    :class="copied ? 'border-status-success/50 text-status-success' : 'border-border'"
     @click="handleCopy"
   >
     <component :is="copied ? Check : Copy" class="h-2.5 w-2.5" />

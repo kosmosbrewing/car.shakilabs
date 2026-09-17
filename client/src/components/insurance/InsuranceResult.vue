@@ -20,8 +20,8 @@ const statIcons = [Banknote, TrendingDown, PiggyBank, Shield] as const;
 const statIconClasses = [
   "bg-muted text-muted-foreground",
   "bg-muted text-muted-foreground",
-  "bg-profit/10 text-profit",
-  "bg-profit/10 text-profit",
+  "bg-status-success/10 text-status-success",
+  "bg-status-success/10 text-status-success",
 ] as const;
 
 type PremiumStep = {
@@ -75,8 +75,8 @@ const premiumSteps = computed(() => {
           v-for="(stat, index) in [
             { label: '현재 보험료', value: result.currentPremium, cls: '' },
             { label: '특약 적용 후', value: result.estimatedPremium, cls: '' },
-            { label: '절약액', value: result.savingsAmount, cls: result.savingsAmount >= 0 ? 'text-profit' : 'text-fee' },
-            { label: '다이렉트 추가 절약', value: result.directDiscountAmount, cls: 'text-profit' },
+            { label: '절약액', value: result.savingsAmount, cls: result.savingsAmount >= 0 ? 'text-status-success' : 'text-status-danger' },
+            { label: '다이렉트 추가 절약', value: result.directDiscountAmount, cls: 'text-status-success' },
           ]"
           :key="stat.label"
           class="rounded-2xl border border-border/50 bg-muted/30 p-3.5"
@@ -97,18 +97,18 @@ const premiumSteps = computed(() => {
       </div>
 
       <!-- 하이라이트: 다이렉트 포함 예상 보험료 -->
-      <div class="flex items-start justify-between gap-3 rounded-2xl border border-profit/20 bg-profit/5 p-4">
+      <div class="flex items-start justify-between gap-3 rounded-2xl border border-status-success/20 bg-status-success/5 p-4">
         <div>
           <p class="text-caption font-semibold text-muted-foreground">다이렉트 포함 예상 보험료</p>
-          <!-- 총 보험료는 지출 총액이지 이익도 손실도 아니다. --profit(초록)을 칠하면
+          <!-- 총 보험료는 지출 총액이지 이익도 손실도 아니다. --status-success(초록)을 칠하면
                숫자가 갖지 않은 "유리하다"는 판단을 주장하게 되므로 중립 전경색을 쓴다.
-               아래 절감률·절약액은 실제 절약분이라 초록 맥락(bg-profit/5)을 유지한다. -->
+               아래 절감률·절약액은 실제 절약분이라 초록 맥락(bg-status-success/5)을 유지한다. -->
           <p class="car-result-amount mt-1 font-bold font-brand tabular-nums text-foreground"><CountUpAmount :value="formatWon(result.finalPremium)" /></p>
           <p class="mt-1 text-caption text-muted-foreground">
             총 절감률 {{ formatPercent(result.totalDiscountRate, 1) }} · 누적 절약액 {{ formatWon(result.totalSavingsWithDirect) }}
           </p>
         </div>
-        <Badge variant="default" class="shrink-0 rounded-full border-transparent bg-profit text-profit-foreground">
+        <Badge variant="default" class="shrink-0 rounded-full border-transparent bg-status-success text-status-success-foreground">
           최종 예상
         </Badge>
       </div>
@@ -128,7 +128,7 @@ const premiumSteps = computed(() => {
           <span>{{ item.label }}</span>
           <strong
             class="tabular-nums"
-            :class="item.kind === 'discount' ? 'text-profit' : 'text-fee'"
+            :class="item.kind === 'discount' ? 'text-status-success' : 'text-status-danger'"
           >
             {{ formatWon(item.amount) }}
           </strong>

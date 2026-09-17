@@ -246,7 +246,7 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
           <BadgePercent class="h-4 w-4" />
           총 보조금
         </span>
-        <span class="inline-flex items-center rounded-full bg-profit/[12%] px-3 py-1 text-heading font-bold tabular-nums text-profit sm:text-h1">
+        <span class="inline-flex items-center rounded-full bg-status-success/[12%] px-3 py-1 text-heading font-bold tabular-nums text-status-success sm:text-h1">
           {{ formatWon(subsidyResult.totalSubsidy) }}
         </span>
       </div>
@@ -281,18 +281,18 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
             <UserRound class="h-4 w-4" />
             청년 가산 (국고 {{ formatPercent(YOUTH_BONUS_RATE, 0) }})
           </span>
-          <span class="text-caption font-semibold tabular-nums text-profit">+{{ formatWon(subsidyResult.youthBonus) }}</span>
+          <span class="text-caption font-semibold tabular-nums text-status-success">+{{ formatWon(subsidyResult.youthBonus) }}</span>
         </div>
         <div v-if="subsidyResult.conversionBonus > 0" class="flex items-center justify-between py-2">
           <span class="flex items-center gap-2 text-caption text-muted-foreground">
             <ArrowRightLeft class="h-4 w-4" />
             전환지원금
           </span>
-          <span class="text-caption font-semibold tabular-nums text-profit">+{{ formatWon(subsidyResult.conversionBonus) }}</span>
+          <span class="text-caption font-semibold tabular-nums text-status-success">+{{ formatWon(subsidyResult.conversionBonus) }}</span>
         </div>
         <div class="flex items-center justify-between py-2">
           <span class="text-caption font-bold text-foreground">총 보조금 합계</span>
-          <span class="text-body font-bold tabular-nums text-profit">{{ formatWon(subsidyResult.totalSubsidy) }}</span>
+          <span class="text-body font-bold tabular-nums text-status-success">{{ formatWon(subsidyResult.totalSubsidy) }}</span>
         </div>
       </div>
     </div>

@@ -78,14 +78,7 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        profit: {
-          DEFAULT: "hsl(var(--profit))",
-          foreground: "hsl(var(--profit-foreground))",
-        },
-        fee: {
-          DEFAULT: "hsl(var(--fee))",
-          foreground: "hsl(var(--fee-foreground))",
-        },
+        // fee(로컬 빨강 별칭)는 2026-09-17 폐기 — 위험은 status.danger로.
         status: {
           success: "hsl(var(--status-success))",
           warning: "hsl(var(--status-warning))",

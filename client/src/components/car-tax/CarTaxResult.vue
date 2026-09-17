@@ -16,16 +16,18 @@ defineEmits<{
   share: [];
 }>();
 
+// 취득세는 위험이 아니라 결과다(DESIGN_CLEANUP_PLAN §4.2-2) — 가장 큰 구성요소를
+// 차트의 단일 액센트(primary)로 남기고 나머지는 중립으로 내린다.
 const chartSegments = computed(() => {
   return [
-    { key: "tax", label: "취득세", value: props.result.acquisitionTax, tone: "danger" as const },
+    { key: "tax", label: "취득세", value: props.result.acquisitionTax, tone: "primary" as const },
     { key: "bond", label: "공채비", value: props.result.bondCost, tone: "muted" as const },
-    { key: "misc", label: "부대비용", value: props.result.miscCost, tone: "primary" as const },
+    { key: "misc", label: "부대비용", value: props.result.miscCost, tone: "muted" as const },
   ];
 });
 
 const statItems = computed(() => [
-  { label: "취득세", value: props.result.acquisitionTax, icon: Receipt, iconCls: "bg-fee/10 text-fee" },
+  { label: "취득세", value: props.result.acquisitionTax, icon: Receipt, iconCls: "bg-muted text-muted-foreground" },
   { label: "공채비", value: props.result.bondCost, icon: Landmark, iconCls: "bg-muted text-muted-foreground" },
   { label: "부대비용", value: props.result.miscCost, icon: FileText, iconCls: "bg-muted text-muted-foreground" },
 ]);

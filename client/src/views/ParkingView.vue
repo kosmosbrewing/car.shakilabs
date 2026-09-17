@@ -126,10 +126,10 @@ const breakEvenDays = computed(() => {
       </div>
       <div class="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
         <span class="flex items-center gap-2 text-caption font-semibold text-muted-foreground">
-          <span class="h-2 w-2 shrink-0 rounded-full bg-profit" />
+          <span class="h-2 w-2 shrink-0 rounded-full bg-status-success" />
           최고/최저 차이
         </span>
-        <span class="inline-flex items-center rounded-full bg-profit/[12%] px-3 py-1 text-heading font-bold tabular-nums text-profit sm:text-h1">
+        <span class="inline-flex items-center rounded-full bg-status-success/[12%] px-3 py-1 text-heading font-bold tabular-nums text-status-success sm:text-h1">
           {{ formatWon(result.spread) }}
         </span>
       </div>
@@ -149,7 +149,7 @@ const breakEvenDays = computed(() => {
         :class="[
           'overflow-hidden rounded-2xl border bg-card p-4 shadow-sm transition-all duration-200',
           item.key === result.bestOption.key
-            ? 'border-profit/40 shadow-[0_0_0_1px_hsl(var(--profit)/0.15),0_4px_16px_-4px_hsl(var(--profit)/0.12)]'
+            ? 'border-status-success/40 shadow-[0_0_0_1px_hsl(var(--status-success)/0.15),0_4px_16px_-4px_hsl(var(--status-success)/0.12)]'
             : 'border-border/70 hover:-translate-y-[1px] hover:border-primary/25'
         ]"
       >
@@ -158,14 +158,14 @@ const breakEvenDays = computed(() => {
             <p class="text-tiny font-semibold text-muted-foreground">{{ item.label }}</p>
             <p
               class="mt-2 text-h1 font-bold tabular-nums"
-              :class="item.key === result.bestOption.key ? 'text-profit' : 'text-foreground'"
+              :class="item.key === result.bestOption.key ? 'text-status-success' : 'text-foreground'"
             >
               {{ formatWon(item.total) }}
             </p>
           </div>
           <span
             class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl"
-            :class="item.key === result.bestOption.key ? 'bg-profit/[12%] text-profit' : 'bg-muted text-muted-foreground'"
+            :class="item.key === result.bestOption.key ? 'bg-status-success/[12%] text-status-success' : 'bg-muted text-muted-foreground'"
           >
             <Trophy v-if="item.key === result.bestOption.key" class="h-5 w-5" />
             <ParkingSquare v-else class="h-5 w-5" />
@@ -173,7 +173,7 @@ const breakEvenDays = computed(() => {
         </div>
         <span
           v-if="item.key === result.bestOption.key"
-          class="mt-3 inline-flex items-center gap-1 rounded-full bg-profit px-2.5 py-0.5 text-[11px] font-semibold text-profit-foreground"
+          class="mt-3 inline-flex items-center gap-1 rounded-full bg-status-success px-2.5 py-0.5 text-[11px] font-semibold text-status-success-foreground"
         >
           <Trophy class="h-3 w-3" />
           가장 저렴

@@ -24,7 +24,7 @@ const formatBarValue = (value: number | null) => props.formatValue(value ?? 0);
 </script>
 
 <template>
-  <!-- highlight=success(=--profit), 비강조=primary — 승격 전 fill-profit / fill-primary/70 색을
+  <!-- highlight=success(=--status-success), 비강조=primary — 승격 전 fill-status-success / fill-primary/70 색을
        그대로 쓰기 위해 main.css 끝에서 톤 색을 앱 의미색으로 고정한다. -->
   <ShRankedBars
     class="retro-panel retro-ranked-bars overflow-hidden"
