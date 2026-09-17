@@ -32,10 +32,10 @@ const costItems = computed(() => [
     </div>
     <div class="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
       <span class="flex items-center gap-2 text-caption font-semibold text-muted-foreground">
-        <span class="h-2 w-2 shrink-0 rounded-full bg-profit" />
+        <span class="h-2 w-2 shrink-0 rounded-full bg-status-success" />
         연간 절감 차이
       </span>
-      <span class="rounded-full bg-profit/[12%] px-3 py-1 text-heading font-bold tabular-nums text-profit sm:text-h1">
+      <span class="rounded-full bg-status-success/[12%] px-3 py-1 text-heading font-bold tabular-nums text-status-success sm:text-h1">
         {{ formatWon(result.gap) }}
       </span>
     </div>
@@ -49,12 +49,12 @@ const costItems = computed(() => [
       ]"
       :key="option.key"
       class="overflow-hidden rounded-2xl border bg-card p-4 shadow-sm"
-      :class="result.winner === option.key ? 'border-profit/40' : 'border-border/70'"
+      :class="result.winner === option.key ? 'border-status-success/40' : 'border-border/70'"
     >
       <div class="flex items-start justify-between gap-3">
         <div>
           <p class="text-tiny font-semibold text-muted-foreground">{{ option.label }} 연간 총비용</p>
-          <p class="mt-2 text-h1 font-bold tabular-nums" :class="result.winner === option.key ? 'text-profit' : 'text-foreground'">
+          <p class="mt-2 text-h1 font-bold tabular-nums" :class="result.winner === option.key ? 'text-status-success' : 'text-foreground'">
             {{ formatWon(option.total) }}
           </p>
           <p class="mt-1 text-tiny text-muted-foreground">에너지 비용 {{ formatWon(option.fuel) }}</p>
@@ -64,7 +64,7 @@ const costItems = computed(() => [
           <Zap v-else class="h-5 w-5" />
         </span>
       </div>
-      <span v-if="result.winner === option.key" class="mt-3 inline-flex items-center gap-1 rounded-full bg-profit px-2.5 py-0.5 text-[11px] font-semibold text-profit-foreground">
+      <span v-if="result.winner === option.key" class="mt-3 inline-flex items-center gap-1 rounded-full bg-status-success px-2.5 py-0.5 text-[11px] font-semibold text-status-success-foreground">
         <TrendingDown class="h-3 w-3" /> 더 유리
       </span>
     </article>

@@ -25,7 +25,7 @@ const maximum = computed(() => Math.max(...props.steps.map((step) => step.value)
         <div class="flex items-baseline justify-between gap-3">
           <span class="text-caption text-foreground">{{ step.label }}</span>
           <span class="shrink-0 text-caption tabular-nums">
-            <span v-if="step.change" class="mr-2" :class="step.change < 0 ? 'text-profit' : 'text-fee'">
+            <span v-if="step.change" class="mr-2" :class="step.change < 0 ? 'text-status-success' : 'text-status-danger'">
               {{ step.change > 0 ? '+' : '-' }}{{ formatValue(Math.abs(step.change)) }}
             </span>
             <strong>{{ formatValue(step.value) }}</strong>
@@ -36,7 +36,7 @@ const maximum = computed(() => Math.max(...props.steps.map((step) => step.value)
             <rect
               :width="positiveBarWidth(step.value, maximum)"
               height="12"
-              :class="step.change && step.change > 0 ? 'fill-fee' : 'fill-primary'"
+              :class="step.change && step.change > 0 ? 'fill-status-danger' : 'fill-primary'"
             />
           </svg>
         </div>

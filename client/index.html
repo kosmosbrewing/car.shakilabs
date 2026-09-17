@@ -99,42 +99,39 @@
     </script>
     <style>
       :root {
-        /* v3 §2.1 역할 토큰 — canvas/card/ink/ink-muted/line/focus는 hex에서 역산(반올림 왕복 검증 완료) */
+        /* v3 §2.1 역할 토큰 — canvas/card/ink/ink-muted/line/focus는 hex에서 역산(반올림 왕복 검증 완료).
+           2026-09-17 카테고리 색 정리(DESIGN_CLEANUP_PLAN §2.2): 청록(hue 175) → house와 같은
+           파랑(hue 214)으로 그룹 통일. --ring은 건드리지 않는다 — color.focus(ink)는
+           브랜드 hue와 무관하다(v3 §2.1, house에서 반대로 갔다가 조율자가 정정한 항목). */
         --background: 60 11.11% 96.47%; /* color.canvas #F7F7F5 */
         --foreground: 0 0% 3.92%; /* color.ink #0A0A0A */
         --muted: 210 40% 96%;
         --muted-foreground: 60 3.37% 34.9%; /* color.ink-muted #5C5C56 */
         --card: 0 0% 100%; /* color.card #FFFFFF */
         --card-foreground: 0 0% 3.92%;
-        --primary: 175 75% 20%;
+        --primary: 214 74% 33%;
         --primary-foreground: 0 0% 100%;
-        --secondary: 175 20% 92%;
+        --secondary: 214 15% 91%;
         --secondary-foreground: 222 47% 11%;
-        --accent: 175 44% 94%;
-        --accent-foreground: 175 64% 24%;
+        --accent: 214 72% 95%;
+        --accent-foreground: 214 74% 30%;
         --popover: 0 0% 100%;
         --popover-foreground: 222 47% 11%;
         /* v3 §4.1 카테고리 액센트 API — @shakilabs/ui 0.3.15가 읽는 계약: --accent-hsl / --accent-muted-hsl.
-           브랜드색(청록)은 지우지 않고 그대로 주입 — SecondaryNav underline·ResultAmount 전용 */
-        --accent-hsl: 175 75% 20%;
-        --accent-muted-hsl: 175 75% 20%;
-        /* --fee가 고친 것과 같은 결함이 여기 남아 있었다: 0 72% 52%는 카드 위 4.70:1로만
-           통과하고 --background(210 40% 98%) 위 text-destructive는 4.49:1, bg-destructive 위
-           --destructive-foreground도 4.49:1로 미달이었다. --fee와 같은 값으로 통일 → 6.12:1. */
-        --destructive: 0 74% 42%;
+           --primary와 같은 값으로 주입 — SecondaryNav underline·ResultAmount 전용 */
+        --accent-hsl: 214 74% 33%;
+        --accent-muted-hsl: 214 74% 33%;
+        /* --destructive는 --status-danger(main.css)와 같은 빨강이어야 한다(@shakilabs/ui
+           tokens.css의 --sh-color-danger가 --destructive를 직접 구독). v3 고정 hex
+           #C62828의 HSL — 카드 위 5.62:1, 캔버스 위 5.24:1로 이전 유도값보다도 여유 있다. */
+        --destructive: 0 66.39% 46.67%;
         --destructive-foreground: 210 40% 98%;
         --border: 60 8% 90.2%; /* color.line #E8E8E4 */
         --input: 214 16% 85%;
         --ring: 0 0% 3.92%; /* color.focus #0A0A0A (v3 §2.1 — 포커스는 브랜드색이 아니라 ink) */
         --radius: 0.4rem;
         /* WCAG AA: 이전 151 64% 37%은 흰 카드 위 3.55:1로 본문 기준(4.5:1) 미달이었다.
-           bg-profit 뱃지의 흰 글자도 같은 3.55:1이라 06.house의 통과값(151 70% 26%)으로 통일 → 6.07:1. */
-        --profit: 151 70% 26%;
-        --profit-foreground: 0 0% 100%;
-        /* 이전 0 72% 52%는 카드 위 4.70:1로 통과했지만 retro-board-list의
-           --background(210 40% 98%) 위에서는 4.49:1로 아슬하게 미달이었다 → 6.12:1. */
-        --fee: 0 74% 42%;
-        --fee-foreground: 0 0% 100%;
+           2026-09-18: --profit 별칭을 폐기하고 v3 status-success(#1B7A4A)로 옮겼다. */
       }
 
       .dark {
@@ -144,34 +141,23 @@
         --muted-foreground: 60 3.33% 64.71%; /* color.ink-muted dark #A8A8A2 */
         --card: 0 0% 10.98%; /* color.card dark #1C1C1C */
         --card-foreground: 0 0% 96.08%;
-        --primary: 172 66% 50%;
-        --primary-foreground: 175 80% 10%;
-        --secondary: 175 18% 20%;
+        --primary: 213 94% 68%;
+        --primary-foreground: 213 94% 10%;
+        --secondary: 213 15% 20%;
         --secondary-foreground: 210 40% 96%;
-        --accent: 175 20% 24%;
-        --accent-foreground: 174 62% 78%;
+        --accent: 213 74% 22%;
+        --accent-foreground: 213 94% 78%;
         --popover: 0 0% 10.98%;
         --popover-foreground: 0 0% 96.08%;
-        --accent-hsl: 172 66% 50%;
-        --accent-muted-hsl: 172 66% 50%;
-        /* 다크에서 0 72% 58%는 카드 위 text-destructive 3.67:1, 그 위 흰 글자 4.04:1로
-           양쪽 다 미달이었다. 하나의 색이 "어두운 면 위의 글자"와 "흰 글자를 얹는 면"을
-           동시에 만족할 수 없어, --fee와 같은 해법(면을 밝히고 전경을 어둡게)으로 통일한다.
-           → 카드 위 5.74:1 / 그 위 전경 6.83:1. */
-        --destructive: 0 75% 72%;
+        --accent-hsl: 213 94% 68%;
+        --accent-muted-hsl: 213 94% 68%;
+        /* v3 고정 hex #F07171의 HSL — 카드 위 5.93:1, 기존 foreground(0 62% 12%)와
+           짝지어도 6.1:1대로 그대로 통과해 foreground 값은 유지한다(실측, 게이트 참조). */
+        --destructive: 0 80.89% 69.22%;
         --destructive-foreground: 0 62% 12%;
         --border: 0 0% 16.47%; /* color.line dark #2A2A2A */
         --input: 214 16% 30%;
         --ring: 0 0% 96.08%; /* color.focus dark #F5F5F5 */
-        --profit: 151 60% 54%;
-        /* 다크 --profit은 밝은 민트라 그 위의 흰 글자가 1.97:1이었다.
-           --primary-foreground과 같은 파생 규칙({H} {S}% 10%)으로 어둡게 → 7.55:1. */
-        --profit-foreground: 151 80% 10%;
-        /* 이전 0 62% 58%는 카드(217 33% 17%) 위 3.66:1 미달. 8개 저장소에 복제된
-           리터럴이라 통일값 0 75% 72%로 상향 → 5.74:1. */
-        --fee: 0 75% 72%;
-        /* fee가 밝아진 만큼 그 위 전경도 반전해야 한다 (흰색이면 2.58:1). */
-        --fee-foreground: 0 62% 12%;
       }
 
       html {

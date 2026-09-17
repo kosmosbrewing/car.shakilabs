@@ -69,7 +69,7 @@ function rankLabel(index: number): string {
           <span class="text-caption text-muted-foreground">총비용</span>
           <span
             class="font-semibold tabular-nums sm:text-right"
-            :class="index === 0 ? 'text-profit' : ''"
+            :class="index === 0 ? 'text-status-success' : ''"
           >
             {{ formatWon(method.totalCost) }}
           </span>

@@ -41,25 +41,24 @@
 @tailwind utilities;
 
 @layer base {
+  /* 2026-09-17 카테고리 색 정리(DESIGN_CLEANUP_PLAN §2.2) — 의미색 4종을 v3 고정 hex로.
+     danger는 index.html의 --destructive와 같은 HSL이어야 한다(패키지 --sh-color-danger가
+     --destructive를 구독하므로 둘이 갈라지면 같은 "위험"이 두 가지 빨강으로 보인다).
+     caution은 v3 4색에 없는 car 자체 확장 토큰이라 이번 정리 대상이 아니다. */
   :root {
-    /* WCAG AA(4.5:1) — 02.finance·06.house가 이미 쓰는 통과 세트로 통일한다.
-       이전값은 --background(210 40% 98%) 위에서 success 3.69:1 / warning 2.48:1 / caution 3.03:1로
-       미달이었다 (warning은 대형 텍스트 완화 기준 3:1마저 미달). danger·info는 4.52·4.87:1로
-       통과하므로 불필요한 시각 변화를 피해 그대로 둔다. */
-    --status-success: 142 64% 24%;
-    --status-warning: 24 83% 31%;
+    --status-success: 149.68 63.76% 29.22%; /* #1B7A4A */
+    --status-warning: 25.96 90.48% 37.06%; /* #B45309 */
     --status-caution: 17 79% 34%;
-    --status-danger: 0 70% 52%;
-    --status-info: 212 83% 45%;
+    --status-danger: 0 66.39% 46.67%; /* #C62828 = --destructive */
+    --status-info: 213.51 65.68% 33.14%; /* #1D4E8C */
   }
 
-  /* 다크 status는 카드(217 33% 17%) 위 7.31~10.26:1로 전부 통과 — 변경하지 않는다. */
   .dark {
-    --status-success: 148 63% 66%;
-    --status-warning: 43 95% 70%;
+    --status-success: 146.97 50.7% 57.84%; /* #5DCA8E */
+    --status-warning: 41.91 86.9% 55.1%; /* #F0B429 */
     --status-caution: 28 91% 66%;
-    --status-danger: 0 86% 73%;
-    --status-info: 205 90% 72%;
+    --status-danger: 0 80.89% 69.22%; /* #F07171 = --destructive */
+    --status-info: 213.55 66.91% 72.75%; /* #8BB4E8 */
   }
 
   * {
@@ -431,11 +430,15 @@
 
 /* ui 0.3.10 차트 승격: 패키지 톤을 앱 의미색으로 고정 (승격 전 색 그대로 유지).
    패키지 styles.css가 main.css보다 뒤에 로드되므로 단일 클래스로는 못 이긴다 —
-   .sh-chart 하위 선택자로 명시도를 올려 확실히 덮어쓴다. */
-.sh-chart .sh-chart-fill--success { fill: hsl(var(--profit)); }
-.sh-chart .sh-chart-fill--danger { fill: hsl(var(--fee)); }
-.sh-chart .sh-metric-bars__label--success { color: hsl(var(--profit)); }
-.sh-chart .sh-metric-bars__label--danger { color: hsl(var(--fee)); }
+   .sh-chart 하위 선택자로 명시도를 올려 확실히 덮어쓴다.
+   2026-09-17: --fee 폐기로 danger 쪽을 --status-danger로 옮겼다 — --destructive와
+   같은 값이라(index.html 참조) 페이지의 다른 danger 표시와도 색이 갈라지지 않는다.
+   이 선택자는 전역(.sh-chart 전체)이라 house의 [data-metric-comparison] 스코프보다
+   넓다 — car의 모든 손익/분류 차트가 이 규칙 하나를 공유한다. */
+.sh-chart .sh-chart-fill--success { fill: hsl(var(--status-success)); }
+.sh-chart .sh-chart-fill--danger { fill: hsl(var(--status-danger)); }
+.sh-chart .sh-metric-bars__label--success { color: hsl(var(--status-success)); }
+.sh-chart .sh-metric-bars__label--danger { color: hsl(var(--status-danger)); }
 
 /* 승격 전 비강조 막대는 fill-primary/70 이었다 — 불투명도까지 재현한다. */
 .retro-ranked-bars .sh-chart-fill--primary { fill: hsl(var(--primary) / 0.7); }

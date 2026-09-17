@@ -156,4 +156,20 @@ const fontVerifyResult = spawnSync(
   }
 );
 
-process.exit(fontVerifyResult.status ?? 1);
+if (fontVerifyResult.status !== 0) {
+  process.exit(fontVerifyResult.status ?? 1);
+}
+
+// 액센트 토큰 게이트 — 색 토큰은 손으로 고치므로 문자열 하나만 틀려도 라이트/다크 한쪽이
+// 조용히 깨지고, 대비 미달은 빌드가 통과해도 아무도 모른다(계획서 §4.2).
+// 브라우저를 쓰지 않는다 — Vercel 빌드 이미지에 크로미움이 없다.
+const accentTokenResult = spawnSync(
+  process.execPath,
+  [resolve(projectRoot, "scripts", "verify-accent-tokens.mjs")],
+  {
+    cwd: projectRoot,
+    stdio: "inherit",
+  }
+);
+
+process.exit(accentTokenResult.status ?? 1);
