@@ -17,7 +17,7 @@ const constantsStore = useConstantsStore();
     description="shakilabs.com/car은 자동차 취등록세, 보험 절약, 리스·할부·렌트 총비용을 비교하는 무료 계산기입니다."
   />
 
-  <div class="container py-5 space-y-5">
+  <div class="sh-container sh-container--prose py-5 space-y-5">
     <div class="retro-panel">
       <div class="retro-titlebar rounded-t-2xl">
         <h1 class="retro-title">서비스 안내</h1>

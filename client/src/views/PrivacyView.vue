@@ -51,7 +51,7 @@ const CALCULATOR_INPUTS = [
     description="자동차 계산기가 받는 입력값, 수집하지 않는 차량 정보, 쿠키·광고·공유 링크 처리 방식을 안내합니다."
   />
 
-  <div class="container py-5">
+  <div class="sh-container sh-container--prose py-5">
     <div class="retro-panel">
       <div class="retro-titlebar rounded-t-2xl">
         <h1 class="retro-title">개인정보 처리방침</h1>

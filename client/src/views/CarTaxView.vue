@@ -103,7 +103,7 @@ const share = useShare({
     :json-ld="faqJsonLd"
   />
 
-  <div class="text-resize-layout container space-y-5 py-5">
+  <div class="text-resize-layout sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="자동차 취등록세 계산기" />
 
     <ShSurface padding="none" class="overflow-hidden">

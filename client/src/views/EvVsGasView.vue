@@ -88,7 +88,7 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
 <template>
   <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="전기차·내연기관 비교" />
 
     <!-- ===== EV vs Gas 비교 ===== -->

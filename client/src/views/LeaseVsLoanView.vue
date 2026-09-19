@@ -93,7 +93,7 @@ const costItems = computed(() => result.value.methods.map((method) => ({
     :json-ld="faqJsonLd"
   />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="리스·할부·장기렌트 비교" />
 
     <div class="retro-panel overflow-hidden">
