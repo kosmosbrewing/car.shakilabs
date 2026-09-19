@@ -6,7 +6,7 @@ import { RouterLink } from "vue-router";
 <template>
   <SEOHead title="페이지를 찾을 수 없습니다" description="요청하신 페이지를 찾을 수 없습니다." :noindex="true" />
 
-  <div class="container space-y-5 py-20 text-center">
+  <div class="sh-container sh-container--page space-y-5 py-20 text-center">
     <p class="text-display text-muted-foreground">404</p>
     <h1 class="text-heading font-bold text-foreground">길을 잃었지만, 비용은 잃지 마세요</h1>
     <p class="text-body text-muted-foreground">

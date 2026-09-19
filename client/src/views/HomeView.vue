@@ -34,7 +34,7 @@ const itemListJsonLd = {
 <template>
   <SEOHead :title="SEO_TITLE" :description="SEO_DESCRIPTION" :json-ld="itemListJsonLd" />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--page space-y-5 py-5">
     <ShSurface padding="lg">
       <ShText as="p" variant="caption" tone="muted">SHAKILABS CAR</ShText>
       <ShText as="h1" variant="display" class="mt-2">

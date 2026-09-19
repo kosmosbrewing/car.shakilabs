@@ -97,7 +97,7 @@ const share = useShare({
     :json-ld="faqJsonLd"
   />
 
-  <div class="container space-y-5 py-5">
+  <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="자동차보험 절약 계산기" />
 
     <div class="retro-panel overflow-hidden">
