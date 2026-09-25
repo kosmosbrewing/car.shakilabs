@@ -6,7 +6,7 @@ import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import CountUpAmount from "@/components/common/CountUpAmount.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
-import RankedBars from "@/components/result-visualization/RankedBars.vue";
+import GapBars from "@/components/result-visualization/GapBars.vue";
 import { CAR_PARKING_GUIDE } from "@/data/seoGuides";
 import { CAR_SERVICE_UPDATED_AT } from "@/data/ownershipData";
 import { formatWon } from "@/lib/utils";
@@ -31,11 +31,11 @@ const { result, validationError } = useSafeCalculation(
   }),
   compareParkingOptions({ daysPerMonth: 20, hoursPerDay: 8, hourlyRate: 2_000, monthlyPass: 180_000 }),
 );
+// 방식 셋 중 무엇이 가장 싸고 나머지는 얼마나 더 드는지 — 1위 대비 차이로 그린다
 const costItems = computed(() => result.value.items.map((item) => ({
   key: item.key,
   label: item.label,
   value: item.total,
-  highlight: item.key === result.value.bestOption.key,
 })));
 
 const dailyHourlyCost = computed(() => hoursPerDay.value * hourlyRate.value);
@@ -135,11 +135,12 @@ const breakEvenDays = computed(() => {
       </div>
     </div>
 
-    <RankedBars
+    <GapBars
       title="주차 방식별 월 비용"
-      note="동일한 이용 일수와 시간 기준이며 막대가 짧을수록 예상 월 비용이 낮습니다."
+      note="동일한 이용 일수와 시간 기준입니다. 막대는 1위보다 더 드는 월 비용입니다."
       :items="costItems"
       :format-value="formatWon"
+      better="lower"
     />
 
     <div class="grid gap-3 md:grid-cols-3">
