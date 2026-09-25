@@ -169,6 +169,11 @@
         scroll-padding-top: calc(var(--header-h) + var(--secondary-nav-h, 0px) + 8px);
       }
 
+      /* 0.3.38 — <48rem에서는 탭 줄이 ☰로 접혀 고정 층이 헤더 하나뿐이다. 앵커 오프셋에서도 뺀다. */
+      @media (max-width: 47.99rem) {
+        html { --secondary-nav-h: 0px; }
+      }
+
       body {
         background: hsl(var(--background));
         color: hsl(var(--foreground));

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // v3 §3.2 BL-003/004 — 전역 헤더는 패키지 ShGlobalHeader가 소유한다(검정 #0A0A0A, 56px).
 // 앱은 링크·테마 토글만 utility 슬롯에 채우고 자체 헤더 마크업을 갖지 않는다.
+// 0.3.38 "순수 내비게이션"(2026-09-25): 헤더는 위치(로고 / 앱 이름)와 이동(블로그·소개·☰)만 싣는다.
 import { computed, onMounted, ref } from "vue";
 import { Moon, Sun } from "lucide-vue-next";
 import { RouterLink } from "vue-router";
@@ -12,8 +13,6 @@ import {
   type PrimaryNavigationItem,
 } from "@shakilabs/ui";
 import { CAR_TOOLS } from "@/data/carNavigation";
-import TickerBar from "@/components/common/TickerBar.vue";
-import { tickerMessages } from "@/data/tickerMessages";
 
 const THEME_STORAGE_KEY = "car:theme:v1";
 type ThemeMode = "light" | "dark";
@@ -36,7 +35,7 @@ onMounted(() => {
     : "light";
 });
 
-// 모바일 드로어(v3 §3.3-1)에 실을 도구 목록 — 2차 내비와 같은 출처를 쓴다
+// 모바일 전체 메뉴(☰)에 실을 도구 목록 — 2차 내비와 같은 출처를 쓴다
 const route = useRoute();
 const navItems: readonly PrimaryNavigationItem[] = [
   { key: "all", label: "차량 도구", to: "/all" },
@@ -53,28 +52,23 @@ const navActiveKey = computed(
     )?.key ?? "",
 );
 
-// 사이트 링크는 최소한만 — 블로그는 이 앱 라우터 밖(포털 소유)이라 href
-const links: GlobalHeaderLink[] = [{ href: "/blog", label: "블로그" }];
+// 사이트 링크 — 블로그는 포털 소유라 href, 소개는 이 앱 라우트라 RouterLink(to). 모바일에서는 ☰ 안으로 들어간다.
+const links: GlobalHeaderLink[] = [
+  { href: "/blog", label: "블로그" },
+  { to: "/about", label: "소개" },
+];
 </script>
 
 <template>
   <ShGlobalHeader
+    app="car"
     home-href="/"
     brand="ShakiLabs"
     :links="links"
     :nav-items="navItems"
     :nav-active-key="navActiveKey"
-    nav-title="차량 도구"
     :link-component="RouterLink"
   >
-    <!-- 헤더 가운데 회전 안내. 패키지가 흐름 밖에 절대 배치하므로 문구 길이가
-         56px 헤더 높이를 바꾸지 못한다(옛 캡션 줄 분리 조치 BL-005의 재발 방지). -->
-    <template #tip>
-      <span class="inline-flex items-center whitespace-nowrap">
-        <TickerBar :key="route.path" :messages="tickerMessages" />
-      </span>
-    </template>
-
     <template #utility>
       <ShButton
         type="button"
