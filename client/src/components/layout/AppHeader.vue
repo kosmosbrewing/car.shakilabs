@@ -2,38 +2,16 @@
 // v3 §3.2 BL-003/004 — 전역 헤더는 패키지 ShGlobalHeader가 소유한다(검정 #0A0A0A, 56px).
 // 앱은 링크·테마 토글만 utility 슬롯에 채우고 자체 헤더 마크업을 갖지 않는다.
 // 0.3.38 "순수 내비게이션"(2026-09-25): 헤더는 위치(로고 / 앱 이름)와 이동(블로그·소개·☰)만 싣는다.
-import { computed, onMounted, ref } from "vue";
-import { Moon, Sun } from "lucide-vue-next";
+import { computed } from "vue";
 import { RouterLink } from "vue-router";
 import { useRoute } from "vue-router";
 import {
-  ShButton,
   ShGlobalHeader,
+  ShThemeToggle,
   type GlobalHeaderLink,
   type PrimaryNavigationItem,
 } from "@shakilabs/ui";
 import { CAR_TOOLS } from "@/data/carNavigation";
-
-const THEME_STORAGE_KEY = "car:theme:v1";
-type ThemeMode = "light" | "dark";
-
-const theme = ref<ThemeMode>("light");
-
-function applyTheme(next: ThemeMode): void {
-  theme.value = next;
-  document.documentElement.classList.toggle("dark", next === "dark");
-  localStorage.setItem(THEME_STORAGE_KEY, next);
-}
-
-function toggleTheme(): void {
-  applyTheme(theme.value === "dark" ? "light" : "dark");
-}
-
-onMounted(() => {
-  theme.value = document.documentElement.classList.contains("dark")
-    ? "dark"
-    : "light";
-});
 
 // 모바일 전체 메뉴(☰)에 실을 도구 목록 — 2차 내비와 같은 출처를 쓴다
 const route = useRoute();
@@ -70,16 +48,7 @@ const links: GlobalHeaderLink[] = [
     :link-component="RouterLink"
   >
     <template #utility>
-      <ShButton
-        type="button"
-        variant="ghost"
-        size="sm"
-        :aria-label="theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'"
-        @click="toggleTheme"
-      >
-        <Moon v-if="theme === 'dark'" class="h-4 w-4" />
-        <Sun v-else class="h-4 w-4" />
-      </ShButton>
+      <ShThemeToggle storage-key="car:theme:v1" />
     </template>
   </ShGlobalHeader>
 </template>
