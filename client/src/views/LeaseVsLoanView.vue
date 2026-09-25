@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
+import { ShCalculatorSplit } from "@shakilabs/ui";
 import { Share2 } from "lucide-vue-next";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import CountUpAmount from "@/components/common/CountUpAmount.vue";
@@ -97,53 +98,58 @@ const costItems = computed(() => result.value.methods.map((method) => ({
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="리스·할부·장기렌트 비교" />
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">비교 조건 입력</h2>
-        <FreshBadge :message="`${LEASE_DATA_UPDATED} 기준`" />
-      </div>
-      <div class="retro-panel-content">
-        <CalculatorInteractionTracker calculator-id="lease_vs_loan" page-path="/car/lease-vs-loan">
-          <LeaseCompareInput v-model="form" />
-        </CalculatorInteractionTracker>
-      </div>
-    </div>
-
-    <div class="retro-panel overflow-hidden">
-      <div class="space-y-1 border-b border-border/40 px-4 py-4 sm:px-5 sm:py-5">
-        <p class="text-caption font-semibold text-muted-foreground">현금유출이 가장 적은 방식</p>
-        <p class="car-result-amount font-bold font-brand tabular-nums text-primary">
-          <CountUpAmount :value="formatWon(result.bestResult.totalCost)" />
-        </p>
-        <p class="text-caption text-muted-foreground">
-          <strong class="font-semibold text-primary">{{ result.bestResult.label }}</strong> 기준 계약기간 총 현금유출
-        </p>
-      </div>
-      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-border/40 px-4 py-3 sm:px-5">
-        <span class="flex shrink-0 items-center gap-2 whitespace-nowrap text-caption font-semibold text-muted-foreground">
-          <span class="h-2 w-2 shrink-0 rounded-full bg-muted-foreground" />
-          최고/최저 차이
-        </span>
-        <span class="inline-flex items-center rounded-full bg-muted px-3 py-1 text-heading font-bold tabular-nums text-foreground sm:text-h1">
-          {{ formatWon(result.spread) }}
-        </span>
-      </div>
-      <div class="divide-y divide-border/40 sm:grid sm:grid-cols-2 sm:divide-x sm:divide-y-0">
-        <div v-for="fact in summaryFacts" :key="fact.label" class="px-4 py-3 sm:px-5">
-          <p class="text-[11px] font-semibold text-muted-foreground">{{ fact.label }}</p>
-          <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ fact.value }}</p>
+    <ShCalculatorSplit>
+      <template #input>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">비교 조건 입력</h2>
+            <FreshBadge :message="`${LEASE_DATA_UPDATED} 기준`" />
+          </div>
+          <div class="retro-panel-content">
+            <CalculatorInteractionTracker calculator-id="lease_vs_loan" page-path="/car/lease-vs-loan">
+              <LeaseCompareInput v-model="form" />
+            </CalculatorInteractionTracker>
+          </div>
         </div>
-      </div>
-      <div class="space-y-3 border-t border-border/40 px-4 py-3 sm:px-5">
-        <p class="text-caption leading-relaxed text-muted-foreground">
-          계약기간 동안 실제로 빠져나가는 현금유출 기준입니다. 리스는 만기 반납 기준이며 잔존가치 인수비용은 총비용에 포함하지 않았습니다.
-        </p>
-        <Button type="button" variant="subtle" size="sm" @click="share.openShare">
-          <Share2 class="h-3.5 w-3.5" />
-          결과 공유하기
-        </Button>
-      </div>
-    </div>
+      </template>
+      <template #result>
+        <div class="retro-panel overflow-hidden">
+          <div class="space-y-1 border-b border-border/40 px-4 py-4 sm:px-5 sm:py-5">
+            <p class="text-caption font-semibold text-muted-foreground">현금유출이 가장 적은 방식</p>
+            <p class="car-result-amount font-bold font-brand tabular-nums text-primary">
+              <CountUpAmount :value="formatWon(result.bestResult.totalCost)" />
+            </p>
+            <p class="text-caption text-muted-foreground">
+              <strong class="font-semibold text-primary">{{ result.bestResult.label }}</strong> 기준 계약기간 총 현금유출
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-border/40 px-4 py-3 sm:px-5">
+            <span class="flex shrink-0 items-center gap-2 whitespace-nowrap text-caption font-semibold text-muted-foreground">
+              <span class="h-2 w-2 shrink-0 rounded-full bg-muted-foreground" />
+              최고/최저 차이
+            </span>
+            <span class="inline-flex items-center rounded-full bg-muted px-3 py-1 text-heading font-bold tabular-nums text-foreground sm:text-h1">
+              {{ formatWon(result.spread) }}
+            </span>
+          </div>
+          <div class="divide-y divide-border/40 sm:grid sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+            <div v-for="fact in summaryFacts" :key="fact.label" class="px-4 py-3 sm:px-5">
+              <p class="text-[11px] font-semibold text-muted-foreground">{{ fact.label }}</p>
+              <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ fact.value }}</p>
+            </div>
+          </div>
+          <div class="space-y-3 border-t border-border/40 px-4 py-3 sm:px-5">
+            <p class="text-caption leading-relaxed text-muted-foreground">
+              계약기간 동안 실제로 빠져나가는 현금유출 기준입니다. 리스는 만기 반납 기준이며 잔존가치 인수비용은 총비용에 포함하지 않았습니다.
+            </p>
+            <Button type="button" variant="subtle" size="sm" @click="share.openShare">
+              <Share2 class="h-3.5 w-3.5" />
+              결과 공유하기
+            </Button>
+          </div>
+        </div>
+      </template>
+    </ShCalculatorSplit>
 
     <GapBars
       title="계약기간 총 현금유출 비교"

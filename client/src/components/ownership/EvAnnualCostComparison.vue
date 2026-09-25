@@ -1,27 +1,9 @@
 <script setup lang="ts">
-import { computed } from "vue";
 import { Fuel, TrendingDown, Zap } from "lucide-vue-next";
-import RankedBars from "@/components/result-visualization/RankedBars.vue";
 import { formatWon } from "@/lib/utils";
 import type { EvVsGasResult } from "@/utils/ownershipCalculator";
 
-const props = defineProps<{ result: EvVsGasResult }>();
-const costItems = computed(() => [
-  {
-    key: "gas",
-    label: "내연기관",
-    value: props.result.gasTotal,
-    detail: `연료비 ${formatWon(props.result.gasFuel)} 포함`,
-    highlight: props.result.winner === "gas",
-  },
-  {
-    key: "ev",
-    label: "전기차",
-    value: props.result.evTotal,
-    detail: `충전비 ${formatWon(props.result.evFuel)} 포함`,
-    highlight: props.result.winner === "ev",
-  },
-]);
+defineProps<{ result: EvVsGasResult }>();
 </script>
 
 <template>
@@ -69,11 +51,4 @@ const costItems = computed(() => [
       </span>
     </article>
   </div>
-
-  <RankedBars
-    title="연간 비용 비교"
-    note="막대 길이는 연간 연료·보험·세금·정비 비용 합계에 직접 비례하며 짧을수록 유리합니다."
-    :items="costItems"
-    :format-value="formatWon"
-  />
 </template>

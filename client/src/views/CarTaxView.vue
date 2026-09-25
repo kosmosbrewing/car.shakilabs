@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
-import { ShSurface, ShText } from "@shakilabs/ui";
+import { ShCalculatorSplit, ShSurface, ShText } from "@shakilabs/ui";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
@@ -106,19 +106,25 @@ const share = useShare({
   <div class="text-resize-layout sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="자동차 취등록세 계산기" />
 
-    <ShSurface padding="none" class="overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <ShText as="h2" variant="heading">차량 정보 입력</ShText>
-        <FreshBadge :message="`${CAR_TAX_DATA_UPDATED} 기준`" />
-      </div>
-      <div class="retro-panel-content">
-        <CalculatorInteractionTracker calculator-id="car_tax" page-path="/car/tax">
-          <CarTaxInput v-model="form" />
-        </CalculatorInteractionTracker>
-      </div>
-    </ShSurface>
+    <ShCalculatorSplit>
+      <template #input>
+        <ShSurface padding="none" class="overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <ShText as="h2" variant="heading">차량 정보 입력</ShText>
+            <FreshBadge :message="`${CAR_TAX_DATA_UPDATED} 기준`" />
+          </div>
+          <div class="retro-panel-content">
+            <CalculatorInteractionTracker calculator-id="car_tax" page-path="/car/tax">
+              <CarTaxInput v-model="form" />
+            </CalculatorInteractionTracker>
+          </div>
+        </ShSurface>
+      </template>
+      <template #result>
+        <CarTaxResult :result="result" @share="share.openShare" />
+      </template>
+    </ShCalculatorSplit>
 
-    <CarTaxResult :result="result" @share="share.openShare" />
     <CarTaxNextActions />
     <AffiliateLinkPanel
       title="차량 구매 후 같이 챙기는 상품"

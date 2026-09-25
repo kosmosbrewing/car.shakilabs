@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
+import { ShCalculatorSplit } from "@shakilabs/ui";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
@@ -100,19 +101,25 @@ const share = useShare({
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="자동차보험 절약 계산기" />
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">갱신 조건 입력</h2>
-        <FreshBadge :message="`${INSURANCE_DATA_UPDATED} 기준`" />
-      </div>
-      <div class="retro-panel-content">
-        <CalculatorInteractionTracker calculator-id="car_insurance" page-path="/car/insurance">
-          <InsuranceInput v-model="form" />
-        </CalculatorInteractionTracker>
-      </div>
-    </div>
+    <ShCalculatorSplit>
+      <template #input>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">갱신 조건 입력</h2>
+            <FreshBadge :message="`${INSURANCE_DATA_UPDATED} 기준`" />
+          </div>
+          <div class="retro-panel-content">
+            <CalculatorInteractionTracker calculator-id="car_insurance" page-path="/car/insurance">
+              <InsuranceInput v-model="form" />
+            </CalculatorInteractionTracker>
+          </div>
+        </div>
+      </template>
+      <template #result>
+        <InsuranceResult :result="result" @share="share.openShare" />
+      </template>
+    </ShCalculatorSplit>
 
-    <InsuranceResult :result="result" @share="share.openShare" />
     <AffiliateLinkPanel
       title="차량 유지비와 함께 많이 보는 상품"
       description="보험료를 점검했다면 차량 안전용품과 셀프 관리 용품 가격도 함께 확인해 보세요."
