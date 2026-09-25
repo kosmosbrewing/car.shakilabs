@@ -28,7 +28,7 @@ function trackRelatedClick(toTool: string): void {
     <ShText id="car-tax-next-actions-title" as="h2" variant="heading" class="mb-3">
       구매 후 비용까지 이어서 계산하세요
     </ShText>
-    <div class="grid gap-3 md:grid-cols-3">
+    <div class="grid gap-3 md:grid-cols-3 lg:grid-cols-1">
       <ShSurface
         v-for="item in actions"
         :key="item.key"

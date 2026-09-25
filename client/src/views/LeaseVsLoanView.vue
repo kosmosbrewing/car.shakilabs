@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
-import { ShCalculatorSplit } from "@shakilabs/ui";
+import { ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import { Share2 } from "lucide-vue-next";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import CountUpAmount from "@/components/common/CountUpAmount.vue";
@@ -151,29 +151,49 @@ const costItems = computed(() => result.value.methods.map((method) => ({
       </template>
     </ShCalculatorSplit>
 
-    <GapBars
-      title="계약기간 총 현금유출 비교"
-      note="막대는 1위보다 더 드는 금액입니다. 리스는 만기 반납, 할부는 차량 잔존가치 제외, 장기렌트는 보험·세금 포함 기준입니다."
-      :items="costItems"
-      :format-value="formatWon"
-      better="lower"
-    />
+    <!-- 계산기 아래 데이터 블록 2열(ShPairRow, 사용자 결정 2026-09-25) — 차트 | 비교표.
+         LeaseCompareCards(md:hidden)·LeaseCompareTable(hidden md:block)는 같은 데이터의
+         모바일/데스크톱 반응형 쌍이라 한 칸에 함께 둔다(분리하면 둘 중 하나가 짝을 잃는다).
+         LeaseGuide는 제목만 "가이드"일 뿐 FaqAccordionPanel(기본 제목 "자주 묻는 질문")이라
+         이 페이지의 FAQ 블록이다 — 전폭 유지. -->
+    <ShPairRow>
+      <template #start>
+        <GapBars
+          title="계약기간 총 현금유출 비교"
+          note="막대는 1위보다 더 드는 금액입니다. 리스는 만기 반납, 할부는 차량 잔존가치 제외, 장기렌트는 보험·세금 포함 기준입니다."
+          :items="costItems"
+          :format-value="formatWon"
+          better="lower"
+        />
+      </template>
+      <template #end>
+        <LeaseCompareCards :result="result" />
+        <LeaseCompareTable :result="result" />
+      </template>
+    </ShPairRow>
 
-    <LeaseCompareCards :result="result" />
     <AffiliateLinkPanel
       title="차량 계약 전에 같이 확인해 볼 상품"
       description="차량 이용 방식 비교와 함께 블랙박스, 세차용품 예산도 미리 점검해 보세요."
       :items="carAffiliateItems"
     />
-    <LeaseCompareTable :result="result" />
     <LeaseGuide :extra="CAR_LEASE_GUIDE.faqs" />
-    <CompareSourceFooter :sources="LEASE_SOURCES" :updated-at="LEASE_DATA_UPDATED" />
-    <div class="rounded-2xl border border-border/60 bg-muted/20 px-4 py-3 text-caption text-muted-foreground">
-      <p class="mb-2 font-semibold text-foreground">비교 기준</p>
-      <p>• 리스: 만기 반납 기준 현금유출 비교, 잔존가치 인수비용 제외</p>
-      <p>• 할부: 같은 기간 실제 납부액 기준, 차량 잔존가치는 비교에서 제외</p>
-      <p>• 장기렌트: 보험·세금 포함 월 납입금 기준</p>
-    </div>
+
+    <!-- 두 번째 짝: 출처 | 비교 기준 노트. 광고는 이미 이 묶음 뒤에 있어 옮기지 않아도 된다. -->
+    <ShPairRow>
+      <template #start>
+        <CompareSourceFooter :sources="LEASE_SOURCES" :updated-at="LEASE_DATA_UPDATED" />
+      </template>
+      <template #end>
+        <div class="rounded-2xl border border-border/60 bg-muted/20 px-4 py-3 text-caption text-muted-foreground">
+          <p class="mb-2 font-semibold text-foreground">비교 기준</p>
+          <p>• 리스: 만기 반납 기준 현금유출 비교, 잔존가치 인수비용 제외</p>
+          <p>• 할부: 같은 기간 실제 납부액 기준, 차량 잔존가치는 비교에서 제외</p>
+          <p>• 장기렌트: 보험·세금 포함 월 납입금 기준</p>
+        </div>
+      </template>
+    </ShPairRow>
+
     <AdSlot slot-id="bottom" label="자동차 금융 광고 영역" />
     <SeoRichGuide
       :title="CAR_LEASE_GUIDE.title"
