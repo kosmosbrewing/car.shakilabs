@@ -11,7 +11,7 @@ import CompareSourceFooter from "@/components/common/CompareSourceFooter.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import SeoRichGuide from "@/components/common/SeoRichGuide.vue";
-import RankedBars from "@/components/result-visualization/RankedBars.vue";
+import GapBars from "@/components/result-visualization/GapBars.vue";
 import { CAR_LEASE_GUIDE } from "@/data/seoGuides";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { leaseGuideItems } from "@/data/leaseGuide";
@@ -76,12 +76,13 @@ const summaryFacts = computed(() => [
   { label: "월 납입금", value: formatWon(result.value.bestResult.monthlyPayment) },
   { label: "2위와 차이", value: formatWon(result.value.runnerUpGap) },
 ]);
+// 계약기간 총액은 수천만 원대에서 몇 % 차이로 모인다 — 0부터 그리면 세 막대가 같아 보였다.
+// 1위(최저 총 현금유출) 대비 더 드는 금액을 막대로 그린다.
 const costItems = computed(() => result.value.methods.map((method) => ({
   key: method.method,
   label: method.label,
   value: method.totalCost,
   detail: `월 납입 ${formatWon(method.monthlyPayment)} · ${method.comparisonNote}`,
-  highlight: method.method === result.value.bestMethod,
 })));
 </script>
 
@@ -144,11 +145,12 @@ const costItems = computed(() => result.value.methods.map((method) => ({
       </div>
     </div>
 
-    <RankedBars
+    <GapBars
       title="계약기간 총 현금유출 비교"
-      note="리스는 만기 반납, 할부는 차량 잔존가치 제외, 장기렌트는 보험·세금 포함 기준입니다."
+      note="막대는 1위보다 더 드는 금액입니다. 리스는 만기 반납, 할부는 차량 잔존가치 제외, 장기렌트는 보험·세금 포함 기준입니다."
       :items="costItems"
       :format-value="formatWon"
+      better="lower"
     />
 
     <LeaseCompareCards :result="result" />
