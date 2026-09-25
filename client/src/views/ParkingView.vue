@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { ParkingSquare, Trophy } from "lucide-vue-next";
+import { ShCalculatorSplit, ShPairRow } from "@shakilabs/ui";
 import FreshBadge from "@/components/common/FreshBadge.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
@@ -55,173 +56,185 @@ const breakEvenDays = computed(() => {
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="주차비 비교 계산기" />
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">주차 조건 입력</h2>
-        <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
-      </div>
-      <CalculatorInteractionTracker calculator-id="parking" page-path="/car/parking">
-      <div class="retro-panel-content grid gap-3 md:grid-cols-2" role="group" :aria-describedby="validationError ? 'parking-error' : undefined">
-        <label class="block space-y-1">
-          <span class="text-caption font-semibold text-foreground">월 주차 일수</span>
-          <input
-            v-model.number="daysPerMonth"
-            type="number"
-            :min="PARKING_INPUT_LIMITS.daysPerMonth.min"
-            :max="PARKING_INPUT_LIMITS.daysPerMonth.max"
-            class="retro-input"
-            placeholder="월 주차 일수"
-          />
-        </label>
-        <label class="block space-y-1">
-          <span class="text-caption font-semibold text-foreground">하루 주차 시간</span>
-          <input
-            v-model.number="hoursPerDay"
-            type="number"
-            :min="PARKING_INPUT_LIMITS.hoursPerDay.min"
-            :max="PARKING_INPUT_LIMITS.hoursPerDay.max"
-            class="retro-input"
-            placeholder="하루 주차 시간"
-          />
-        </label>
-        <label class="block space-y-1">
-          <span class="text-caption font-semibold text-foreground">시간당 요금 (원)</span>
-          <input
-            v-model.number="hourlyRate"
-            type="number"
-            :min="PARKING_INPUT_LIMITS.hourlyRate.min"
-            :max="PARKING_INPUT_LIMITS.hourlyRate.max"
-            class="retro-input"
-            placeholder="시간당 요금"
-          />
-        </label>
-        <label class="block space-y-1">
-          <span class="text-caption font-semibold text-foreground">월주차 요금 (원)</span>
-          <input
-            v-model.number="monthlyPass"
-            type="number"
-            :min="PARKING_INPUT_LIMITS.monthlyPass.min"
-            :max="PARKING_INPUT_LIMITS.monthlyPass.max"
-            class="retro-input"
-            placeholder="월주차 요금"
-          />
-        </label>
-        <p v-if="validationError" id="parking-error" class="text-caption font-semibold text-destructive md:col-span-2" role="alert">
-          {{ validationError }}
-        </p>
-      </div>
-      </CalculatorInteractionTracker>
-    </div>
-
-    <!-- 히어로: 최저 비용 결론 -->
-    <div class="retro-panel overflow-hidden">
-      <div class="space-y-1 border-b border-border/40 px-4 py-4 sm:px-5 sm:py-5">
-        <p class="text-caption font-semibold text-muted-foreground">가장 저렴한 방식의 월 주차비</p>
-        <p class="car-result-amount font-bold font-brand tabular-nums text-primary">
-          <CountUpAmount :value="formatWon(result.bestOption.total)" />
-        </p>
-        <p class="text-caption text-muted-foreground">
-          <strong class="font-semibold text-primary">{{ result.bestOption.label }}</strong> 기준 월 예상 비용
-        </p>
-      </div>
-      <div class="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
-        <span class="flex items-center gap-2 text-caption font-semibold text-muted-foreground">
-          <span class="h-2 w-2 shrink-0 rounded-full bg-status-success" />
-          최고/최저 차이
-        </span>
-        <span class="inline-flex items-center rounded-full bg-status-success/[12%] px-3 py-1 text-heading font-bold tabular-nums text-status-success sm:text-h1">
-          {{ formatWon(result.spread) }}
-        </span>
-      </div>
-    </div>
-
-    <GapBars
-      title="주차 방식별 월 비용"
-      note="동일한 이용 일수와 시간 기준입니다. 막대는 1위보다 더 드는 월 비용입니다."
-      :items="costItems"
-      :format-value="formatWon"
-      better="lower"
-    />
-
-    <div class="grid gap-3 md:grid-cols-3">
-      <div
-        v-for="item in result.items"
-        :key="item.key"
-        :class="[
-          'overflow-hidden rounded-2xl border bg-card p-4 shadow-sm transition-all duration-200',
-          item.key === result.bestOption.key
-            ? 'border-status-success/40 shadow-[0_0_0_1px_hsl(var(--status-success)/0.15),0_4px_16px_-4px_hsl(var(--status-success)/0.12)]'
-            : 'border-border/70 hover:-translate-y-[1px] hover:border-primary/25'
-        ]"
-      >
-        <div class="flex items-start justify-between gap-3">
-          <div>
-            <p class="text-tiny font-semibold text-muted-foreground">{{ item.label }}</p>
-            <p
-              class="mt-2 text-h1 font-bold tabular-nums"
-              :class="item.key === result.bestOption.key ? 'text-status-success' : 'text-foreground'"
-            >
-              {{ formatWon(item.total) }}
+    <ShCalculatorSplit>
+      <template #input>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">주차 조건 입력</h2>
+            <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
+          </div>
+          <CalculatorInteractionTracker calculator-id="parking" page-path="/car/parking">
+          <div class="retro-panel-content grid gap-3 md:grid-cols-2" role="group" :aria-describedby="validationError ? 'parking-error' : undefined">
+            <label class="block space-y-1">
+              <span class="text-caption font-semibold text-foreground">월 주차 일수</span>
+              <input
+                v-model.number="daysPerMonth"
+                type="number"
+                :min="PARKING_INPUT_LIMITS.daysPerMonth.min"
+                :max="PARKING_INPUT_LIMITS.daysPerMonth.max"
+                class="retro-input"
+                placeholder="월 주차 일수"
+              />
+            </label>
+            <label class="block space-y-1">
+              <span class="text-caption font-semibold text-foreground">하루 주차 시간</span>
+              <input
+                v-model.number="hoursPerDay"
+                type="number"
+                :min="PARKING_INPUT_LIMITS.hoursPerDay.min"
+                :max="PARKING_INPUT_LIMITS.hoursPerDay.max"
+                class="retro-input"
+                placeholder="하루 주차 시간"
+              />
+            </label>
+            <label class="block space-y-1">
+              <span class="text-caption font-semibold text-foreground">시간당 요금 (원)</span>
+              <input
+                v-model.number="hourlyRate"
+                type="number"
+                :min="PARKING_INPUT_LIMITS.hourlyRate.min"
+                :max="PARKING_INPUT_LIMITS.hourlyRate.max"
+                class="retro-input"
+                placeholder="시간당 요금"
+              />
+            </label>
+            <label class="block space-y-1">
+              <span class="text-caption font-semibold text-foreground">월주차 요금 (원)</span>
+              <input
+                v-model.number="monthlyPass"
+                type="number"
+                :min="PARKING_INPUT_LIMITS.monthlyPass.min"
+                :max="PARKING_INPUT_LIMITS.monthlyPass.max"
+                class="retro-input"
+                placeholder="월주차 요금"
+              />
+            </label>
+            <p v-if="validationError" id="parking-error" class="text-caption font-semibold text-destructive md:col-span-2" role="alert">
+              {{ validationError }}
             </p>
           </div>
-          <span
-            class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl"
-            :class="item.key === result.bestOption.key ? 'bg-status-success/[12%] text-status-success' : 'bg-muted text-muted-foreground'"
-          >
-            <Trophy v-if="item.key === result.bestOption.key" class="h-5 w-5" />
-            <ParkingSquare v-else class="h-5 w-5" />
-          </span>
+          </CalculatorInteractionTracker>
         </div>
-        <span
-          v-if="item.key === result.bestOption.key"
-          class="mt-3 inline-flex items-center gap-1 rounded-full bg-status-success px-2.5 py-0.5 text-[11px] font-semibold text-status-success-foreground"
-        >
-          <Trophy class="h-3 w-3" />
-          가장 저렴
-        </span>
-      </div>
-    </div>
+      </template>
+      <template #result>
+        <!-- 히어로: 최저 비용 결론 -->
+        <div class="retro-panel overflow-hidden">
+          <div class="space-y-1 border-b border-border/40 px-4 py-4 sm:px-5 sm:py-5">
+            <p class="text-caption font-semibold text-muted-foreground">가장 저렴한 방식의 월 주차비</p>
+            <p class="car-result-amount font-bold font-brand tabular-nums text-primary">
+              <CountUpAmount :value="formatWon(result.bestOption.total)" />
+            </p>
+            <p class="text-caption text-muted-foreground">
+              <strong class="font-semibold text-primary">{{ result.bestOption.label }}</strong> 기준 월 예상 비용
+            </p>
+          </div>
+          <div class="flex items-center justify-between border-b border-border/40 px-4 py-3 sm:px-5">
+            <span class="flex items-center gap-2 text-caption font-semibold text-muted-foreground">
+              <span class="h-2 w-2 shrink-0 rounded-full bg-status-success" />
+              최고/최저 차이
+            </span>
+            <span class="inline-flex items-center rounded-full bg-status-success/[12%] px-3 py-1 text-heading font-bold tabular-nums text-status-success sm:text-h1">
+              {{ formatWon(result.spread) }}
+            </span>
+          </div>
+        </div>
+      </template>
+    </ShCalculatorSplit>
 
-    <!-- 계산 근거 공개: 세 방식의 산식과 일 최대요금 상한을 화면에서 밝힌다.
-         상한 금액은 계산 모듈이 export하는 PARKING_DAILY_CAP을 그대로 렌더한다 —
-         로직만 고치고 설명이 남는 사고를 막으려면 화면에 숫자를 다시 적으면 안 된다. -->
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">이 결과는 이렇게 계산했습니다</h2>
-      </div>
-      <div class="retro-panel-content space-y-3">
-        <p class="text-body text-muted-foreground">
-          같은 주차 습관을 세 가지 요금제로 각각 환산해 월 비용을 비교합니다.
-          입력한 조건은 월 {{ daysPerMonth }}일 · 하루 {{ hoursPerDay }}시간 · 시간당 {{ formatWon(hourlyRate) }}이며,
-          이때 하루 시간권 요금은 {{ formatWon(dailyHourlyCost) }}입니다.
-        </p>
-        <ul class="list-inside list-disc space-y-1 text-body text-muted-foreground">
-          <li>
-            <span class="font-semibold text-foreground">시간권</span> — 하루 주차 시간 × 시간당 요금 × 월 주차 일수.
-            상한 없이 세운 시간만큼 그대로 누적한 경우입니다.
-          </li>
-          <li>
-            <span class="font-semibold text-foreground">일 최대요금</span> — 하루 요금에
-            {{ formatWon(PARKING_DAILY_CAP) }}의 상한을 적용한 뒤 월 주차 일수를 곱합니다.
-            입력 조건에서는 하루 {{ formatWon(cappedDailyCost) }}이 적용됐습니다.
-            상한 금액은 주차장마다 다르므로 실제 안내판의 일 최대요금과 비교해 보세요.
-          </li>
-          <li>
-            <span class="font-semibold text-foreground">월주차</span> — 이용 일수와 무관한 정액 월정기권 요금입니다.
-          </li>
-        </ul>
-        <p v-if="breakEvenDays" class="text-body text-muted-foreground">
-          월주차 요금 {{ formatWon(monthlyPass) }}을 하루 {{ formatWon(cappedDailyCost) }}(상한 적용 후)으로 나누면
-          손익분기는 <span class="font-semibold text-foreground">월 {{ breakEvenDays }}일</span>입니다.
-          실제로 차를 세우는 날이 이보다 적으면 정기권을 끊지 않는 편이 유리하고, 많으면 정기권이 유리합니다.
-          휴가·출장·재택으로 세우지 않는 날을 빼고 세어 보세요.
-        </p>
-        <p class="text-caption text-muted-foreground">
-          경차·전기차는 공영주차장에서 50% 감면을 받는 경우가 많고, 다자녀·장애인 감면이 중복 적용되는 지자체도 있습니다.
-          감면 대상이라면 위 결과에서 해당 비율만큼 낮춰 해석하세요.
-        </p>
-      </div>
-    </div>
+    <!-- 계산기 아래 데이터 블록 2열(ShPairRow, 사용자 결정 2026-09-25) — 차트+카드 묶음 | 계산 근거 패널.
+         3열 카드 그리드는 반폭 칸에서 lg:grid-cols-1로 접어 좁은 칸에 3열이 끼이지 않게 한다. -->
+    <ShPairRow>
+      <template #start>
+        <GapBars
+          title="주차 방식별 월 비용"
+          note="동일한 이용 일수와 시간 기준입니다. 막대는 1위보다 더 드는 월 비용입니다."
+          :items="costItems"
+          :format-value="formatWon"
+          better="lower"
+        />
+
+        <div class="grid gap-3 md:grid-cols-3 lg:grid-cols-1">
+          <div
+            v-for="item in result.items"
+            :key="item.key"
+            :class="[
+              'overflow-hidden rounded-2xl border bg-card p-4 shadow-sm transition-all duration-200',
+              item.key === result.bestOption.key
+                ? 'border-status-success/40 shadow-[0_0_0_1px_hsl(var(--status-success)/0.15),0_4px_16px_-4px_hsl(var(--status-success)/0.12)]'
+                : 'border-border/70 hover:-translate-y-[1px] hover:border-primary/25'
+            ]"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <p class="text-tiny font-semibold text-muted-foreground">{{ item.label }}</p>
+                <p
+                  class="mt-2 text-h1 font-bold tabular-nums"
+                  :class="item.key === result.bestOption.key ? 'text-status-success' : 'text-foreground'"
+                >
+                  {{ formatWon(item.total) }}
+                </p>
+              </div>
+              <span
+                class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl"
+                :class="item.key === result.bestOption.key ? 'bg-status-success/[12%] text-status-success' : 'bg-muted text-muted-foreground'"
+              >
+                <Trophy v-if="item.key === result.bestOption.key" class="h-5 w-5" />
+                <ParkingSquare v-else class="h-5 w-5" />
+              </span>
+            </div>
+            <span
+              v-if="item.key === result.bestOption.key"
+              class="mt-3 inline-flex items-center gap-1 rounded-full bg-status-success px-2.5 py-0.5 text-[11px] font-semibold text-status-success-foreground"
+            >
+              <Trophy class="h-3 w-3" />
+              가장 저렴
+            </span>
+          </div>
+        </div>
+      </template>
+      <template #end>
+        <!-- 계산 근거 공개: 세 방식의 산식과 일 최대요금 상한을 화면에서 밝힌다.
+             상한 금액은 계산 모듈이 export하는 PARKING_DAILY_CAP을 그대로 렌더한다 —
+             로직만 고치고 설명이 남는 사고를 막으려면 화면에 숫자를 다시 적으면 안 된다. -->
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">이 결과는 이렇게 계산했습니다</h2>
+          </div>
+          <div class="retro-panel-content space-y-3">
+            <p class="text-body text-muted-foreground">
+              같은 주차 습관을 세 가지 요금제로 각각 환산해 월 비용을 비교합니다.
+              입력한 조건은 월 {{ daysPerMonth }}일 · 하루 {{ hoursPerDay }}시간 · 시간당 {{ formatWon(hourlyRate) }}이며,
+              이때 하루 시간권 요금은 {{ formatWon(dailyHourlyCost) }}입니다.
+            </p>
+            <ul class="list-inside list-disc space-y-1 text-body text-muted-foreground">
+              <li>
+                <span class="font-semibold text-foreground">시간권</span> — 하루 주차 시간 × 시간당 요금 × 월 주차 일수.
+                상한 없이 세운 시간만큼 그대로 누적한 경우입니다.
+              </li>
+              <li>
+                <span class="font-semibold text-foreground">일 최대요금</span> — 하루 요금에
+                {{ formatWon(PARKING_DAILY_CAP) }}의 상한을 적용한 뒤 월 주차 일수를 곱합니다.
+                입력 조건에서는 하루 {{ formatWon(cappedDailyCost) }}이 적용됐습니다.
+                상한 금액은 주차장마다 다르므로 실제 안내판의 일 최대요금과 비교해 보세요.
+              </li>
+              <li>
+                <span class="font-semibold text-foreground">월주차</span> — 이용 일수와 무관한 정액 월정기권 요금입니다.
+              </li>
+            </ul>
+            <p v-if="breakEvenDays" class="text-body text-muted-foreground">
+              월주차 요금 {{ formatWon(monthlyPass) }}을 하루 {{ formatWon(cappedDailyCost) }}(상한 적용 후)으로 나누면
+              손익분기는 <span class="font-semibold text-foreground">월 {{ breakEvenDays }}일</span>입니다.
+              실제로 차를 세우는 날이 이보다 적으면 정기권을 끊지 않는 편이 유리하고, 많으면 정기권이 유리합니다.
+              휴가·출장·재택으로 세우지 않는 날을 빼고 세어 보세요.
+            </p>
+            <p class="text-caption text-muted-foreground">
+              경차·전기차는 공영주차장에서 50% 감면을 받는 경우가 많고, 다자녀·장애인 감면이 중복 적용되는 지자체도 있습니다.
+              감면 대상이라면 위 결과에서 해당 비율만큼 낮춰 해석하세요.
+            </p>
+          </div>
+        </div>
+      </template>
+    </ShPairRow>
 
     <SeoRichGuide
       :title="CAR_PARKING_GUIDE.title"

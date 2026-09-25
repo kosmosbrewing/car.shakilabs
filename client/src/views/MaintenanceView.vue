@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { ShBreakdownBar } from "@shakilabs/ui";
+import { ShBreakdownBar, ShCalculatorSplit } from "@shakilabs/ui";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import CountUpAmount from "@/components/common/CountUpAmount.vue";
 import FreshBadge from "@/components/common/FreshBadge.vue";
@@ -46,67 +46,72 @@ const chartSegments = computed(() => {
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="차량 유지비 계산기" />
 
-    <div class="retro-panel overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <h2 class="retro-title">유지비 조건 입력</h2>
-        <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
-      </div>
-      <CalculatorInteractionTracker calculator-id="maintenance" page-path="/car/maintenance">
-        <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'maintenance-error' : undefined">
-          <label class="block space-y-1">
-            <span class="text-caption font-semibold text-foreground">연 주행거리 (km)</span>
-            <input
-              v-model.number="annualKm"
-              type="number"
-              :min="MAINTENANCE_INPUT_LIMITS.annualKm.min"
-              :max="MAINTENANCE_INPUT_LIMITS.annualKm.max"
-              class="retro-input"
-              placeholder="연 주행거리"
-            />
-          </label>
-          <label class="block space-y-1">
-            <span class="text-caption font-semibold text-foreground">차량 연식 (년)</span>
-            <input
-              v-model.number="vehicleAge"
-              type="number"
-              :min="MAINTENANCE_INPUT_LIMITS.vehicleAge.min"
-              :max="MAINTENANCE_INPUT_LIMITS.vehicleAge.max"
-              class="retro-input"
-              placeholder="차량 연식(년)"
-            />
-          </label>
-          <label class="block space-y-1">
-            <span class="text-caption font-semibold text-foreground">연료 종류</span>
-            <select v-model="fuelType" class="retro-input">
-              <option v-for="(item, key) in maintenanceProfiles" :key="key" :value="key">{{ item.label }}</option>
-            </select>
-          </label>
-          <p v-if="validationError" id="maintenance-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
-            {{ validationError }}
-          </p>
+    <ShCalculatorSplit>
+      <template #input>
+        <div class="retro-panel overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <h2 class="retro-title">유지비 조건 입력</h2>
+            <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
+          </div>
+          <CalculatorInteractionTracker calculator-id="maintenance" page-path="/car/maintenance">
+            <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'maintenance-error' : undefined">
+              <label class="block space-y-1">
+                <span class="text-caption font-semibold text-foreground">연 주행거리 (km)</span>
+                <input
+                  v-model.number="annualKm"
+                  type="number"
+                  :min="MAINTENANCE_INPUT_LIMITS.annualKm.min"
+                  :max="MAINTENANCE_INPUT_LIMITS.annualKm.max"
+                  class="retro-input"
+                  placeholder="연 주행거리"
+                />
+              </label>
+              <label class="block space-y-1">
+                <span class="text-caption font-semibold text-foreground">차량 연식 (년)</span>
+                <input
+                  v-model.number="vehicleAge"
+                  type="number"
+                  :min="MAINTENANCE_INPUT_LIMITS.vehicleAge.min"
+                  :max="MAINTENANCE_INPUT_LIMITS.vehicleAge.max"
+                  class="retro-input"
+                  placeholder="차량 연식(년)"
+                />
+              </label>
+              <label class="block space-y-1">
+                <span class="text-caption font-semibold text-foreground">연료 종류</span>
+                <select v-model="fuelType" class="retro-input">
+                  <option v-for="(item, key) in maintenanceProfiles" :key="key" :value="key">{{ item.label }}</option>
+                </select>
+              </label>
+              <p v-if="validationError" id="maintenance-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+                {{ validationError }}
+              </p>
+            </div>
+          </CalculatorInteractionTracker>
         </div>
-      </CalculatorInteractionTracker>
-    </div>
+      </template>
+      <template #result>
+        <!-- 히어로: 연간 총 유지비 -->
+        <div class="retro-panel overflow-hidden">
+          <div class="space-y-1 border-b border-border/40 px-4 py-4 sm:px-5 sm:py-5">
+            <p class="text-caption font-semibold text-muted-foreground">연간 총 유지비</p>
+            <p class="car-result-amount font-bold font-brand tabular-nums text-primary"><CountUpAmount :value="formatWon(result.total)" /></p>
+          </div>
+          <div class="maintenance-metric-grid grid grid-cols-2 divide-x divide-border/40">
+            <div class="px-4 py-3 sm:px-5">
+              <p class="text-[11px] font-semibold text-muted-foreground">월 평균</p>
+              <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ formatWon(result.monthlyAverage) }}</p>
+            </div>
+            <div class="px-4 py-3 sm:px-5">
+              <p class="text-[11px] font-semibold text-muted-foreground">보험+세금</p>
+              <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ formatWon(result.insurance + result.tax) }}</p>
+            </div>
+          </div>
+        </div>
 
-    <!-- 히어로: 연간 총 유지비 -->
-    <div class="retro-panel overflow-hidden">
-      <div class="space-y-1 border-b border-border/40 px-4 py-4 sm:px-5 sm:py-5">
-        <p class="text-caption font-semibold text-muted-foreground">연간 총 유지비</p>
-        <p class="car-result-amount font-bold font-brand tabular-nums text-primary"><CountUpAmount :value="formatWon(result.total)" /></p>
-      </div>
-      <div class="maintenance-metric-grid grid grid-cols-2 divide-x divide-border/40">
-        <div class="px-4 py-3 sm:px-5">
-          <p class="text-[11px] font-semibold text-muted-foreground">월 평균</p>
-          <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ formatWon(result.monthlyAverage) }}</p>
-        </div>
-        <div class="px-4 py-3 sm:px-5">
-          <p class="text-[11px] font-semibold text-muted-foreground">보험+세금</p>
-          <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ formatWon(result.insurance + result.tax) }}</p>
-        </div>
-      </div>
-    </div>
-
-    <ShBreakdownBar label="연간 유지비 구성" :segments="chartSegments" :format-value="formatWon" surface="outlined" />
+        <ShBreakdownBar label="연간 유지비 구성" :segments="chartSegments" :format-value="formatWon" surface="outlined" />
+      </template>
+    </ShCalculatorSplit>
 
     <SeoRichGuide
       :title="CAR_MAINTENANCE_GUIDE.title"

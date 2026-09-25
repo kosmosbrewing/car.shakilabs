@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { mergeFaqs } from "@/lib/faqMerge";
-import { ShSurface, ShText } from "@shakilabs/ui";
+import { ShCalculatorSplit, ShPairRow, ShSurface, ShText } from "@shakilabs/ui";
 import CalculatorInteractionTracker from "@/components/analytics/CalculatorInteractionTracker.vue";
 import AdSlot from "@/components/common/AdSlot.vue";
 import AffiliateDisclosure from "@/components/common/AffiliateDisclosure.vue";
@@ -106,26 +106,41 @@ const share = useShare({
   <div class="text-resize-layout sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="자동차 취등록세 계산기" />
 
-    <ShSurface padding="none" class="overflow-hidden">
-      <div class="retro-titlebar rounded-t-2xl">
-        <ShText as="h2" variant="heading">차량 정보 입력</ShText>
-        <FreshBadge :message="`${CAR_TAX_DATA_UPDATED} 기준`" />
-      </div>
-      <div class="retro-panel-content">
-        <CalculatorInteractionTracker calculator-id="car_tax" page-path="/car/tax">
-          <CarTaxInput v-model="form" />
-        </CalculatorInteractionTracker>
-      </div>
-    </ShSurface>
+    <ShCalculatorSplit>
+      <template #input>
+        <ShSurface padding="none" class="overflow-hidden">
+          <div class="retro-titlebar rounded-t-2xl">
+            <ShText as="h2" variant="heading">차량 정보 입력</ShText>
+            <FreshBadge :message="`${CAR_TAX_DATA_UPDATED} 기준`" />
+          </div>
+          <div class="retro-panel-content">
+            <CalculatorInteractionTracker calculator-id="car_tax" page-path="/car/tax">
+              <CarTaxInput v-model="form" />
+            </CalculatorInteractionTracker>
+          </div>
+        </ShSurface>
+      </template>
+      <template #result>
+        <CarTaxResult :result="result" @share="share.openShare" />
+      </template>
+    </ShCalculatorSplit>
 
-    <CarTaxResult :result="result" @share="share.openShare" />
-    <CarTaxNextActions />
+    <!-- 계산기 아래 데이터 블록 2열(ShPairRow, 사용자 결정 2026-09-25): 다음 계산 링크 | 세부 내역 표.
+         CarTaxNextActions의 3열 카드는 반폭 칸에 끼면 비좁아 lg:grid-cols-1로 접는다(컴포넌트 파일에서 처리).
+         제휴 패널·출처 패널은 짝 지을 이웃이 없어 전폭 그대로 두고, 광고는 짝에 넣지 않는다. -->
+    <ShPairRow>
+      <template #start>
+        <CarTaxNextActions />
+      </template>
+      <template #end>
+        <CarTaxBreakdown :result="result" />
+      </template>
+    </ShPairRow>
     <AffiliateLinkPanel
       title="차량 구매 후 같이 챙기는 상품"
       description="등록비용을 계산했다면 블랙박스와 세차용품 가격도 함께 비교해 보세요."
       :items="carAffiliateItems"
     />
-    <CarTaxBreakdown :result="result" />
     <CompareSourceFooter :sources="CAR_TAX_SOURCES" :updated-at="CAR_TAX_DATA_UPDATED" />
     <AdSlot slot-id="top" label="자동차 금융 광고 영역" />
     <CarTaxFAQ :faqs="mergedFaqs" />
