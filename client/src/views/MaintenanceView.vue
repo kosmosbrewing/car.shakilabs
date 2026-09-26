@@ -54,7 +54,9 @@ const chartSegments = computed(() => {
             <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
           </div>
           <CalculatorInteractionTracker calculator-id="maintenance" page-path="/car/maintenance">
-            <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'maintenance-error' : undefined">
+            <!-- 반폭 칸(약 544px)에 3열이면 칸이 159px로 좁아진다 — 숫자 둘(주행거리·연식)만 2열로 짝짓고
+                 연료 종류 셀렉트는 선택값이 잘리지 않게 한 줄을 다 쓴다(반폭 입력 규칙: 최대 2열·셀렉트 전체 폭). -->
+            <div class="retro-panel-content grid gap-3 md:grid-cols-2" role="group" :aria-describedby="validationError ? 'maintenance-error' : undefined">
               <label class="block space-y-1">
                 <span class="text-caption font-semibold text-foreground">연 주행거리 (km)</span>
                 <input
@@ -77,13 +79,13 @@ const chartSegments = computed(() => {
                   placeholder="차량 연식(년)"
                 />
               </label>
-              <label class="block space-y-1">
+              <label class="block space-y-1 md:col-span-2">
                 <span class="text-caption font-semibold text-foreground">연료 종류</span>
                 <select v-model="fuelType" class="retro-input">
                   <option v-for="(item, key) in maintenanceProfiles" :key="key" :value="key">{{ item.label }}</option>
                 </select>
               </label>
-              <p v-if="validationError" id="maintenance-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+              <p v-if="validationError" id="maintenance-error" class="text-caption font-semibold text-destructive md:col-span-2" role="alert">
                 {{ validationError }}
               </p>
             </div>
