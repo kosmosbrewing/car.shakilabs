@@ -121,8 +121,10 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
             <FreshBadge :message="`${CAR_SERVICE_UPDATED_AT} 기준`" />
           </div>
           <CalculatorInteractionTracker calculator-id="ev_vs_gas" page-path="/car/ev-vs-gas">
-            <div class="retro-panel-content grid gap-3 md:grid-cols-3" role="group" :aria-describedby="validationError ? 'ev-gas-error' : undefined">
-              <label class="block space-y-1">
+            <!-- 반폭 칸에 3열이면 칸이 159px로 좁아진다 — 최대 2열. 공통 조건인 주행거리를 한 줄에 두면
+                 DOM 순서 그대로 단가 짝·연비 짝이 되고 왼쪽 열=내연기관, 오른쪽 열=전기차로 결과 카드와 같은 편에 선다. -->
+            <div class="retro-panel-content grid gap-3 md:grid-cols-2" role="group" :aria-describedby="validationError ? 'ev-gas-error' : undefined">
+              <label class="block space-y-1 md:col-span-2">
                 <span class="text-caption font-semibold text-foreground">연 주행거리 (km)</span>
                 <input
                   v-model.number="annualKm"
@@ -167,7 +169,7 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
                   placeholder="내연기관 연비"
                 />
               </label>
-              <label class="block space-y-1 md:col-span-2">
+              <label class="block space-y-1">
                 <span class="text-caption font-semibold text-foreground">전기차 전비 (kWh/km)</span>
                 <input
                   v-model.number="evKwhPerKm"
@@ -179,7 +181,7 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
                   placeholder="전기차 전비(kWh/km)"
                 />
               </label>
-              <p v-if="validationError" id="ev-gas-error" class="text-caption font-semibold text-destructive md:col-span-3" role="alert">
+              <p v-if="validationError" id="ev-gas-error" class="text-caption font-semibold text-destructive md:col-span-2" role="alert">
                 {{ validationError }}
               </p>
             </div>
@@ -208,7 +210,10 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
           </div>
           <CalculatorInteractionTracker calculator-id="ev_subsidy" page-path="/car/ev-vs-gas">
             <div class="retro-panel-content space-y-4" role="group" :aria-describedby="subsidyValidationError ? 'ev-subsidy-error' : undefined">
-            <div class="grid gap-3 md:grid-cols-2">
+            <!-- 한 줄에 하나: 반폭 2열이면 셀렉트가 245px라 차종명(최대 280px)·지자체 범위(260px)가 잘렸고,
+                 국고보조금은 칸 아래 안내문이 붙는다(반폭 입력 규칙: 셀렉트·안내문 칸은 1열). 순서는 그대로 —
+                 차종을 고르면 바로 아래 국고보조금이 채워진다. -->
+            <div class="grid gap-3">
               <label class="block space-y-1">
                 <span class="text-caption font-semibold text-foreground">차량 출고가 (원)</span>
                 <input v-model.number="vehiclePrice" type="number" min="0" step="1000000" class="retro-input" placeholder="차량 출고가" />
@@ -221,9 +226,6 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
                   </option>
                 </select>
               </label>
-            </div>
-
-            <div class="grid gap-3 md:grid-cols-2">
               <label class="block space-y-1">
                 <span class="text-caption font-semibold text-foreground">국고보조금 (원)</span>
                 <input

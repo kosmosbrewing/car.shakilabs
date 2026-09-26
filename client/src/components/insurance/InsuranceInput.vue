@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, useId } from "vue";
 import { ShPresetGroup, ShSlider } from "@shakilabs/ui";
 import {
   DEDUCTIBLE_LABELS,
@@ -31,6 +31,9 @@ const accidentOptions = [0, 1, 2, 3] as const;
 const accidentPresetOptions = accidentOptions.map((value) => ({ label: `${value}건`, value }));
 const mileagePresetOptions = mileageRanges.map((value) => ({ label: MILEAGE_LABELS[value], value }));
 const deductiblePresetOptions = deductibleLevels.map((value) => ({ label: DEDUCTIBLE_LABELS[value], value }));
+// 보이는 제목 "현재 자동차보험료 (원)"은 칸의 형제라 for/id가 없으면 칸과 이어지지 않는다 —
+// 제목을 눌러도 칸이 잡히지 않고 접근 이름은 숨은 aria-label에만 기댔다(CarTaxInput 차량 가격과 같은 문법).
+const premiumInputId = useId();
 const formattedPremium = computed(() => formatNumber(props.modelValue.currentPremium));
 const premiumPresets = INSURANCE_PRESETS.map((value) => ({
   label: `${formatNumber(value)}원`,
@@ -57,11 +60,11 @@ function onPremiumInput(event: Event): void {
 <template>
   <section class="space-y-4">
     <div class="space-y-2">
-      <label class="block text-caption font-semibold text-foreground">현재 자동차보험료 (원)</label>
+      <label :for="premiumInputId" class="block text-caption font-semibold text-foreground">현재 자동차보험료 (원)</label>
       <div class="relative">
         <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-heading font-bold text-muted-foreground">₩</span>
         <input
-          aria-label="현재 자동차보험료"
+          :id="premiumInputId"
           :value="formattedPremium"
           type="text"
           inputmode="numeric"
