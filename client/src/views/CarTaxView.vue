@@ -126,7 +126,7 @@ const share = useShare({
     </ShCalculatorSplit>
 
     <!-- 계산기 아래 데이터 블록 2열(ShPairRow, 사용자 결정 2026-09-25): 다음 계산 링크 | 세부 내역 표.
-         CarTaxNextActions의 3열 카드는 반폭 칸에 끼면 비좁아 lg:grid-cols-1로 접는다(컴포넌트 파일에서 처리).
+         다음 계산(ShNextActions)은 자기 폭을 보고 반폭 칸이면 목록, 넓으면 3열로 스스로 바꾼다 — 격자 클래스를 달지 않는다.
          제휴 패널·출처 패널은 짝 지을 이웃이 없어 전폭 그대로 두고, 광고는 짝에 넣지 않는다. -->
     <ShPairRow>
       <template #start>
