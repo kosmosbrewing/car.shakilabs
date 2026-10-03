@@ -46,7 +46,9 @@ defineProps<{ result: EvVsGasResult }>();
           <Zap v-else class="h-5 w-5" />
         </span>
       </div>
-      <span v-if="result.winner === option.key" class="mt-3 inline-flex items-center gap-1 rounded-full bg-status-success px-2.5 py-0.5 text-[11px] font-semibold text-status-success-foreground">
+      <!-- 2026-10-03 v8 결함 수정: 11px(전역 규칙으로 실측 12px)·대비 3.70:1(검정 on #1B7A4A) —
+           13px 이상 + status-success-foreground 토큰(흰 글자, main.css 참고)으로 ≥4.5:1 확보 -->
+      <span v-if="result.winner === option.key" class="mt-3 inline-flex items-center gap-1 rounded-full bg-status-success px-2.5 py-0.5 text-caption font-semibold text-status-success-foreground">
         <TrendingDown class="h-3 w-3" /> 더 유리
       </span>
     </article>

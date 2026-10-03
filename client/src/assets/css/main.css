@@ -47,6 +47,11 @@
      caution은 v3 4색에 없는 car 자체 확장 토큰이라 이번 정리 대상이 아니다. */
   :root {
     --status-success: 149.68 63.76% 29.22%; /* #1B7A4A */
+    /* 2026-10-03 v8 결함 수정: tailwind.config.ts·main.css 어디에도 --status-success-foreground가
+       없어 text-status-success-foreground가 생성되지 않는 클래스였다 — 배지 글자색은 조용히
+       기본 --foreground(거의 검정)로 떨어져 진초록 배경과 3.70:1(검정 on #1B7A4A)이 됐다.
+       흰 글자 ≈5.35:1로 고정한다(--primary-foreground 등 다른 전경 토큰과 같은 패턴). */
+    --status-success-foreground: 0 0% 100%;
     --status-warning: 25.96 90.48% 37.06%; /* #B45309 */
     --status-caution: 17 79% 34%;
     --status-danger: 0 66.39% 46.67%; /* #C62828 = --destructive */
@@ -55,6 +60,10 @@
 
   .dark {
     --status-success: 146.97 50.7% 57.84%; /* #5DCA8E */
+    /* 다크에서는 success가 밝은 초록으로 뒤집히므로(#5DCA8E) 흰 글자를 그대로 두면
+       대비가 ~2:1로 더 나빠진다 — 전경도 같이 뒤집어 짙은 초록-검정으로(≈6.9:1),
+       --destructive-foreground 다크 값과 같은 형식(색 유지·명도만 낮춤). */
+    --status-success-foreground: 150 62% 12%;
     --status-warning: 41.91 86.9% 55.1%; /* #F0B429 */
     --status-caution: 28 91% 66%;
     --status-danger: 0 80.89% 69.22%; /* #F07171 = --destructive */
