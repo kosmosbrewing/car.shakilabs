@@ -12,9 +12,11 @@ const constantsStore = useConstantsStore();
 </script>
 
 <template>
+  <!-- 함대 제목 레시피: 소개는 `<페이지 제목> · <앱 이름> | ShakiLabs` -->
   <SEOHead
     title="서비스 안내"
     description="shakilabs.com/car은 자동차 취등록세, 보험 절약, 리스·할부·렌트 총비용을 비교하는 무료 계산기입니다."
+    title-kind="site"
   />
 
   <div class="sh-container sh-container--prose py-5 space-y-5">

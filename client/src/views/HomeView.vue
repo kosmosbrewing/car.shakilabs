@@ -5,6 +5,7 @@ import { ShSurface, ShText } from "@shakilabs/ui";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import RelatedServices from "@/components/common/RelatedServices.vue";
 import SEOHead from "@/components/common/SEOHead.vue";
+import { APP_NAME } from "@/composables/useSEO";
 import {
   CAR_HOME_UPDATED,
   HOME_COST_TABLE,
@@ -13,7 +14,6 @@ import {
 } from "@/data/homeHighlights";
 import { buildCanonicalUrl } from "@/lib/site";
 
-const SEO_TITLE = "자동차 비용 계산기 | 취득세·보험·유지비 2026 기준";
 const SEO_DESCRIPTION =
   "차량 가격만 보고 계약하면 등록비와 유지비에서 어긋납니다. 취득·등록세, 보험료, 리스·할부, 유지비, 주차비, 전기차 전환까지 계산기 6개를 2026년 기준 숫자로 제공합니다.";
 
@@ -32,7 +32,8 @@ const itemListJsonLd = {
 </script>
 
 <template>
-  <SEOHead :title="SEO_TITLE" :description="SEO_DESCRIPTION" :json-ld="itemListJsonLd" />
+  <!-- 함대 제목 레시피: 홈은 `<앱 이름> | ShakiLabs` (useSEO.buildPageTitle) -->
+  <SEOHead :title="APP_NAME" :description="SEO_DESCRIPTION" :json-ld="itemListJsonLd" />
 
   <div class="sh-container sh-container--page space-y-5 py-5">
     <ShSurface padding="lg">

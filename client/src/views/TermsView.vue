@@ -6,9 +6,11 @@ const constantsStore = useConstantsStore();
 </script>
 
 <template>
+  <!-- 함대 제목 레시피: 이용약관은 `<페이지 제목> · <앱 이름> | ShakiLabs` -->
   <SEOHead
     title="이용약관"
     description="자동차 계산기의 이용 조건, 계산 결과의 한계(취득세·보험료·리스 정산), 광고 게재와 면책 범위를 안내합니다."
+    title-kind="site"
   />
 
   <div class="sh-container sh-container--prose py-5">
