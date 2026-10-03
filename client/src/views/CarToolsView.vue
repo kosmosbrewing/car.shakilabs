@@ -47,8 +47,7 @@ const toolDetails = CAR_TOOLS.map((tool) => ({ ...tool, ...TOOL_USAGE[tool.key] 
   />
   <div class="sh-container sh-container--page space-y-5 py-5">
     <ShSurface padding="lg">
-      <ShText as="p" variant="caption" tone="muted">CAR TOOL DIRECTORY</ShText>
-      <ShText as="h1" variant="display" class="mt-2">차량 비용은 단계별로 나눠 보세요</ShText>
+      <ShText as="h1" variant="display">차량 비용은 단계별로 나눠 보세요</ShText>
       <ShText tone="muted" class="mt-3 max-w-3xl">
         구매, 보험, 보유, 운행 중 지금 확인할 비용과 가까운 도구에서 시작하세요.
       </ShText>
