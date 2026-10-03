@@ -1,4 +1,6 @@
 import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { validateNoTinyTextUtilities } from "./validate-no-tiny-text.mjs";
+import { validateParagraphLength } from "./validate-paragraph-length.mjs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -313,3 +315,7 @@ assert(/googlesyndication\.com/i.test(taxHtml),
 console.log("Validated " + SEO_ROUTES.length
   + " prerendered routes (" + SITEMAP_ROUTES.length + " sitemap + "
   + PARAM_ROUTES.length + " canonicalized variants), root alias, and custom 404 output.");
+
+// v8b(2026-10-03): 13px 미만 글자 소스 게이트 + 빌드 HTML 문단 ≤250자 게이트
+validateNoTinyTextUtilities({ projectRoot });
+validateParagraphLength({ distRoot });

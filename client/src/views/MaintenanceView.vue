@@ -101,11 +101,11 @@ const chartSegments = computed(() => {
           </div>
           <div class="maintenance-metric-grid grid grid-cols-2 divide-x divide-border/40">
             <div class="px-4 py-3 sm:px-5">
-              <p class="text-[11px] font-semibold text-muted-foreground">월 평균</p>
+              <p class="text-caption font-semibold text-muted-foreground">월 평균</p>
               <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ formatWon(result.monthlyAverage) }}</p>
             </div>
             <div class="px-4 py-3 sm:px-5">
-              <p class="text-[11px] font-semibold text-muted-foreground">보험+세금</p>
+              <p class="text-caption font-semibold text-muted-foreground">보험+세금</p>
               <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ formatWon(result.insurance + result.tax) }}</p>
             </div>
           </div>

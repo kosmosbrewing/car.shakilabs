@@ -134,7 +134,7 @@ const costItems = computed(() => result.value.methods.map((method) => ({
           </div>
           <div class="divide-y divide-border/40 sm:grid sm:grid-cols-2 sm:divide-x sm:divide-y-0">
             <div v-for="fact in summaryFacts" :key="fact.label" class="px-4 py-3 sm:px-5">
-              <p class="text-[11px] font-semibold text-muted-foreground">{{ fact.label }}</p>
+              <p class="text-caption font-semibold text-muted-foreground">{{ fact.label }}</p>
               <p class="mt-1 text-heading font-bold tabular-nums text-foreground">{{ fact.value }}</p>
             </div>
           </div>
