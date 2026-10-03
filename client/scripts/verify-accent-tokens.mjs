@@ -233,6 +233,31 @@ for (const [token, { light, dark }] of Object.entries(STATUS_HEX)) {
 }
 
 // ---------------------------------------------------------------------------
+// 3b) status-success-foreground (2026-10-03 v8 결함 수정) — DESIGN_CLEANUP_PLAN의
+//     의미색 4종엔 전경이 없었지만, /ev-vs-gas "더 유리" 배지가 text-status-success-foreground를
+//     쓰고 있어서 이 토큰만 짝이 필요하다. 토큰이 사라지면(예: 되돌리기) 유틸리티가 통째로
+//     생성되지 않아 글자가 기본 --foreground(거의 검정)로 떨어진다 — 존재 여부부터 본다.
+// ---------------------------------------------------------------------------
+const STATUS_SUCCESS_FOREGROUND_HEX = { light: "#FFFFFF", dark: "#0C321F" };
+const lightSuccessFgHsl = statusRootTokens["--status-success-foreground"];
+const darkSuccessFgHsl = statusDarkTokens["--status-success-foreground"];
+
+if (!lightSuccessFgHsl) {
+  fail("라이트 --status-success-foreground가 main.css :root에 없다 — text-status-success-foreground가 생성되지 않는다");
+} else if (hslToHex(lightSuccessFgHsl) === STATUS_SUCCESS_FOREGROUND_HEX.light) {
+  pass(`라이트 --status-success-foreground = ${lightSuccessFgHsl} (${STATUS_SUCCESS_FOREGROUND_HEX.light})`);
+} else {
+  fail(`라이트 --status-success-foreground: hsl(${lightSuccessFgHsl}) = ${hslToHex(lightSuccessFgHsl)}, expected ${STATUS_SUCCESS_FOREGROUND_HEX.light}`);
+}
+if (!darkSuccessFgHsl) {
+  fail("다크 --status-success-foreground가 main.css .dark에 없다 — text-status-success-foreground가 생성되지 않는다");
+} else if (hslToHex(darkSuccessFgHsl) === STATUS_SUCCESS_FOREGROUND_HEX.dark) {
+  pass(`다크 --status-success-foreground = ${darkSuccessFgHsl} (${STATUS_SUCCESS_FOREGROUND_HEX.dark})`);
+} else {
+  fail(`다크 --status-success-foreground: hsl(${darkSuccessFgHsl}) = ${hslToHex(darkSuccessFgHsl)}, expected ${STATUS_SUCCESS_FOREGROUND_HEX.dark}`);
+}
+
+// ---------------------------------------------------------------------------
 // 4) 로컬 별칭이 빌드 CSS에 남아 있으면 실패 (dist/assets/*.css)
 // ---------------------------------------------------------------------------
 if (!existsSync(distAssetsDir)) {
@@ -302,6 +327,25 @@ if (!failed || true) {
     const darkAccentHex = hslToHex(darkTokens["--accent"]);
     assertContrast("라이트 accent-fg vs accent 틴트", lightAccentFgHex, lightAccentHex);
     assertContrast("다크 accent-fg vs accent 틴트", darkAccentFgHex, darkAccentHex);
+
+    // 2026-10-03 v8 결함 수정 — /ev-vs-gas "더 유리" 배지(꽉 찬 bg-status-success +
+    // text-status-success-foreground)의 실제 대비. 감사 실측값(검정 on #1B7A4A = 3.70:1)을
+    // 그대로 재현해 역방향 검증도 같이 한다: 전경을 흰색/다크값에서 되돌리면 이 라인이 먼저 깨진다.
+    const lightSuccessHex = hslToHex(statusRootTokens["--status-success"]);
+    const darkSuccessHex = hslToHex(statusDarkTokens["--status-success"]);
+    const lightSuccessFgHex = hslToHex(lightSuccessFgHsl);
+    const darkSuccessFgHex = hslToHex(darkSuccessFgHsl);
+    assertContrast("라이트 status-success-foreground vs status-success 배지", lightSuccessFgHex, lightSuccessHex);
+    assertContrast("다크 status-success-foreground vs status-success 배지", darkSuccessFgHex, darkSuccessHex);
+    // 역방향 재현: 사고 당시 실제로 쓰였던 전경(기본 --foreground, #0A0A0A)은 지금도 미달이어야
+    // 한다 — 이 식이 조용히 틀려서 사고를 "통과"시키는 거짓 그린을 막는다.
+    const incidentForegroundHex = "#0A0A0A";
+    const incidentRatio = contrastRatio(hexToRgb(incidentForegroundHex), hexToRgb(lightSuccessHex));
+    if (incidentRatio < 4.5) {
+      pass(`역방향 확인 — 사고 전경(#0A0A0A) vs status-success: ${incidentRatio.toFixed(2)}:1 (여전히 4.5:1 미달, 수식이 사고를 재현한다)`);
+    } else {
+      fail(`역방향 확인 실패 — 사고 전경(#0A0A0A) vs status-success가 ${incidentRatio.toFixed(2)}:1로 계산됐다(미달이어야 하는데 통과) — 대비 계산식을 확인하라`);
+    }
 
     // 코디네이터 지적(함정2) — status-warning vs --muted. --muted는 이 그룹에서 건드리지
     // 않았지만, v3 고정 경고색(#B45309/#F0B429)이 기존 --muted 위에서도 여전히 4.5:1을

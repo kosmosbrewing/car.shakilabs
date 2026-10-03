@@ -82,7 +82,13 @@ const config: Config = {
         },
         // fee(로컬 빨강 별칭)는 2026-09-17 폐기 — 위험은 status.danger로.
         status: {
-          success: "hsl(var(--status-success))",
+          // success만 foreground를 갖는다(2026-10-03) — text-status-success-foreground가
+          // 소스에서 쓰이고 있었는데 이 키가 없어 유틸리티 자체가 생성되지 않았다(배지
+          // 대비 결함의 근본 원인). 다른 상태색은 전경 토큰을 쓰는 곳이 없어 범위를 넓히지 않는다.
+          success: {
+            DEFAULT: "hsl(var(--status-success))",
+            foreground: "hsl(var(--status-success-foreground))",
+          },
           warning: "hsl(var(--status-warning))",
           caution: "hsl(var(--status-caution))",
           danger: "hsl(var(--status-danger))",

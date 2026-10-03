@@ -184,7 +184,7 @@ const breakEvenDays = computed(() => {
             </div>
             <span
               v-if="item.key === result.bestOption.key"
-              class="mt-3 inline-flex items-center gap-1 rounded-full bg-status-success px-2.5 py-0.5 text-[11px] font-semibold text-status-success-foreground"
+              class="mt-3 inline-flex items-center gap-1 rounded-full bg-status-success px-2.5 py-0.5 text-caption font-semibold text-status-success-foreground"
             >
               <Trophy class="h-3 w-3" />
               가장 저렴
