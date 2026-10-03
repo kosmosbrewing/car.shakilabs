@@ -236,7 +236,7 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
                   class="retro-input"
                   placeholder="국고보조금"
                 />
-                <span class="text-[11px] text-muted-foreground">
+                <span class="text-caption text-muted-foreground">
                   차종별 성능보조금 (최대 {{ formatWonShort(NATIONAL_SUBSIDY_MAX) }})
                 </span>
               </label>
@@ -262,7 +262,7 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
                 <span class="font-semibold">내연차 전환 (3년+ 폐차·매도)</span>
               </label>
             </div>
-            <p class="text-[11px] leading-relaxed text-muted-foreground">
+            <p class="text-caption leading-relaxed text-muted-foreground">
               지자체 금액은 차종·시군구·접수 시점에 따라 달라집니다. 범위가 있는 지역은 보수적으로 최솟값을 적용했으며,
               최종 신청 전
               <a :href="EV_SUBSIDY_SOURCE_URL" target="_blank" rel="noopener noreferrer" class="retro-link">무공해차 통합누리집</a>에서 확인하세요.
