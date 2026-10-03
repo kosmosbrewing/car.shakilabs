@@ -4,7 +4,13 @@ import { RouterLink } from "vue-router";
 </script>
 
 <template>
-  <SEOHead title="페이지를 찾을 수 없습니다" description="요청하신 페이지를 찾을 수 없습니다." :noindex="true" />
+  <!-- 함대 제목 레시피: 404는 `<페이지 제목> · <앱 이름> | ShakiLabs` -->
+  <SEOHead
+    title="페이지를 찾을 수 없습니다"
+    description="요청하신 페이지를 찾을 수 없습니다."
+    :noindex="true"
+    title-kind="site"
+  />
 
   <div class="sh-container sh-container--page space-y-5 py-20 text-center">
     <p class="text-display text-muted-foreground">404</p>

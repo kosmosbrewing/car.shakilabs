@@ -39,9 +39,11 @@ const toolDetails = CAR_TOOLS.map((tool) => ({ ...tool, ...TOOL_USAGE[tool.key] 
 </script>
 
 <template>
+  <!-- 함대 제목 레시피: 허브(/all)는 `<페이지 제목> · <앱 이름> | ShakiLabs` -->
   <SEOHead
     title="차량 계산기 전체 보기 | 구매·보험·유지비 도구"
     description="차량 구매, 보험, 보유와 운행 단계별로 필요한 자동차 계산기와 비교 도구를 찾으세요."
+    title-kind="site"
   />
   <div class="sh-container sh-container--page space-y-5 py-5">
     <ShSurface padding="lg">

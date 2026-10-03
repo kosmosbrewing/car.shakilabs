@@ -3,15 +3,29 @@ import { toValue, type MaybeRefOrGetter } from "vue";
 import { useRoute } from "vue-router";
 import { getSiteUrl } from "@/lib/site";
 
-// 정본 규칙(디자인 시스템 §11.1): "{페이지} | {카테고리} | ShakiLabs".
-const CATEGORY = "자동차 비교 계산기";
-const TITLE_SUFFIX = ` | ${CATEGORY} | ShakiLabs`;
-const DEFAULT_TITLE = CATEGORY;
+// 함대 제목 레시피(2026-10-03 개정) — 페이지 종류에 따라 두 모양으로 나뉜다.
+// - "tool"(기본, 계산기·도구): `<페이지 제목> | ShakiLabs`
+//   유입의 거의 전부인 네이버 검색 결과는 제목을 약 35자에서 자르는데, 옛 중간
+//   배지(" | 자동차 비교 계산기 | ShakiLabs", 16자)가 그 자리를 먹어 핵심 구절과
+//   브랜드가 잘려 보였다.
+// - "site"(허브(/all)·소개·이용약관·개인정보처리방침·404): `<페이지 제목> · <앱 이름> | ShakiLabs`
+//   앱 이름까지 빼면 "이용약관 | ShakiLabs"가 shakilabs.com 아래 12개 앱에서 똑같아져
+//   도메인 안 중복 제목이 된다. 이 페이지들은 검색 유입이 목적이 아니라 35자 절단이
+//   문제되지 않는다.
+// 홈은 어느 쪽이든 `<앱 이름> | ShakiLabs`(뷰가 APP_NAME을 그대로 title로 넘긴다).
+export const APP_NAME = "자동차 비교 계산기";
+const TITLE_SUFFIX = " | ShakiLabs";
+const SITE_APP_SUFFIX = ` · ${APP_NAME}`;
+export type TitleKind = "tool" | "site";
+// 호출부가 옛·현행 접미사를 그대로 넘겨도 두 번 붙지 않게 벗겨 낸다.
+// 긴 것부터 검사해야 " | ShakiLabs"만 먼저 벗겨지고 앱 이름이 남는 일이 없다.
 const LEGACY_TITLE_SUFFIXES = [
-  TITLE_SUFFIX,
+  `${SITE_APP_SUFFIX}${TITLE_SUFFIX}`,
+  ` | ${APP_NAME} | ShakiLabs`,
+  ` | ${APP_NAME}`,
+  SITE_APP_SUFFIX,
   " | shakilabs",
-  " | ShakiLabs",
-  ` | ${CATEGORY}`,
+  TITLE_SUFFIX,
 ] as const;
 
 type SEOOptions = {
@@ -19,6 +33,8 @@ type SEOOptions = {
   description: MaybeRefOrGetter<string>;
   ogImage?: MaybeRefOrGetter<string | undefined>;
   noindex?: MaybeRefOrGetter<boolean | undefined>;
+  /** 기본 "tool". 허브(/all)·소개·약관·개인정보·404만 "site"로 넘긴다(위 레시피 주석 참고). */
+  titleKind?: MaybeRefOrGetter<TitleKind | undefined>;
   jsonLd?: MaybeRefOrGetter<
     Record<string, unknown> | Record<string, unknown>[] | undefined
   >;
@@ -31,12 +47,10 @@ type SEOOptions = {
   canonicalPath?: MaybeRefOrGetter<string | undefined>;
 };
 
-// 뷰가 넘기는 title에 이미 "|"가 들어있어도(서브타이틀 병기) 배지를 건너뛰지
-// 않는다 — 예전에는 pipe 유무로 두 레시피가 섞였다(카테고리 배지 있음/없음).
-// 항상 한 레시피만 적용해 배지 유무가 페이지마다 갈리지 않게 한다.
-function normalizeTitle(rawTitle: string): string {
+/** 문서 제목·og:title·twitter:title이 모두 이 함수 하나를 거친다 — 레시피를 두 곳에 적지 않는다. */
+export function buildPageTitle(rawTitle: string, kind: TitleKind = "tool"): string {
   const trimmed = rawTitle.trim();
-  let baseTitle = trimmed || DEFAULT_TITLE;
+  let baseTitle = trimmed;
 
   for (const suffix of LEGACY_TITLE_SUFFIXES) {
     if (baseTitle.endsWith(suffix)) {
@@ -45,22 +59,18 @@ function normalizeTitle(rawTitle: string): string {
     }
   }
 
-  if (!baseTitle) {
-    baseTitle = DEFAULT_TITLE;
-  }
-
-  // v3 §11.1의 레시피는 `{페이지} | {카테고리} | ShakiLabs` 3단이다.
-  // 페이지 이름이 자체 부제를 pipe로 달고 있으면 4단이 되어 어디까지가 페이지명인지
-  // 읽히지 않는다. 부제는 검색 키워드를 담고 있으므로 버리지 않고 구분자만 중점으로 바꾼다.
+  // 뷰가 넘기는 title에 이미 "|"가 들어있으면(서브타이틀 병기) 중점으로 바꾼다 —
+  // 그대로 두면 끝에 붙는 " | ShakiLabs"와 합쳐져 "|"가 두 번 나와 어디까지가
+  // 페이지 이름인지 읽히지 않는다. 부제는 검색 키워드를 담고 있으므로 버리지 않는다.
   baseTitle = baseTitle.replace(/\s*\|\s*/g, " · ");
 
-  // 카테고리 없는 루트 예외(§11.1): 페이지 이름이 이미 카테고리로 시작하면
-  // 배지를 또 붙이지 않고 ShakiLabs만 덧붙인다.
-  if (baseTitle.startsWith(CATEGORY)) {
-    return `${baseTitle} | ShakiLabs`;
+  if (!baseTitle || baseTitle === APP_NAME) {
+    return `${APP_NAME}${TITLE_SUFFIX}`;
   }
 
-  return `${baseTitle}${TITLE_SUFFIX}`;
+  return kind === "site"
+    ? `${baseTitle}${SITE_APP_SUFFIX}${TITLE_SUFFIX}`
+    : `${baseTitle}${TITLE_SUFFIX}`;
 }
 
 export function useSEO({
@@ -68,13 +78,14 @@ export function useSEO({
   description,
   ogImage,
   noindex = false,
+  titleKind,
   jsonLd,
   canonicalPath,
 }: SEOOptions): void {
   const route = useRoute();
 
   useHead(() => {
-    const resolvedTitle = normalizeTitle(toValue(title));
+    const resolvedTitle = buildPageTitle(toValue(title), toValue(titleKind) ?? "tool");
     const resolvedDescription = toValue(description);
     const resolvedNoindex = Boolean(toValue(noindex));
     const resolvedOgImage = toValue(ogImage);

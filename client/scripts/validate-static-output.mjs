@@ -59,6 +59,57 @@ function validateVercelConfig(configPath) {
     configPath + ": car rewrite must preserve the requested path");
 }
 
+// 함대 제목 레시피(2026-10-03 개정) 게이트 — useSEO.buildPageTitle의 두 모양을 산출물에서 확인한다.
+// - "tool"(계산기·도구, 기본): `<페이지 제목> | ShakiLabs` — 네이버는 제목을 ~35자에서
+//   자르므로 가운데 앱 이름이 되살아나거나 제목이 길어지면 핵심 구절이 다시 잘린다.
+// - "site"(허브(/all)·소개·약관·개인정보·404): `<페이지 제목> · <앱 이름> | ShakiLabs` —
+//   앱 이름이 빠지면 shakilabs.com 아래 12개 앱의 "이용약관 | ShakiLabs"가 서로 같아진다.
+// - 홈: `<앱 이름> | ShakiLabs`.
+// 소스가 아니라 산출물을 본다: 셸 <title>과 뷰 제목이 합쳐지거나 차트 SVG <title>이
+// 다시 들어와도(0.3.42에서 제거) 여기서 걸린다. useSEO.ts의 APP_NAME과 반드시 같이 바꿀 것.
+const TITLE_BRAND_SUFFIX = " | ShakiLabs";
+const APP_NAME = "자동차 비교 계산기";
+const SITE_TITLE_ROUTES = new Set(["/all", "/about", "/terms", "/privacy", "/404"]);
+const MAX_PAGE_TITLE_CHARS = 40;
+
+// route는 보고용 실제 경로, kindRoute는 레시피 모양을 고르는 기준 경로다.
+// 금액 변형(/tax/2000 등)은 자기 캐노니컬 베이스("/tax")의 "tool" 모양을 쓰지만
+// 베이스와 다른 자기 title을 가지므로, 검사 대상 html은 항상 route 자신의 산출물이다.
+function validateTitleRecipe(html, route, kindRoute = route) {
+  const titleTagCount = html.match(/<title\b/gi)?.length ?? 0;
+  assert(titleTagCount === 1,
+    "Expected exactly one <title> tag for " + route + ", found " + titleTagCount);
+
+  const title = html.match(/<title>([^<]+)<\/title>/)?.[1]?.trim() ?? "";
+  assert(title.endsWith(TITLE_BRAND_SUFFIX),
+    'Title must end with "' + TITLE_BRAND_SUFFIX + '" for ' + route + ": " + title);
+  const head = title.slice(0, -TITLE_BRAND_SUFFIX.length);
+  assert(!head.includes(" | "),
+    "Title must not carry a middle \" | \" segment for " + route + ": " + title);
+
+  let pageTitle;
+  if (kindRoute === "/") {
+    assert(head === APP_NAME,
+      'Home title must be "' + APP_NAME + TITLE_BRAND_SUFFIX + '": ' + title);
+    pageTitle = head;
+  } else if (SITE_TITLE_ROUTES.has(kindRoute)) {
+    const appSuffix = " · " + APP_NAME;
+    assert(head.endsWith(appSuffix),
+      'Site page title must be "<page title>' + appSuffix + TITLE_BRAND_SUFFIX
+        + '" for ' + route + ": " + title);
+    pageTitle = head.slice(0, -appSuffix.length);
+  } else {
+    assert(!head.includes(APP_NAME),
+      "Tool page title must not carry the app name for " + route + ": " + title);
+    pageTitle = head;
+  }
+  assert(pageTitle.length > 0 && pageTitle.length <= MAX_PAGE_TITLE_CHARS,
+    "Page title must be 1-" + MAX_PAGE_TITLE_CHARS + " chars for " + route + ": " + pageTitle.length);
+
+  const description = html.match(/<meta name="description" content="([^"]*)"/)?.[1]?.trim();
+  assert(description, "Missing meta description for " + route);
+}
+
 function validateRoute(route) {
   const outputPath = routeOutputPath(route);
   assert(existsSync(outputPath), "Missing static output for " + route + ": " + outputPath);
@@ -71,11 +122,14 @@ function validateRoute(route) {
 
   assert(canonicalFrom(html) === expectedCanonical,
     "Invalid canonical for " + route + ": expected " + expectedCanonical);
-  assert(/<title>[^<]+<\/title>/.test(html), "Missing title for " + route);
   assert(html.includes('id="app"'), "Missing app root for " + route);
   assert(h1Count === 1, "Expected one H1 for " + route + ", found " + h1Count);
   assert(!/<noscript>/i.test(html),
     "Rendered route must not retain the shell noscript for " + route);
+  // Amount-variant routes (PARAM_ROUTES) canonicalize to their base calculator,
+  // so the title recipe shape follows the base page's kind (also "tool"),
+  // but the html checked is always this route's own static output.
+  validateTitleRecipe(html, route, canonicalPathFor(route));
 }
 
 function validateSitemap() {
@@ -243,6 +297,7 @@ assert(existsSync(notFoundPath), "Missing custom 404.html output");
 const notFoundHtml = readFileSync(notFoundPath, "utf8");
 assert(/name="robots" content="noindex,nofollow"/.test(notFoundHtml),
   "404.html must be noindex,nofollow");
+validateTitleRecipe(notFoundHtml, "/404");
 assert(notFoundHtml.includes('href="/car/tax"'),
   "404.html must contain a recovery link back into the calculators");
 // Valuable Inventory: 콘텐츠가 없는 화면에는 광고 로더 자체가 있으면 안 된다.

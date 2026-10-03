@@ -46,9 +46,11 @@ const CALCULATOR_INPUTS = [
 </script>
 
 <template>
+  <!-- 함대 제목 레시피: 개인정보처리방침은 `<페이지 제목> · <앱 이름> | ShakiLabs` -->
   <SEOHead
     title="개인정보 처리방침"
     description="자동차 계산기가 받는 입력값, 수집하지 않는 차량 정보, 쿠키·광고·공유 링크 처리 방식을 안내합니다."
+    title-kind="site"
   />
 
   <div class="sh-container sh-container--prose py-5">
