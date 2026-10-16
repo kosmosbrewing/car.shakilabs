@@ -107,7 +107,7 @@ const { result: subsidyResult, validationError: subsidyValidationError } = useSa
 </script>
 
 <template>
-  <SEOHead :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
+  <SEOHead noindex :title="seoTitle" :description="seoDescription" :json-ld="faqJsonLd" />
 
   <div class="sh-container sh-container--tool space-y-5 py-5">
     <CalculatorPageHeader title="전기차·내연기관 비교" />
