@@ -88,7 +88,7 @@ const costItems = computed(() => result.value.methods.map((method) => ({
 </script>
 
 <template>
-  <SEOHead
+  <SEOHead noindex
     :title="seoTitle"
     :description="seoDescription"
     :canonical-path="canonicalPath"

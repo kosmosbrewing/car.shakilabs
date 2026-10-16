@@ -91,7 +91,7 @@ const share = useShare({
 </script>
 
 <template>
-  <SEOHead
+  <SEOHead noindex
     :title="seoTitle"
     :description="seoDescription"
     :canonical-path="canonicalPath"
