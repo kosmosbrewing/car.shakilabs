@@ -141,27 +141,4 @@ export const HOME_COST_TABLE: readonly HomeCostRow[] = [
   },
 ];
 
-export interface HomeUsageNote {
-  key: string;
-  title: string;
-  body: string;
-}
-
 /** 홈에서만 설명하는 서비스 운영 방식 */
-export const HOME_USAGE_NOTES: readonly HomeUsageNote[] = [
-  {
-    key: "sourced",
-    title: "숫자마다 근거를 답니다",
-    body: "취득세율과 잔존가치율은 지방세법과 지자체 시가표준액 자료, 보조금은 환경부 보급사업 공고를 출처로 답니다. 결과를 그대로 믿지 말고 링크를 눌러 직접 확인해 보셔도 됩니다.",
-  },
-  {
-    key: "dated",
-    title: "기준일이 화면에 남습니다",
-    body: "계산기마다 어느 시점의 고시를 반영했는지 배지로 표시합니다. 연식이나 세율이 바뀌는 항목이 많아, 오래된 숫자로 계산해 놓고 모르는 상황을 줄이기 위해서입니다.",
-  },
-  {
-    key: "local",
-    title: "차값을 서버로 보내지 않습니다",
-    body: "견적 금액이나 보험료처럼 남에게 보이고 싶지 않은 숫자를 다루는 도구입니다. 계산은 전부 이 브라우저 안에서 끝나고, 저장되는 값도 없습니다.",
-  },
-];
